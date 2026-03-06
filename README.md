@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧸 Tender Cradle — Premium Nursery & Childcare Platform
 
-## Getting Started
+Tender Cradle is a high-end, editorial-style web platform designed for a modern nursery and childcare centre. Built with **Next.js 15**, **Framer Motion**, and **Tailwind CSS**, it combines a sophisticated "Montessori-inspired" aesthetic with a powerful administrative backend.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Core Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 🎨 Premium Landing Page
+- **Immersive Hero Section**: Parallax typography and scroll-linked image scaling.
+- **Dynamic Stats**: Animated count-up numbers with progress reveals.
+- **Editorial Gallery**: Dual-track horizontal marquee with reverse-scroll animations.
+- **Interactive FAQ**: Smooth accordion transitions for parent inquiries.
+- **Social Proof**: Staggered "Meet the Team" and "Trusted Partners" sections.
+- **Engagement**: Animated Newsletter signup and persistent "Enroll Now" CTAs.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 📝 Integrated Blog System
+- **Listing Page (`/blog`)**: Featured article hero with a responsive grid of editorial cards.
+- **Detail Pages (`/blog/[id]`)**: Full-width readability, metadata tracking, and related post suggestions.
+- **Centralized Data**: A single source of truth in `lib/blog-data.ts` for easy content management.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 🛍️ E-commerce Preview
+- **Shop Preview**: Curated product cards on the landing page.
+- **Individual Product Pages**: Detailed views for premium nursery essentials.
+- **Global Shopping Cart**: Persistent sliding cart with real-time total calculations.
 
-## Learn More
+### 🔐 Admin Dashboard (`/admin`)
+- **Rich Analytics Overview**: Visualized revenue charts (hover tooltips), active order tracking, and sales trends.
+- **Activity Feed**: Real-time log of orders, customer registrations, and blog updates.
+- **Inventory & Orders**: Dedicated management views for processing nursery stock and parent orders.
+- **Content Management**: Full CRUD interface for the blog system.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🚀 UI/UX Highlights
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Custom Navigation**: A glassmorphism Navbar that adapts as you scroll.
+- **Premium Scroll-to-Top**: A floating button with an integrated SVG scroll-progress ring and dynamic direction-aware arrow rotation.
+- **Branded Scrollbar**: A slim, primary-colored scrollbar that matches the platform's palette.
+- **Fluid Animations**: Staggered entry reveals, spring-based interactions, and scroll-linked parallax throughout.
+- **Full Responsiveness**: Every section is hand-optimized for mobile, tablet, and desktop viewing.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🛠️ Tech Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Framework**: [Next.js 15 (App Router)](https://nextjs.org/)
+- **Logic**: [React 19](https://react.dev/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Fonts**: [DM Serif Display](https://fonts.google.com/specimen/DM+Serif+Display) & [Nunito](https://fonts.google.com/specimen/Nunito)
+- **Deployment**: Optimized for Vercel
+
+---
+
+## 🏃 Getting Started
+
+1. **Clone & Install**:
+   ```bash
+   git clone <repository-url>
+   cd tender-cradle
+   npm install
+   ```
+
+2. **Run Development Server**:
+   ```bash
+   npm run dev
+   ```
+
+3. **Build for Production**:
+   ```bash
+   npm run build
+   ```
+
+---
+
+## 📂 Project Structure
+
+- `app/`: Next.js App Router pages and layouts.
+- `components/sections/`: High-level landing page components (Hero, Stats, etc.).
+- `components/pages/`: Content components for individual pages (Blog, Shop).
+- `components/ui/`: Reusable UI primitives (Buttons, Navbar, Scroll-to-Top).
+- `lib/`: Utility functions and shared data sources.
+- `public/`: Static assets, images, and branding.
+
+---
+
+## 📐 Design Philosophy
+
+Tender Cradle follows an **Editorial Montessori** design logic. We prioritize whitespace, high-quality photography, and serif typography to evoke a sense of calm, structure, and premium care. Every interaction is designed to feel "alive" through subtle micro-animations that respond to the user's focus.

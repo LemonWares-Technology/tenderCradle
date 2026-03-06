@@ -39,3 +39,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Custom Ignores
+/design inspo/
+_MConverter.eu_Tender Cradle- BRIEF.md
+.antigravity*
+.agents/
+.agent/
+_agents/
+_agent/
+brain/
+
