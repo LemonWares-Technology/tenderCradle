@@ -1,106 +1,162 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { SplitText } from "@/components/ui/split-text";
+import { motion } from "framer-motion";
+import { Baby, Gamepad2, HeartHandshake, Users } from "lucide-react";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import Image from "next/image";
 
 const programs = [
   {
+    icon: Baby,
     title: "Childcare & After-School",
-    description: "Reliable out-of-school care services supporting working families with flexible schedules.",
-    image: "/images/hero-1.png",
+    description: "Reliable out-of-school care supporting working families with flexible schedules.",
+    bg: "#BFDBFE",
+    iconBg: "#DBEAFE",
+    iconColor: "#1D4ED8",
+    tag: "Ages 0–5",
+    tagColor: "#1D4ED8",
   },
   {
+    icon: Gamepad2,
     title: "Structured Play",
     description: "Creative activities that promote age-appropriate development and spark endless curiosity.",
-    image: "/images/gallery-1.png",
+    bg: "#FEF08A",
+    iconBg: "#FEF9C3",
+    iconColor: "#B45309",
+    tag: "Daily",
+    tagColor: "#B45309",
   },
   {
+    icon: HeartHandshake,
     title: "Emotional Growth",
-    description: "Social and value-based development support promoting strong character formation.",
-    image: "/images/about-2.png",
+    description: "Social and value-based development promoting strong character formation.",
+    bg: "#FECDD3",
+    iconBg: "#FFE4E6",
+    iconColor: "#BE123C",
+    tag: "Ongoing",
+    tagColor: "#BE123C",
   },
   {
+    icon: Users,
     title: "Parent Partnership",
     description: "Support and guidance resources to help families raise confident children together.",
-    image: "/images/about-1.png",
+    bg: "#BBF7D0",
+    iconBg: "#DCFCE7",
+    iconColor: "#15803D",
+    tag: "Monthly",
+    tagColor: "#15803D",
   },
 ];
 
 export const OfferingsSection = () => {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(0);
-
   return (
-    <section id="offerings" className="relative w-full min-h-screen bg-background text-foreground overflow-hidden py-32">
-      
-      {/* Dynamic Background Image based on hover state */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <AnimatePresence mode="wait">
-          {hoveredIndex !== null && (
-            <motion.div
-              key={hoveredIndex}
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 0.15, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1, ease: "easeInOut" }}
-              className="absolute inset-0"
-            >
-              <Image 
-                src={programs[hoveredIndex].image}
-                alt="Program background"
-                fill
-                className="object-cover grayscale"
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
+    <section id="offerings" className="relative w-full py-24 md:py-32 bg-[#DCFCE7] overflow-hidden">
+
+      {/* Wavy top */}
+      <div className="absolute top-0 left-0 w-full overflow-hidden leading-none rotate-180" aria-hidden="true">
+        <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" className="w-full h-12 fill-[#FEF9C3]">
+          <path d="M0,30 C360,60 1080,0 1440,30 L1440,0 L0,0 Z" />
+        </svg>
+      </div>
+
+      {/* Wavy bottom */}
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none" aria-hidden="true">
+        <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" className="w-full h-12 fill-[#EDE9FE]">
+          <path d="M0,30 C360,60 1080,0 1440,30 L1440,0 L0,0 Z" />
+        </svg>
       </div>
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-24">
-          <SplitText 
-            text="Comprehensive Care."
-            className="font-serif text-5xl md:text-7xl lg:text-8xl leading-[0.9] tracking-tighter"
-          />
-          <p className="text-xl max-w-sm font-serif italic text-foreground/70">
-            More than just supervision. We curate experiences that shape futures.
+
+        {/* Header */}
+        <div className="text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-3 bg-white border-2 border-[#16A34A]/30 px-5 py-2 rounded-full mb-6 shadow-sm"
+          >
+            <div className="w-2 h-2 rounded-full bg-[#16A34A]" />
+            <span className="text-sm font-bold text-[#15803D] uppercase tracking-widest">Our Programs</span>
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="font-serif text-4xl md:text-6xl text-[#1A1045] tracking-tighter mb-4"
+          >
+            Comprehensive{" "}
+            <span className="relative text-[#16A34A] inline-block">
+              Care
+              <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 100 10" fill="none">
+                <path d="M2 7 Q25 1 50 7 Q75 13 98 7" stroke="#BBF7D0" strokeWidth="4" fill="none" strokeLinecap="round"/>
+              </svg>
+            </span>
+            .
+          </motion.h2>
+          <p className="text-lg text-[#1A1045]/60 max-w-xl mx-auto font-serif italic">
+            More than just supervision — we curate experiences that shape futures.
           </p>
         </div>
 
-        {/* The Interactive List */}
-        <div className="w-full border-t border-foreground/10">
-          {programs.map((program, index) => (
+        {/* Card grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {programs.map((p, i) => (
             <motion.div
-              key={program.title}
-              onHoverStart={() => setHoveredIndex(index)}
-              initial={{ opacity: 0, y: 20 }}
+              key={p.title}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="group border-b border-foreground/10 py-10 md:py-16 cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-8 hover:bg-foreground/2 transition-colors"
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="group rounded-[28px] p-6 flex flex-col gap-5 border-2 border-white shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-500 cursor-pointer"
+              style={{ backgroundColor: p.bg }}
             >
-              <div className="flex items-center gap-8 md:gap-16">
-                <span className="font-serif text-2xl text-primary/50 group-hover:text-primary transition-colors">
-                  0{index + 1}
-                </span>
-                <h3 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground group-hover:translate-x-4 transition-transform duration-500">
-                  {program.title}
-                </h3>
+              {/* Icon */}
+              <div
+                className="w-14 h-14 rounded-2xl flex items-center justify-center"
+                style={{ backgroundColor: p.iconBg }}
+              >
+                <p.icon className="w-6 h-6" style={{ color: p.iconColor }} />
               </div>
-              
-              <div className="flex items-center gap-8 md:gap-16 ml-14 md:ml-0">
-                <p className="max-w-xs text-base md:text-lg text-foreground/60 group-hover:text-foreground transition-colors">
-                  {program.description}
-                </p>
-                <div className="w-16 h-16 rounded-full border border-foreground/20 flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all duration-500 -rotate-45 group-hover:rotate-0">
-                  <ArrowRight className="w-6 h-6" />
-                </div>
+
+              {/* Tag */}
+              <span
+                className="inline-block text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-white/60"
+                style={{ color: p.tagColor }}
+              >
+                {p.tag}
+              </span>
+
+              <h3 className="font-serif text-xl text-[#1A1045] font-bold leading-tight">{p.title}</h3>
+              <p className="text-sm text-[#1A1045]/60 leading-relaxed flex-1">{p.description}</p>
+
+              {/* Arrow */}
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center self-end mt-auto bg-white/60 group-hover:bg-white transition-colors"
+              >
+                <ArrowRight className="w-4 h-4" style={{ color: p.iconColor }} />
               </div>
             </motion.div>
           ))}
         </div>
+
+        {/* Bottom CTA */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 }}
+          className="text-center mt-14"
+        >
+          <Link
+            href="/programs"
+            className="inline-flex items-center gap-3 bg-[#16A34A] text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#1A1045] transition-all duration-500 shadow-lg shadow-[#16A34A]/25"
+          >
+            View All Programs <ArrowRight className="w-4 h-4" />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

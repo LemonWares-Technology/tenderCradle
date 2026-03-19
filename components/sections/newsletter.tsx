@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, CheckCircle2, Mail } from "lucide-react";
+import { ArrowRight, CheckCircle2, Mail, Sparkles } from "lucide-react";
 
 export const NewsletterSection = () => {
   const [email, setEmail] = useState("");
@@ -16,9 +16,47 @@ export const NewsletterSection = () => {
   };
 
   return (
-    <section className="w-full py-20 md:py-28 lg:py-32 bg-foreground/3 border-t border-foreground/10 overflow-hidden">
-      <div className="container mx-auto px-6 md:px-12">
-        <div className="max-w-2xl mx-auto text-center">
+    <section className="relative w-full py-24 md:py-32 bg-[#DB2777] overflow-hidden">
+      
+      {/* Decorative floating elements */}
+      <motion.div 
+        animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-10 left-10 text-white/10 text-9xl pointer-events-none select-none"
+      >
+        ☁️
+      </motion.div>
+      <motion.div 
+        animate={{ y: [0, 20, 0], rotate: [0, -5, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-10 right-10 text-white/10 text-9xl pointer-events-none select-none"
+      >
+        🌟
+      </motion.div>
+      <motion.div 
+        animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.5, 0.2] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute top-1/2 left-1/4 text-white/10 text-6xl pointer-events-none select-none"
+      >
+        ✨
+      </motion.div>
+
+      {/* Wavy top */}
+      <div className="absolute top-0 left-0 w-full overflow-hidden leading-none rotate-180" aria-hidden="true">
+        <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" className="w-full h-14 fill-[#2563EB]">
+          <path d="M0,30 C360,60 1080,0 1440,30 L1440,0 L0,0 Z" />
+        </svg>
+      </div>
+
+      {/* Wavy bottom */}
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none" aria-hidden="true">
+        <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" className="w-full h-14 fill-[#2D0057]">
+          <path d="M0,30 C360,60 1080,0 1440,30 L1440,0 L0,0 Z" />
+        </svg>
+      </div>
+
+      <div className="container mx-auto px-6 md:px-12 relative z-10">
+        <div className="max-w-3xl mx-auto text-center">
 
           {/* Icon */}
           <motion.div
@@ -26,22 +64,9 @@ export const NewsletterSection = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
-            className="w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-8"
+            className="w-20 h-20 rounded-[32px] bg-white text-[#DB2777] flex items-center justify-center mx-auto mb-10 shadow-2xl rotate-3"
           >
-            <Mail className="w-7 h-7" />
-          </motion.div>
-
-          {/* Pill label */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="flex items-center justify-center gap-4 mb-8"
-          >
-            <div className="h-px w-10 bg-primary" />
-            <span className="text-sm font-bold uppercase tracking-widest text-primary">Stay Connected</span>
-            <div className="h-px w-10 bg-primary" />
+            <Mail className="w-10 h-10" />
           </motion.div>
 
           {/* Heading */}
@@ -49,85 +74,73 @@ export const NewsletterSection = () => {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-[0.95] tracking-tighter text-foreground mb-5"
+            transition={{ duration: 0.8 }}
+            className="font-serif text-4xl md:text-6xl text-white tracking-tighter mb-6"
           >
-            Parenting tips, delivered monthly.
+            Keep in the{" "}
+            <span className="relative inline-block text-[#FEF08A]">
+              loop
+              <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 100 10" fill="none">
+                <path d="M2 7 Q25 1 50 7 Q75 13 98 7" stroke="white" strokeWidth="4" fill="none" strokeLinecap="round"/>
+              </svg>
+            </span>
+            !
           </motion.h2>
 
-          {/* Sub */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.15 }}
-            className="text-foreground/50 text-base md:text-lg font-light leading-relaxed mb-10 md:mb-12 max-w-xl mx-auto"
-          >
-            Join 2,000+ Nigerian parents who receive our curated newsletter — Montessori activities, development milestones, and exclusive shop discounts.
-          </motion.p>
-
-          {/* Form / Success */}
-          <AnimatePresence mode="wait">
-            {submitted ? (
-              <motion.div
-                key="success"
-                initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ type: "spring", stiffness: 200 }}
-                className="flex flex-col items-center gap-4 text-foreground"
-              >
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 300, delay: 0.15 }}
-                >
-                  <CheckCircle2 className="w-12 h-12 text-primary" />
-                </motion.div>
-                <p className="font-serif text-xl md:text-2xl">Thank you for subscribing!</p>
-                <p className="text-foreground/50 text-sm">Your first edition will land soon. Check your inbox.</p>
-              </motion.div>
-            ) : (
-              <motion.form
-                key="form"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                onSubmit={handleSubmit}
-                className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto"
-              >
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Your email address"
-                  required
-                  className="flex-1 px-5 py-4 rounded-full border border-foreground/20 bg-background text-foreground placeholder:text-foreground/30 focus:outline-none focus:border-foreground text-sm font-sans transition-all duration-300 focus:ring-2 focus:ring-foreground/10"
-                />
-                <motion.button
-                  type="submit"
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="w-full sm:w-auto px-7 py-4 rounded-full bg-foreground text-background font-bold uppercase tracking-widest text-sm hover:bg-primary transition-colors duration-500 flex items-center gap-2 justify-center shrink-0 shadow-md"
-                >
-                  Subscribe
-                  <ArrowRight className="w-4 h-4" />
-                </motion.button>
-              </motion.form>
-            )}
-          </AnimatePresence>
-
-          {/* Fine print */}
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.6 }}
-            className="text-foreground/30 text-xs mt-6 font-sans"
+            transition={{ delay: 0.3 }}
+            className="text-white/80 text-xl font-serif italic mb-12 max-w-xl mx-auto"
           >
-            No spam, ever. Unsubscribe at any time.
+            Join our mailing list for parenting tips, curriculum updates, and news from our little stars.
           </motion.p>
+
+          <AnimatePresence mode="wait">
+            {!submitted ? (
+              <motion.form
+                key="form"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                onSubmit={handleSubmit}
+                className="relative max-w-md mx-auto"
+              >
+                <div className="relative group">
+                  <input
+                    type="email"
+                    required
+                    placeholder="Enter your email address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full bg-white text-[#1A1045] px-8 py-6 rounded-full text-lg focus:outline-none focus:ring-4 focus:ring-white/30 transition-all placeholder:text-[#1A1045]/40 shadow-2xl"
+                  />
+                  <button
+                    type="submit"
+                    className="absolute right-2 top-2 bottom-2 bg-[#DB2777] text-white px-8 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#1A1045] transition-all flex items-center gap-2 group-hover:pr-10"
+                  >
+                    Subscribe
+                    <Sparkles className="w-4 h-4" />
+                  </button>
+                </div>
+              </motion.form>
+            ) : (
+              <motion.div
+                key="success"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-white/10 backdrop-blur-md rounded-[40px] p-10 border-2 border-white/20 inline-block text-white"
+              >
+                <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle2 className="w-8 h-8 text-[#DB2777]" />
+                </div>
+                <h3 className="text-2xl font-serif font-bold mb-2">Welcome to the family!</h3>
+                <p className="text-white/70">You&apos;ve successfully joined our newsletter.</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
         </div>
       </div>
     </section>

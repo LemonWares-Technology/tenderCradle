@@ -1,0 +1,145 @@
+PASS tests/services/stock.service.test.ts (8.902 s)
+  Stock Service
+    reserveStock
+      √ should reserve stock when sufficient quantity is available (12 ms)
+      √ should throw error when insufficient stock (0 rows affected) (33 ms)
+      √ should throw error when variant not found after failed reservation (2 ms)
+    releaseStock
+      √ should release reserved stock successfully (2 ms)
+      √ should throw error when variant not found (0 rows affected) (2 ms)
+    commitStock
+      √ should commit stock by reducing both stock and reservedStock (1 ms)
+      √ should throw error when commit fails (2 ms)
+    getAvailableStock
+      √ should return correct available stock (1 ms)
+      √ should throw error for non-existent variant (1 ms)
+    isLowStock
+      √ should return true when stock is below threshold (1 ms)
+      √ should return false when stock is above threshold
+      √ should return false for non-existent variant (2 ms)
+    setStock
+      √ should set absolute stock level (3 ms)
+      √ should reject negative stock values (4 ms)
+      √ should reject stock below reserved amount (1 ms)
+    adjustStock
+      √ should adjust stock by a positive delta (1 ms)
+      √ should reject adjustment that would make stock negative (1 ms)
+      √ should reject adjustment that goes below reserved amount (2 ms)
+      √ should throw for non-existent variant (1 ms)
+
+PASS tests/utils/idempotency.test.ts
+  Idempotency Utility
+    √ should execute handler and cache result on first call (5 ms)
+    √ should return cached response on duplicate key (1 ms)
+    √ should treat different keys independently (4 ms)
+    √ should handle race condition on create (P2002) gracefully (3 ms)
+
+PASS tests/middleware/auth.middleware.test.ts
+  Auth Middleware
+    protect
+      √ should pass with valid admin token (13 ms)
+      √ should pass with valid customer token (3 ms)
+      √ should reject when no token provided (2 ms)
+      √ should reject with invalid token (1 ms)
+      √ should reject with expired token (2 ms)
+    adminOnly
+      √ should pass for admin user
+      √ should reject customer user (1 ms)
+      √ should reject when no user object (1 ms)
+    customerProtect
+      √ should pass with valid customer token (2 ms)
+      √ should reject admin token (3 ms)
+      √ should reject when no token provided (1 ms)
+    customerOrAdmin
+      √ should pass with customer token (2 ms)
+      √ should pass with admin token (2 ms)
+      √ should reject unknown role (2 ms)
+
+PASS tests/services/cart.service.test.ts
+  Cart Service
+    getOrCreateCart
+      √ should return existing cart (3 ms)
+      √ should create a new cart if none exists (1 ms)
+    addItem
+      √ should throw error for inactive product (19 ms)
+      √ should throw error for out-of-stock variant (2 ms)
+      √ should throw error for non-existent variant (1 ms)
+      √ should throw error for zero quantity (3 ms)
+    updateItemQuantity
+      √ should throw for negative quantity (1 ms)
+      √ should remove item when quantity is set to 0 (1 ms)
+      √ should throw when item not found in cart (1 ms)
+    removeItem
+      √ should throw when item not in cart (8 ms)
+    clearCart
+      √ should clear all items from cart (1 ms)
+    getCartWithTotals
+      √ should return correct totals for cart with items (1 ms)
+      √ should warn about inactive products (1 ms)
+      √ should return empty totals for empty cart (2 ms)
+
+PASS tests/middleware/rateLimit.middleware.test.ts
+  Rate Limit Middleware
+    √ should allow requests under the limit (2 ms)
+    √ should set rate limit headers (2 ms)
+    √ should block requests exceeding the limit (2 ms)
+    √ should allow requests from different IPs (1 ms)
+    √ should set Retry-After header when blocked (1 ms)
+
+  console.warn
+    ⚠️ Webhook: No order found for reference ref-789
+
+    [0m [90m 172 |[39m
+     [90m 173 |[39m       [36mif[39m ([33m![39morder) {
+    [31m[1m>[22m[39m[90m 174 |[39m         console[33m.[39mwarn([32m`⚠️ Webhook: No order found for reference ${reference}`[39m)[33m;[39m
+     [90m     |[39m                 [31m[1m^[22m[39m
+     [90m 175 |[39m         [36mreturn[39m[33m;[39m
+     [90m 176 |[39m       }
+     [90m 177 |[39m[0m
+
+      at Object.handleWebhook (src/services/payment.service.ts:174:17)
+      at Object.<anonymous> (tests/services/payment.service.test.ts:186:7)
+
+PASS tests/services/payment.service.test.ts (12.028 s)
+  Payment Service
+    verifyWebhookSignature
+      √ should return true for valid HMAC-SHA512 signature (10 ms)
+      √ should return false for invalid signature (1 ms)
+      √ should return false for empty signature (1 ms)
+      √ should return false for tampered body
+    handleWebhook
+      √ should handle charge.success event (1 ms)
+      √ should handle charge.failed event (1 ms)
+      √ should skip processing for already-paid orders (615 ms)
+
+PASS tests/services/order.service.test.ts (12.793 s)
+  Order Service
+    getOrdersByCustomer
+      √ should return paginated orders for a customer (16 ms)
+      √ should handle empty order list (1 ms)
+    getOrderById
+      √ should return order belonging to customer (1 ms)
+      √ should throw error when order belongs to different customer (34 ms)
+      √ should throw error when order not found (1 ms)
+    cancelOrder
+      √ should cancel a pending order and release stock (5 ms)
+      √ should throw error when cancelling a shipped order (2 ms)
+      √ should throw error when cancelling delivered order (1 ms)
+      √ should throw error when order not found (2 ms)
+    adminUpdateOrderStatus
+      √ should update order status with valid transition (1 ms)
+      √ should reject invalid status transition (DELIVERED → PENDING) (1 ms)
+      √ should reject transition from CANCELLED (1 ms)
+      √ should allow PENDING → CONFIRMED
+      √ should allow SHIPPED → DELIVERED
+    adminGetOrderById
+      √ should return any order for admin (1 ms)
+      √ should throw when order not found (1 ms)
+
+A worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.
+Test Suites: 7 passed, 7 total
+Tests:       79 passed, 79 total
+Snapshots:   0 total
+Time:        14.684 s, estimated 19 s
+Ran all test suites.
+Force exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?

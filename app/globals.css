@@ -50,36 +50,47 @@
 }
 
 :root {
-  /* Editorial Palette */
-  --background: #EBE6DD; /* Warm Oatmeal/Sand */
-  --foreground: #101010; /* Near Black / Deep Charcoal */
-  --card: #F2EFE8; /* Slightly lighter sand */
-  --card-foreground: #101010;
-  --popover: #F2EFE8;
-  --popover-foreground: #101010;
-  --primary: #85988A; /* Muted Sage Green */
-  --primary-foreground: #EBE6DD;
-  --secondary: #D9D2C4; /* Darker Sand */
-  --secondary-foreground: #101010;
-  --muted: #D9D2C4;
-  --muted-foreground: #6B6B6B;
-  --accent: #C47D63; /* Muted Terracotta */
-  --accent-foreground: #EBE6DD;
-  --warm: #C47D63; /* Terracotta alias */
-  --warm-foreground: #EBE6DD;
+  /* Children's Palette — bright, warm, playful */
+  --background: #FFFFFF;
+  /* Pure White — clean base */
+  --foreground: #1A1045;
+  /* Deep Indigo */
+  --card: #FFFFFF;
+  /* Clean White */
+  --card-foreground: #1A1045;
+  --popover: #FFFFFF;
+  --popover-foreground: #1A1045;
+  --primary: #FF6B35;
+  /* Coral Orange CTA */
+  --primary-foreground: #FFFFFF;
+  --secondary: #FFE66D;
+  /* Sunny Yellow */
+  --secondary-foreground: #1A1045;
+  --muted: #EEF4FF;
+  /* Soft Lavender Tint */
+  --muted-foreground: #6B7DB3;
+  /* Periwinkle Grey */
+  --accent: #4ECDC4;
+  /* Aqua Teal */
+  --accent-foreground: #FFFFFF;
+  --warm: #4ECDC4;
+  /* Aqua Teal alias */
+  --warm-foreground: #FFFFFF;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: #D9D2C4;
-  --input: #D9D2C4;
-  --ring: #101010;
+  --border: #FFD6CC;
+  /* Soft Peach Border */
+  --input: #FFD6CC;
+  --ring: #FF6B6B;
+  /* Coral Red focus ring */
 
-  --sidebar: #EBE6DD;
-  --sidebar-foreground: #101010;
-  --sidebar-primary: #101010;
-  --sidebar-primary-foreground: #EBE6DD;
-  --sidebar-accent: #D9D2C4;
-  --sidebar-accent-foreground: #101010;
-  --sidebar-border: #D9D2C4;
-  --sidebar-ring: #101010;
+  --sidebar: #FFFBF0;
+  --sidebar-foreground: #1A1045;
+  --sidebar-primary: #FF6B6B;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #EEF4FF;
+  --sidebar-accent-foreground: #1A1045;
+  --sidebar-border: #FFD6CC;
+  --sidebar-ring: #FF6B6B;
 }
 
 @layer base {

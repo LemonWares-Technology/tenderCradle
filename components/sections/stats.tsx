@@ -49,16 +49,16 @@ function StatCard({ stat, delay }: { stat: (typeof stats)[0]; delay: number }) {
     >
       {/* Number */}
       <div className="flex items-end gap-1">
-        <span className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-none tracking-tighter text-background tabular-nums">
+        <span className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-none tracking-tighter text-white tabular-nums">
           {stat.decimals > 0 ? count.toFixed(stat.decimals) : Math.round(count)}
           {stat.raw === 450 && count >= 450 ? "+" : ""}
         </span>
-        <span className="font-serif text-2xl md:text-4xl text-primary mb-1 md:mb-2 leading-none">
+        <span className="font-serif text-2xl md:text-4xl text-[#FCD34D] mb-1 md:mb-2 leading-none">
           {stat.suffix}
         </span>
       </div>
       {/* Label */}
-      <p className="text-background/50 text-xs md:text-sm uppercase tracking-widest font-sans font-bold mt-1">
+      <p className="text-white/60 text-xs md:text-sm uppercase tracking-widest font-sans font-bold mt-1">
         {stat.label}
       </p>
       {/* Animated underline */}
@@ -66,7 +66,7 @@ function StatCard({ stat, delay }: { stat: (typeof stats)[0]; delay: number }) {
         initial={{ width: 0 }}
         animate={inView ? { width: "2.5rem" } : {}}
         transition={{ duration: 0.6, delay: delay + 0.4 }}
-        className="h-px bg-primary"
+        className="h-px bg-[#FCD34D]"
       />
     </motion.div>
   );
@@ -74,10 +74,10 @@ function StatCard({ stat, delay }: { stat: (typeof stats)[0]; delay: number }) {
 
 export const StatsSection = () => {
   return (
-    <section className="w-full py-16 md:py-24 lg:py-32 bg-foreground text-background overflow-hidden relative">
+    <section className="w-full py-16 md:py-24 lg:py-32 bg-[#7C3AED] text-white overflow-hidden relative">
       {/* Subtle background texture line */}
       <div className="absolute inset-0 flex items-center pointer-events-none" aria-hidden="true">
-        <div className="w-full h-px bg-background/5" />
+        <div className="w-full h-px bg-white/5" />
       </div>
 
       <div className="container mx-auto px-6 md:px-12 relative">
@@ -89,8 +89,8 @@ export const StatsSection = () => {
           transition={{ duration: 0.6 }}
           className="flex items-center gap-4 mb-12 md:mb-16"
         >
-          <div className="h-px w-12 bg-primary" />
-          <span className="text-xs font-bold uppercase tracking-widest text-primary">By the Numbers</span>
+          <div className="h-px w-12 bg-[#FCD34D]" />
+          <span className="text-xs font-bold uppercase tracking-widest text-[#FCD34D]">By the Numbers</span>
         </motion.div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10 md:gap-12 lg:gap-16">

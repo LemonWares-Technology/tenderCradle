@@ -12,6 +12,7 @@ const navLinks = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Programs", href: "/programs" },
+  { name: "Admissions", href: "/enrollment" },
   { name: "Shop", href: "/shop" },
   { name: "Blog", href: "/blog" },
   { name: "Contact", href: "/contact" },
@@ -39,7 +40,7 @@ export const Navbar = () => {
   return (
     <nav 
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
-        scrolled ? "py-4 bg-background/80 backdrop-blur-xl border-b border-foreground/5 shadow-sm" : "py-6 bg-transparent"
+        scrolled ? "py-4 bg-white/95 backdrop-blur-xl border-b border-[#1D4ED8]/10 shadow-sm" : "py-6 bg-transparent"
       }`}
     >
       <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
@@ -63,7 +64,7 @@ export const Navbar = () => {
                 className="relative group py-2"
               >
                 <span className={`text-xs font-bold uppercase tracking-widest transition-colors ${
-                  isActive ? "text-primary" : "text-foreground/60 group-hover:text-foreground"
+                  isActive ? "text-[#FF6B35]" : "text-[#1A1045]/60 group-hover:text-[#1A1045]"
                 }`}>
                   {link.name}
                 </span>
@@ -71,7 +72,7 @@ export const Navbar = () => {
                 {isActive && (
                   <motion.div 
                     layoutId="nav-active"
-                    className="absolute -bottom-1 left-0 w-full h-0.5 bg-primary"
+                    className="absolute -bottom-1 left-0 w-full h-0.5 bg-[#FF6B35]"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -89,15 +90,15 @@ export const Navbar = () => {
           {/* Cart Trigger */}
           <button 
             onClick={() => setIsCartOpen(!isCartOpen)}
-            className="p-2 relative hover:bg-foreground/5 rounded-full transition-colors group"
+            className="p-2 relative hover:bg-[#FF6B35]/10 rounded-full transition-colors group"
             aria-label="Toggle shopping cart"
           >
-            <ShoppingCart className="w-5 h-5 text-foreground group-hover:text-primary transition-colors" />
+            <ShoppingCart className="w-5 h-5 text-[#1A1045] group-hover:text-[#FF6B35] transition-colors" />
             {cartCount > 0 && (
               <motion.span 
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className="absolute top-0 right-0 w-4 h-4 bg-primary text-background text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-background"
+                className="absolute top-0 right-0 w-4 h-4 bg-[#FF6B35] text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white"
               >
                 {cartCount}
               </motion.span>
@@ -105,8 +106,8 @@ export const Navbar = () => {
           </button>
 
           <Link
-            href="/contact"
-            className="hidden sm:flex items-center justify-center px-6 py-2.5 bg-foreground text-background text-xs font-bold uppercase tracking-widest rounded-full hover:bg-primary hover:scale-105 transition-all duration-300 shadow-xl shadow-foreground/10"
+            href="/enrollment"
+            className="hidden sm:flex items-center justify-center px-6 py-2.5 bg-[#FF6B35] text-white text-xs font-bold uppercase tracking-widest rounded-full hover:bg-[#7C3AED] hover:scale-105 transition-all duration-300 shadow-xl shadow-[#FF6B35]/20"
           >
             Enroll Now
           </Link>

@@ -1,15 +1,14 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { SplitText } from "@/components/ui/split-text";
 import Link from "next/link";
-import { ArrowLeft, Plus, Minus, ShoppingBag } from "lucide-react";
+import { ArrowLeft, Plus, Minus, ShoppingBag, Check } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { notFound } from "next/navigation";
 import { useCart } from "@/components/providers/cart-provider";
 
-// Re-using the mock data
 const allProducts = [
   {
     id: "tc-unif-01",
@@ -49,7 +48,6 @@ const allProducts = [
       { title: "Safety", content: "100% non-toxic and easily washable from skin and clothes." },
     ]
   },
-  // Default fallback for the layout testing
   {
     id: "default",
     name: "Premium Development Tool",
@@ -68,47 +66,50 @@ export const ProductPageContent = ({ productId }: { productId: string }) => {
   const [quantity, setQuantity] = useState(1);
   const [activeAccordion, setActiveAccordion] = useState<number | null>(0);
   const { addItem, cartCount, setIsCartOpen } = useCart();
+  const [isAdded, setIsAdded] = useState(false);
 
-  // Find the product, if not found, use a fallback (in a real app, you'd trigger a 404 or boundary)
   const product = allProducts.find(p => p.id === productId) || allProducts.find(p => p.id === "default");
 
   if (!product) return notFound();
 
+  const handleAddToCart = () => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: parseInt(product.price.replace(/[^\d]/g, '')),
+      image: product.image,
+      quantity: quantity
+    });
+    setIsAdded(true);
+    setTimeout(() => setIsAdded(false), 2000);
+  };
+
   return (
-    <div className="bg-background selection:bg-foreground selection:text-background pb-32 min-h-screen">
+    <div className="bg-[#F8FAFC] min-h-screen pb-32">
       
-      {/* Refined Navigation */}
-      <nav className="fixed top-0 left-0 w-full px-6 py-6 md:px-12 md:py-8 z-50 bg-background/80 backdrop-blur-md border-b border-foreground/5 flex justify-between items-center">
+      {/* Elegant Navigation */}
+      <nav className="fixed top-0 left-0 w-full px-6 py-6 md:px-12 md:py-8 z-50 bg-white/80 backdrop-blur-md border-b border-[#1A1045]/5 flex justify-between items-center transition-all">
         <Link 
           href="/shop"
-          className="inline-flex items-center gap-4 text-foreground hover:opacity-70 transition-opacity"
+          className="inline-flex items-center gap-3 text-[#1A1045] hover:text-[#0284C7] transition-colors group"
         >
-          <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-foreground/20 flex items-center justify-center">
-            <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
+          <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-[#1A1045]/10 flex items-center justify-center group-hover:border-[#0284C7]/30 group-hover:bg-[#E0F2FE]">
+            <ArrowLeft className="w-4 h-4 md:w-5 md:h-5 group-hover:-translate-x-1 transition-transform" />
           </div>
-          <span className="font-serif text-lg md:text-xl tracking-widest uppercase hidden md:inline-block">Back to Shop</span>
+          <span className="font-bold text-xs uppercase tracking-widest hidden md:inline-block">Back to Shop</span>
         </Link>
         <button 
           onClick={() => setIsCartOpen(true)}
-          className="font-serif italic text-xl md:text-2xl text-foreground/80 hover:text-foreground transition-colors group flex items-center gap-2"
+          className="bg-white text-[#1A1045] px-6 py-3 rounded-full font-bold uppercase tracking-widest text-xs pointer-events-auto border-2 border-[#1A1045]/5 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all flex items-center gap-3"
         >
-          Cart 
-          <span className="w-8 h-8 rounded-full bg-foreground text-background text-sm flex items-center justify-center font-sans not-italic">
+          Cart
+          <span className="w-6 h-6 rounded-full bg-[#3B82F6] text-white flex items-center justify-center text-[10px] font-bold">
             {cartCount}
           </span>
         </button>
       </nav>
 
       <div className="container mx-auto px-6 md:px-12 pt-32 md:pt-40">
-        
-        {/* Breadcrumb / Category Tag */}
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8 md:mb-12">
-          <span className="text-xs font-bold uppercase tracking-widest text-primary border border-primary/20 px-3 py-1.5 rounded-full inline-block">
-            {product.category}
-          </span>
-        </motion.div>
-
-        {/* Split Layout: Images left (sticky on desktop), Details right */}
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-24 items-start relative">
           
           {/* Left: Product Images */}
@@ -117,69 +118,64 @@ export const ProductPageContent = ({ productId }: { productId: string }) => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full aspect-4/5 md:aspect-3/4 rounded-[24px] md:rounded-[40px] overflow-hidden bg-foreground/5 shadow-2xl"
+              className="relative w-full aspect-[4/5] rounded-[40px] overflow-hidden bg-white shadow-xl border border-[#1A1045]/5 group"
             >
               <Image 
                 src={product.image} 
                 alt={product.name}
                 fill
-                className="object-cover"
+                className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                 priority
               />
+              <div className="absolute inset-0 bg-[#1A1045]/5 mix-blend-overlay pointer-events-none" />
             </motion.div>
-            
-            {/* Thumbnails (Simulated) */}
-            <div className="grid grid-cols-2 gap-6">
-              <div className="relative aspect-square rounded-[16px] md:rounded-[24px] overflow-hidden bg-foreground/5 opacity-50 hover:opacity-100 transition-opacity cursor-pointer">
-                <Image src={product.image} alt="Thumbnail 1" fill className="object-cover" />
-              </div>
-              <div className="relative aspect-square rounded-[16px] md:rounded-[24px] overflow-hidden bg-foreground/5 opacity-50 hover:opacity-100 transition-opacity cursor-pointer">
-                <Image src={product.image} alt="Thumbnail 2" fill className="object-cover" />
-              </div>
-            </div>
           </div>
 
           {/* Right: Product Details & Typography */}
-          <div className="w-full lg:w-1/2 flex flex-col pt-4 lg:pt-12 pb-32">
-            
-            <SplitText
-              text={product.name}
-              className="font-serif text-5xl md:text-6xl lg:text-7xl leading-[0.9] text-foreground tracking-tighter mb-6"
-            />
+          <div className="w-full lg:w-1/2 flex flex-col pt-4 lg:pt-8 pb-16">
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-[#1A1045]/60 bg-white border border-[#1A1045]/10 px-4 py-2 rounded-full shadow-sm">
+                {product.category}
+              </span>
+            </motion.div>
+
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-[#1A1045] tracking-tighter mb-6 leading-[1.1]">
+              {product.name}
+            </h1>
             
             <motion.p 
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
-              className="text-3xl md:text-4xl text-foreground font-serif italic mb-10"
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
+              className="text-2xl md:text-3xl text-[#1A1045]/80 font-serif italic mb-8"
             >
               {product.price}
             </motion.p>
             
             <motion.div 
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-              className="w-full border-t border-foreground/10 pt-8 mb-10"
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+              className="w-full border-t border-[#1A1045]/10 pt-8 mb-10"
             >
-              <p className="text-lg md:text-xl text-foreground/70 leading-relaxed font-sans font-light">
+              <p className="text-lg md:text-xl text-[#1A1045]/70 leading-relaxed font-serif italic">
                 {product.description}
               </p>
             </motion.div>
 
             {/* Actions */}
             <motion.div 
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
               className="flex flex-col md:flex-row gap-6 mb-16"
             >
               {/* Quantity Selector */}
-              <div className="flex items-center justify-between border border-foreground/20 rounded-full px-6 py-4 w-full md:w-auto md:min-w-[160px]">
+              <div className="flex items-center justify-between bg-white border border-[#1A1045]/10 shadow-sm rounded-full px-6 py-4 w-full md:w-auto md:min-w-[160px]">
                 <button 
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="text-foreground/50 hover:text-foreground transition-colors p-1"
+                  className="text-[#1A1045]/50 hover:text-[#1A1045] transition-colors p-1"
                 >
                   <Minus className="w-5 h-5" />
                 </button>
-                <span className="font-sans font-bold text-lg select-none">{quantity}</span>
+                <span className="font-bold text-lg select-none text-[#1A1045]">{quantity}</span>
                 <button 
                   onClick={() => setQuantity(quantity + 1)}
-                  className="text-foreground/50 hover:text-foreground transition-colors p-1"
+                  className="text-[#1A1045]/50 hover:text-[#1A1045] transition-colors p-1"
                 >
                   <Plus className="w-5 h-5" />
                 </button>
@@ -187,56 +183,62 @@ export const ProductPageContent = ({ productId }: { productId: string }) => {
               
               {/* Add to Cart Button */}
               <button 
-                onClick={() => {
-                  addItem({
-                    id: product.id,
-                    name: product.name,
-                    // Parse the price string (e.g. "₦15,000" to 15000)
-                    price: parseInt(product.price.replace(/[^\d]/g, '')),
-                    image: product.image,
-                    quantity: quantity
-                  });
-                }}
-                className="flex-1 bg-foreground text-background flex items-center justify-center gap-3 rounded-full py-4 px-8 text-sm font-bold uppercase tracking-widest hover:bg-primary transition-colors duration-500 group"
+                onClick={handleAddToCart}
+                disabled={isAdded}
+                className={`flex-1 flex items-center justify-center gap-3 rounded-full py-4 px-8 text-sm font-bold uppercase tracking-widest transition-all duration-300 shadow-lg ${isAdded ? 'bg-[#10B981] text-white' : 'bg-[#1A1045] text-white hover:bg-[#3B82F6] hover:shadow-xl hover:-translate-y-1'}`}
               >
-                <ShoppingBag className="w-5 h-5" />
-                <span>Add to Cart</span>
+                {isAdded ? (
+                  <>
+                    <Check className="w-5 h-5" />
+                    <span>Added!</span>
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag className="w-5 h-5" />
+                    <span>Add to Cart</span>
+                  </>
+                )}
               </button>
             </motion.div>
 
             {/* Details Accordion */}
             <motion.div 
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
-              className="border-t border-foreground/10"
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
+              className="border-t border-[#1A1045]/10"
             >
               {product.details.map((detail, idx) => (
-                <div key={idx} className="border-b border-foreground/10">
+                <div key={idx} className="border-b border-[#1A1045]/10">
                   <button 
                     onClick={() => setActiveAccordion(activeAccordion === idx ? null : idx)}
                     className="w-full flex items-center justify-between py-6 text-left group"
                   >
-                    <span className="font-serif text-2xl group-hover:text-primary transition-colors">
+                    <span className="font-serif text-2xl text-[#1A1045] group-hover:text-[#3B82F6] transition-colors">
                       {detail.title}
                     </span>
-                    <span className="text-foreground/40 group-hover:text-primary transition-colors">
+                    <span className="text-[#1A1045]/40 group-hover:text-[#3B82F6] transition-colors">
                       {activeAccordion === idx ? <Minus className="w-6 h-6" /> : <Plus className="w-6 h-6" />}
                     </span>
                   </button>
-                  <motion.div
-                    initial={false}
-                    animate={{ height: activeAccordion === idx ? 'auto' : 0, opacity: activeAccordion === idx ? 1 : 0 }}
-                    className="overflow-hidden"
-                  >
-                    <p className="pb-6 text-foreground/60 leading-relaxed font-sans font-light">
-                      {detail.content}
-                    </p>
-                  </motion.div>
+                  <AnimatePresence>
+                    {activeAccordion === idx && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <p className="pb-6 text-[#1A1045]/70 leading-relaxed font-serif italic text-lg">
+                          {detail.content}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               ))}
             </motion.div>
             
           </div>
-
         </div>
       </div>
     </div>

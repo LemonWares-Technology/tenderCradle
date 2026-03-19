@@ -1,57 +1,85 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ShieldCheck, Star, Award, Heart } from "lucide-react";
 
 const partners = [
-  { name: "Association Montessori Internationale", abbr: "AMI", description: "Internationally certifying our caregiver training programme." },
-  { name: "UNICEF Nigeria", abbr: "UNICEF", description: "Early childhood development programme partner." },
-  { name: "NERDC", abbr: "NERDC", description: "Curriculum aligned with national early learning standards." },
-  { name: "Ministry of Education", abbr: "MOE", description: "Lagos State licensed early years centre." },
-  { name: "NAEYC", abbr: "NAEYC", description: "Member of the premier early childhood educators association." },
-  { name: "WHO", abbr: "WHO", description: "Adhering to World Health Organization child development guidelines." },
+  { name: "Montessori", abbr: "AMI",   bg: "#DBEAFE", color: "#1D4ED8", icon: Award },
+  { name: "UNICEF",    abbr: "UNICEF", bg: "#DCFCE7", color: "#15803D", icon: Heart },
+  { name: "NERDC",     abbr: "NERDC",  bg: "#FEF9C3", color: "#D97706", icon: Star },
+  { name: "MOE Lagos", abbr: "MOE",    bg: "#FFE4E6", color: "#BE123C", icon: ShieldCheck },
+  { name: "NAEYC",     abbr: "NAEYC",  bg: "#EDE9FE", color: "#7C3AED", icon: Award },
+  { name: "WHO",       abbr: "WHO",    bg: "#E0F2FE", color: "#0369A1", icon: Heart },
 ];
 
 export const PartnersSection = () => {
   return (
-    <section className="w-full py-16 md:py-24 lg:py-28 bg-foreground text-background border-t border-background/10 overflow-hidden">
-      <div className="container mx-auto px-6 md:px-12">
+    <section className="relative w-full py-20 bg-white overflow-hidden">
+      
+      {/* Subtle background texture */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#1A1045 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
 
-        {/* Label */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="flex items-center gap-4 mb-10 md:mb-14"
-        >
-          <div className="h-px w-16 bg-primary" />
-          <span className="text-sm font-bold uppercase tracking-widest text-primary">Trusted & Accredited</span>
-        </motion.div>
+      <div className="container mx-auto px-6 md:px-12 relative z-10">
 
-        {/* Partners grid */}
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-px border border-background/10 rounded-2xl overflow-hidden">
+        {/* Label and Header */}
+        <div className="flex flex-col items-center text-center mb-16">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 bg-blue-50 text-blue-600 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-6"
+          >
+            <ShieldCheck className="w-4 h-4" />
+            Trusted & Accredited
+          </motion.div>
+          
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="font-serif text-3xl md:text-5xl text-[#1A1045] max-w-2xl mx-auto tracking-tight"
+          >
+            Partnering with the world&apos;s leading{" "}
+            <span className="relative inline-block text-blue-500">
+              educators
+              <svg className="absolute -bottom-1 left-0 w-full" viewBox="0 0 100 10" fill="none">
+                <path d="M2 7 Q25 1 50 7 Q75 13 98 7" stroke="#DBEAFE" strokeWidth="6" fill="none" strokeLinecap="round"/>
+              </svg>
+            </span>
+            .
+          </motion.h2>
+        </div>
+
+        {/* Partners Sticker Wall */}
+        <div className="flex flex-wrap justify-center gap-6 md:gap-10">
           {partners.map((partner, idx) => (
             <motion.div
-              key={partner.name}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              key={partner.abbr}
+              initial={{ opacity: 0, scale: 0.8, rotate: idx % 2 === 0 ? -5 : 5 }}
+              whileInView={{ opacity: 1, scale: 1, rotate: idx % 2 === 0 ? -5 : 5 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: idx * 0.07, ease: [0.16, 1, 0.3, 1] }}
-              className="group bg-background/5 hover:bg-background/12 transition-all duration-300 p-5 md:p-8 flex flex-col items-center justify-center text-center gap-2 md:gap-3 cursor-default"
+              whileHover={{ scale: 1.1, rotate: 0, y: -5 }}
+              transition={{ duration: 0.5, delay: idx * 0.05, type: "spring", stiffness: 200 }}
+              className="group relative cursor-default"
             >
-              {/* Abbr badge */}
-              <motion.div
-                whileHover={{ y: -4 }}
-                transition={{ type: "spring", stiffness: 300 }}
-                className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-background/10 group-hover:bg-primary/20 transition-colors flex items-center justify-center mb-1"
+              {/* Sticker Content */}
+              <div 
+                className="w-24 h-24 md:w-32 md:h-32 rounded-[32px] md:rounded-[40px] shadow-lg flex flex-col items-center justify-center p-4 border-4 border-white transition-all duration-300"
+                style={{ backgroundColor: partner.bg }}
               >
-                <span className="font-serif font-bold text-xs md:text-sm text-background/80 group-hover:text-primary transition-colors leading-none">
+                <partner.icon className="w-5 h-5 md:w-8 md:h-8 mb-2 opacity-80" style={{ color: partner.color }} />
+                <span className="font-serif font-bold text-sm md:text-lg leading-none" style={{ color: partner.color }}>
                   {partner.abbr}
                 </span>
-              </motion.div>
-              <p className="text-[9px] md:text-[11px] font-bold uppercase tracking-widest text-background/40 group-hover:text-background/60 transition-colors leading-tight hidden sm:block">
+                
+                {/* Glossy overlay effect */}
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-white/30 to-transparent pointer-events-none rounded-[32px] md:rounded-[40px]" />
+              </div>
+              
+              {/* Full name tooltip on hover */}
+              <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-[#1A1045] text-white px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-20 pointer-events-none shadow-xl">
                 {partner.name}
-              </p>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -62,9 +90,9 @@ export const PartnersSection = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5 }}
-          className="text-center text-background/30 text-xs md:text-sm font-sans mt-8 md:mt-10 max-w-lg mx-auto leading-relaxed"
+          className="text-center text-[#1A1045]/30 text-xs md:text-sm font-serif italic mt-16 max-w-lg mx-auto leading-relaxed"
         >
-          Tender Cradle holds active accreditation and partnership status with each of the above organisations.
+          Active accreditation status with each of these global families.
         </motion.p>
       </div>
     </section>
