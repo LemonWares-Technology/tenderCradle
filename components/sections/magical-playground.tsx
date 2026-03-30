@@ -60,34 +60,6 @@ const bubbles = [
     initialY: 80,
   },
   {
-    image: "/images/disney_owl_teacher_1773833708195.png",
-    alt: "Wise Teacher",
-    size: 110,
-    initialX: 40,
-    initialY: 10,
-  },
-  {
-    image: "/images/disney_magical_castle_1773833507992.png",
-    alt: "Dream Castle",
-    size: 145,
-    initialX: 90,
-    initialY: 25,
-  },
-  {
-    image: "/images/disney_magical_bus_1773833671715.png",
-    alt: "Adventure Bus",
-    size: 155,
-    initialX: 20,
-    initialY: 40,
-  },
-  {
-    image: "/images/disney_kid_astronaut_1773833524519.png",
-    alt: "Little Astronaut",
-    size: 125,
-    initialX: 80,
-    initialY: 70,
-  },
-  {
     image: "/images/disney_girl_blocks_1773833639079.png",
     alt: "Building Blocks",
     size: 120,
@@ -248,8 +220,8 @@ export const MagicalPlaygroundSection = () => {
           </motion.p>
         </div>
 
-        {/* Floating Bubbles */}
-        <div className="relative min-h-[800px] md:min-h-[900px]">
+        {/* Floating Bubbles - Desktop */}
+        <div className="relative min-h-[800px] md:min-h-[900px] hidden md:block">
           {bubbles.map((bubble, index) => (
             <Bubble 
               key={index} 
@@ -258,6 +230,42 @@ export const MagicalPlaygroundSection = () => {
               mouseY={mouseY}
               scrollY={scrollY}
             />
+          ))}
+        </div>
+
+        {/* Mobile Grid */}
+        <div className="md:hidden grid grid-cols-3 gap-6 max-w-md mx-auto">
+          {bubbles.map((bubble, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, scale: 0 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ 
+                duration: 0.5, 
+                delay: index * 0.1,
+                type: "spring",
+                stiffness: 100
+              }}
+              className="aspect-square"
+            >
+              <div className="relative w-full h-full">
+                {/* Bubble glow */}
+                <div className="absolute inset-0 rounded-full bg-white/40 blur-lg" />
+                
+                {/* Bubble */}
+                <div className="relative w-full h-full rounded-full overflow-hidden bg-white shadow-xl border-4 border-white">
+                  <img 
+                    src={bubble.image} 
+                    alt={bubble.alt}
+                    className="w-full h-full object-cover"
+                  />
+                  
+                  {/* Shine effect */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent opacity-60" />
+                </div>
+              </div>
+            </motion.div>
           ))}
         </div>
 
