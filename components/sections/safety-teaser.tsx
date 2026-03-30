@@ -1,4 +1,3 @@
-"use client";
 
 import { motion } from "framer-motion";
 import { 
@@ -18,7 +17,7 @@ import {
   Moon,
   Zap
 } from "lucide-react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 const safetyItems = [
   { 
@@ -221,8 +220,7 @@ export const SafetyTeaser = () => {
             </motion.div>
           </div>
 
-          <Link
-            href="/health-safety"
+          <Link to="/health-safety"
             className="group relative inline-flex items-center gap-6 bg-[#1A1045] text-white px-12 py-6 rounded-[30px] font-black uppercase tracking-widest text-sm hover:translate-y-[-4px] transition-all duration-300 shadow-[0_15px_30px_rgba(26,16,69,0.3)]"
           >
             <span>Explore All Safety Secrets</span>

@@ -1,8 +1,6 @@
-"use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { ArrowLeft, Clock, Calendar, ArrowUpRight } from "lucide-react";
 import { BlogPost, blogPosts } from "@/lib/blog-data";
 
@@ -15,7 +13,7 @@ export const BlogDetailContent = ({ post }: { post: BlogPost }) => {
     <div className="bg-white min-h-screen pb-32">
       {/* Elegant Nav */}
       <nav className="fixed top-0 left-0 w-full px-6 py-5 md:px-12 md:py-8 z-50 bg-white/80 backdrop-blur-md border-b border-[#1A1045]/5 flex justify-between items-center transition-all">
-        <Link href="/blog" className="inline-flex items-center gap-3 text-[#1A1045] hover:text-[#BE185D] transition-colors group">
+        <Link to="/blog" className="inline-flex items-center gap-3 text-[#1A1045] hover:text-[#BE185D] transition-colors group">
           <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-[#1A1045]/10 flex items-center justify-center group-hover:border-[#FCE7F3] group-hover:bg-[#FCE7F3]">
             <ArrowLeft className="w-4 h-4 md:w-5 md:h-5 group-hover:-translate-x-1 transition-transform" />
           </div>
@@ -104,7 +102,7 @@ export const BlogDetailContent = ({ post }: { post: BlogPost }) => {
             </div>
           </div>
           <Link
-             href="/blog"
+             to="/blog"
              className="group inline-flex items-center gap-3 bg-[#F8FAFC] text-[#1A1045] px-6 py-3 rounded-full font-bold uppercase tracking-widest text-xs transition-colors hover:bg-[#1A1045] hover:text-white border border-[#1A1045]/10"
            >
              <span>All Articles</span>
@@ -129,9 +127,9 @@ export const BlogDetailContent = ({ post }: { post: BlogPost }) => {
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.1 }}
                 >
-                  <Link href={`/blog/${related.id}`} className="group block bg-white p-4 rounded-[40px] shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-500 border border-[#1A1045]/5">
+                  <Link to={`/blog/${related.id}`} className="group block bg-white p-4 rounded-[40px] shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-500 border border-[#1A1045]/5">
                     <div className="relative w-full aspect-[4/3] rounded-[30px] overflow-hidden bg-[#F8FAFC] mb-6">
-                      <Image src={related.image} alt={related.title} fill className="object-cover transition-transform duration-1000 group-hover:scale-[1.05]" />
+                      <img src={related.image} alt={related.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.05]" />
                       <div className="absolute inset-0 bg-[#1A1045]/5 group-hover:bg-transparent transition-colors duration-500" />
                       <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest text-[#1A1045] shadow-sm">
                         {related.category}

@@ -1,12 +1,10 @@
-"use client";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { SplitText } from "@/components/ui/split-text";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { ArrowLeft, Plus, Minus, ShoppingBag, Check } from "lucide-react";
-import Image from "next/image";
 import { useState } from "react";
-import { notFound } from "next/navigation";
+import { Navigate } from "react-router-dom";
 import { useCart } from "@/components/providers/cart-provider";
 
 const allProducts = [
@@ -70,7 +68,7 @@ export const ProductPageContent = ({ productId }: { productId: string }) => {
 
   const product = allProducts.find(p => p.id === productId) || allProducts.find(p => p.id === "default");
 
-  if (!product) return notFound();
+  if (!product) return <Navigate to="/404" replace />;
 
   const handleAddToCart = () => {
     addItem({
@@ -90,7 +88,7 @@ export const ProductPageContent = ({ productId }: { productId: string }) => {
       {/* Elegant Navigation */}
       <nav className="fixed top-0 left-0 w-full px-6 py-6 md:px-12 md:py-8 z-50 bg-white/80 backdrop-blur-md border-b border-[#1A1045]/5 flex justify-between items-center transition-all">
         <Link 
-          href="/shop"
+          to="/shop"
           className="inline-flex items-center gap-3 text-[#1A1045] hover:text-[#0284C7] transition-colors group"
         >
           <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-[#1A1045]/10 flex items-center justify-center group-hover:border-[#0284C7]/30 group-hover:bg-[#E0F2FE]">
@@ -120,11 +118,10 @@ export const ProductPageContent = ({ productId }: { productId: string }) => {
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="relative w-full aspect-[4/5] rounded-[40px] overflow-hidden bg-white shadow-xl border border-[#1A1045]/5 group"
             >
-              <Image 
+              <img 
                 src={product.image} 
                 alt={product.name}
-                fill
-                className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                 priority
               />
               <div className="absolute inset-0 bg-[#1A1045]/5 mix-blend-overlay pointer-events-none" />

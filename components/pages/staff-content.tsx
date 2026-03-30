@@ -1,64 +1,47 @@
-"use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { SplitText } from "@/components/ui/split-text";
-import Link from "next/link";
-import { ArrowLeft, Mail, Linkedin, GraduationCap, Award } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Mail, Linkedin, GraduationCap, Award, Loader2 } from "lucide-react";
+import { getTeamMembers, TeamMember } from "@/lib/api/team";
 
-const team = [
-  {
-    name: "Amaka Osei-Bonsu",
-    role: "Lead Montessori Guide",
-    bio: "Certified by the Association Montessori Internationale with 9 years of practice. Amaka's calm approach transforms even the most hesitant child into a confident learner.",
-    initials: "AO",
-    accent: "bg-[#DBEAFE] text-[#1D4ED8] border-[#BFDBFE]",
-    education: "B.Ed. Early Childhood Education, AMI Certification",
-    expertise: ["Montessori Philosophy", "Sensory Development", "Child Psychology"],
-  },
-  {
-    name: "Dr. Emeka Nwosu",
-    role: "Paediatric Development Consultant",
-    bio: "A developmental paediatrician with a doctorate from the University of Lagos. He advises the Tender Cradle curriculum and conducts quarterly developmental screenings.",
-    initials: "EN",
-    accent: "bg-[#DCFCE7] text-[#15803D] border-[#BBF7D0]",
-    education: "MBBS, Ph.D. Paediatrics, University of Lagos",
-    expertise: ["Neurodevelopment", "Growth Monitoring", "Nutrition Science"],
-  },
-  {
-    name: "Chioma Adeyemi",
-    role: "Early Childhood Education Specialist",
-    bio: "With a master's in Early Childhood Education from the University of Ibadan, Chioma leads our curriculum design and parent education workshops.",
-    initials: "CA",
-    accent: "bg-[#FEF9C3] text-[#B45309] border-[#FDE68A]",
-    education: "M.Ed. Early Childhood, University of Ibadan",
-    expertise: ["Curriculum Design", "Literacy Development", "Parent Coaching"],
-  },
-  {
-    name: "Babatunde Fashola",
-    role: "Operations & Family Relations",
-    bio: "Babatunde ensures that every family interaction with Tender Cradle is smooth, warm, and memorable — from first enquiry to end-of-term collection.",
-    initials: "BF",
-    accent: "bg-[#FCE7F3] text-[#BE185D] border-[#FBCFE8]",
-    education: "B.Sc. Business Administration, Customer Experience Cert.",
-    expertise: ["Family Relations", "Operations Management", "Health & Safety"],
-  },
+const ACCENT_STYLES = [
+  "bg-[#DBEAFE] text-[#1D4ED8] border-[#BFDBFE]",
+  "bg-[#DCFCE7] text-[#15803D] border-[#BBF7D0]",
+  "bg-[#FEF9C3] text-[#B45309] border-[#FDE68A]",
+  "bg-[#FCE7F3] text-[#BE185D] border-[#FBCFE8]",
 ];
 
 export const StaffPageContent = () => {
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTeam = async () => {
+      try {
+        const data = await getTeamMembers();
+        setTeamMembers(data.sort((a, b) => a.order - b.order));
+      } catch (err: any) {
+        setError(err.message || "Failed to load team members");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchTeam();
+  }, []);
+
+  if (isLoading && teamMembers.length === 0) {
+    return (
+      <div className="bg-[#F8FAFC] min-h-screen flex justify-center items-center">
+        <Loader2 className="w-12 h-12 text-[#1A1045] animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="bg-[#F8FAFC] text-foreground pb-32 overflow-hidden">
-      {/* Elegant navigation */}
-      <nav className="fixed top-0 left-0 w-full px-6 py-6 md:px-12 md:py-10 z-50 pointer-events-none">
-        <Link 
-          href="/"
-          className="inline-flex items-center gap-3 bg-white/90 backdrop-blur-md px-6 py-3 rounded-full shadow-lg border border-[#1A1045]/5 pointer-events-auto hover:-translate-y-1 transition-all group"
-        >
-          <div className="w-8 h-8 rounded-full bg-[#FEF9C3] flex items-center justify-center group-hover:bg-[#FDE68A] transition-colors">
-            <ArrowLeft className="w-4 h-4 text-[#B45309]" />
-          </div>
-          <span className="font-bold text-[#1A1045] uppercase tracking-widest text-xs hidden sm:inline-block">Back Home</span>
-        </Link>
-      </nav>
 
       {/* Hero */}
       <section className="relative w-full min-h-[50vh] flex items-center pb-24 overflow-hidden pt-40 bg-white">
@@ -85,79 +68,94 @@ export const StaffPageContent = () => {
       {/* Staff Directory */}
       <section className="w-full py-32">
         <div className="container mx-auto px-6 md:px-12">
+          {error && (
+            <div className="bg-red-50 text-red-600 p-8 rounded-[40px] text-center mb-16 border border-red-100">
+              {error}
+            </div>
+          )}
+          
           <div className="grid gap-24 md:gap-32">
-            {team.map((member, index) => (
-              <motion.div
-                key={member.name}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="grid lg:grid-cols-12 gap-12 lg:gap-24 items-center bg-white p-6 md:p-12 rounded-[50px] shadow-xl border border-[#1A1045]/5 hover:shadow-2xl transition-shadow duration-500"
-              >
-                {/* Avatar Column */}
-                <div className={`lg:col-span-4 ${index % 2 !== 0 ? 'lg:order-last' : ''}`}>
-                  <div className={`w-full aspect-square rounded-[40px] flex items-center justify-center relative overflow-hidden ${member.accent} shadow-inner border-2`}>
-                    <span className="font-serif text-8xl md:text-[10rem] font-bold opacity-30 select-none">
-                      {member.initials}
-                    </span>
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent pointer-events-none mix-blend-overlay" />
-                  </div>
-                </div>
+            {teamMembers.map((member, index) => {
+              const accent = ACCENT_STYLES[index % ACCENT_STYLES.length];
+              const initials = member.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+              
+              // Fallbacks as these are not in the current DB schema
+              const education = "B.Ed. Early Childhood Development";
+              const expertise = ["Child Psychology", "Curriculum Design", "Early Literacy"];
 
-                {/* Content Column */}
-                <div className="lg:col-span-8 flex flex-col justify-center">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-[#1A1045]/10 pb-8">
-                    <div>
-                      <h2 className="font-serif text-4xl md:text-5xl tracking-tighter text-[#1A1045] mb-4">{member.name}</h2>
-                      <div className="inline-block px-4 py-2 bg-[#F8FAFC] rounded-full border border-[#1A1045]/10">
-                        <p className="text-[#1A1045]/70 font-bold uppercase tracking-widest text-xs">{member.role}</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-4">
-                      <button className="w-12 h-12 rounded-full bg-white border border-[#1A1045]/10 flex items-center justify-center shadow-sm hover:shadow-md hover:-translate-y-1 transition-all text-[#1A1045]/60 hover:text-[#3B82F6]">
-                        <Mail className="w-5 h-5" />
-                      </button>
-                      <button className="w-12 h-12 rounded-full bg-white border border-[#1A1045]/10 flex items-center justify-center shadow-sm hover:shadow-md hover:-translate-y-1 transition-all text-[#1A1045]/60 hover:text-[#3B82F6]">
-                        <Linkedin className="w-5 h-5" />
-                      </button>
+              return (
+                <motion.div
+                  key={member.id}
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  className="grid lg:grid-cols-12 gap-12 lg:gap-24 items-center bg-white p-6 md:p-12 rounded-[50px] shadow-xl border border-[#1A1045]/5 hover:shadow-2xl transition-shadow duration-500"
+                >
+                  {/* Avatar Column */}
+                  <div className={`lg:col-span-4 ${index % 2 !== 0 ? 'lg:order-last' : ''}`}>
+                    <div className={`w-full aspect-square rounded-[40px] flex items-center justify-center relative overflow-hidden ${accent} shadow-inner border-2`}>
+                      <span className="font-serif text-8xl md:text-[10rem] font-bold opacity-30 select-none">
+                        {initials}
+                      </span>
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/30 to-transparent pointer-events-none mix-blend-overlay" />
                     </div>
                   </div>
 
-                  <p className="text-xl md:text-2xl text-[#1A1045]/80 font-serif italic leading-relaxed mb-10">
-                    "{member.bio}"
-                  </p>
-
-                  <div className="grid md:grid-cols-2 gap-8">
-                    <div className="bg-[#F8FAFC] p-6 rounded-[30px] border border-[#1A1045]/5 flex items-start gap-4 transition-colors hover:bg-white hover:shadow-lg">
-                      <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm shrink-0">
-                        <GraduationCap className="w-5 h-5 text-[#1D4ED8]" />
-                      </div>
+                  {/* Content Column */}
+                  <div className="lg:col-span-8 flex flex-col justify-center">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-[#1A1045]/10 pb-8">
                       <div>
-                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-[#1A1045]/50 mb-1">Education</h4>
-                        <p className="font-serif text-lg text-[#1A1045]">{member.education}</p>
+                        <h2 className="font-serif text-4xl md:text-5xl tracking-tighter text-[#1A1045] mb-4">{member.name}</h2>
+                        <div className="inline-block px-4 py-2 bg-[#F8FAFC] rounded-full border border-[#1A1045]/10">
+                          <p className="text-[#1A1045]/70 font-bold uppercase tracking-widest text-xs">{member.role}</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-4">
+                        <button className="w-12 h-12 rounded-full bg-white border border-[#1A1045]/10 flex items-center justify-center shadow-sm hover:shadow-md hover:-translate-y-1 transition-all text-[#1A1045]/60 hover:text-[#3B82F6]">
+                          <Mail className="w-5 h-5" />
+                        </button>
+                        <button className="w-12 h-12 rounded-full bg-white border border-[#1A1045]/10 flex items-center justify-center shadow-sm hover:shadow-md hover:-translate-y-1 transition-all text-[#1A1045]/60 hover:text-[#3B82F6]">
+                          <Linkedin className="w-5 h-5" />
+                        </button>
                       </div>
                     </div>
 
-                    <div className="bg-[#F8FAFC] p-6 rounded-[30px] border border-[#1A1045]/5 flex items-start gap-4 transition-colors hover:bg-white hover:shadow-lg">
-                      <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm shrink-0">
-                        <Award className="w-5 h-5 text-[#B45309]" />
+                    <p className="text-xl md:text-2xl text-[#1A1045]/80 font-serif italic leading-relaxed mb-10">
+                      "{member.bio}"
+                    </p>
+
+                    <div className="grid md:grid-cols-2 gap-8">
+                      <div className="bg-[#F8FAFC] p-6 rounded-[30px] border border-[#1A1045]/5 flex items-start gap-4 transition-colors hover:bg-white hover:shadow-lg">
+                        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm shrink-0">
+                          <GraduationCap className="w-5 h-5 text-[#1D4ED8]" />
+                        </div>
+                        <div>
+                          <h4 className="text-[10px] font-bold uppercase tracking-widest text-[#1A1045]/50 mb-1">Education</h4>
+                          <p className="font-serif text-lg text-[#1A1045]">{education}</p>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-[#1A1045]/50 mb-2">Expertise</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {member.expertise.map(skill => (
-                            <span key={skill} className="px-3 py-1 bg-white border border-[#1A1045]/5 shadow-sm rounded-full text-[10px] font-bold uppercase tracking-widest text-[#1A1045]/70">
-                              {skill}
-                            </span>
-                          ))}
+
+                      <div className="bg-[#F8FAFC] p-6 rounded-[30px] border border-[#1A1045]/5 flex items-start gap-4 transition-colors hover:bg-white hover:shadow-lg">
+                        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm shrink-0">
+                          <Award className="w-5 h-5 text-[#B45309]" />
+                        </div>
+                        <div>
+                          <h4 className="text-[10px] font-bold uppercase tracking-widest text-[#1A1045]/50 mb-2">Expertise</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {expertise.map(skill => (
+                              <span key={skill} className="px-3 py-1 bg-white border border-[#1A1045]/5 shadow-sm rounded-full text-[10px] font-bold uppercase tracking-widest text-[#1A1045]/70">
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -178,3 +176,4 @@ export const StaffPageContent = () => {
     </div>
   );
 };
+

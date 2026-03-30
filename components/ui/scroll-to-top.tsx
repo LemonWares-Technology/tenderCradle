@@ -1,18 +1,20 @@
-"use client";
 
 import { useEffect, useState, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence, useSpring } from "framer-motion";
 import { ArrowUp } from "lucide-react";
 
 export const ScrollToTop = () => {
+  const { pathname } = useLocation();
   const [visible, setVisible] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [hovered, setHovered] = useState(false);
   const [direction, setDirection] = useState<"up" | "down">("up");
 
-  // Smooth spring for the progress ring
   const springProgress = useSpring(0, { stiffness: 80, damping: 20 });
   const lastScrollY = useRef(0);
+
+  const isLanding = pathname === "/";
 
   useEffect(() => {
     const onScroll = () => {
@@ -47,7 +49,7 @@ export const ScrollToTop = () => {
 
   return (
     <AnimatePresence>
-      {visible && (
+      {visible && !isLanding && (
         <motion.button
           key="scroll-top"
           initial={{ opacity: 0, scale: 0.5, y: 24 }}

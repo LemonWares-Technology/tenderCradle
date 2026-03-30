@@ -1,8 +1,6 @@
-"use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { 
   ArrowUpRight, 
   Gift, 
@@ -104,7 +102,7 @@ export const ShopPreviewSection = () => {
             </h2>
           </div>
           
-          <Link href="/shop" className="group relative inline-flex items-center gap-4 bg-blue-600 text-white px-8 py-5 rounded-[24px] font-black uppercase tracking-widest text-sm hover:-translate-y-1 transition-all duration-300 shadow-[0_10px_0px_#1E40AF] hover:shadow-[0_14px_0px_#1E40AF]">
+          <Link to="/shop" className="group relative inline-flex items-center gap-4 bg-blue-600 text-white px-8 py-5 rounded-[24px] font-black uppercase tracking-widest text-sm hover:-translate-y-1 transition-all duration-300 shadow-[0_10px_0px_#1E40AF] hover:shadow-[0_14px_0px_#1E40AF]">
             <span className="font-serif italic capitalize text-lg">Visit the Shop</span>
             <ShoppingCart className="w-6 h-6 group-hover:rotate-12 transition-transform" />
           </Link>
@@ -121,13 +119,12 @@ export const ShopPreviewSection = () => {
             className="md:col-span-12 lg:col-span-7 group cursor-pointer block"
             style={{ rotate: `${previewProducts[0].rotation}deg` }}
           >
-            <Link href={`/shop/${previewProducts[0].id}`}>
+            <Link to={`/shop/${previewProducts[0].id}`}>
               <div className="relative w-full aspect-4/5 rounded-[50px] overflow-visible bg-white mb-10 border-[10px] border-white shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]">
                 <div className="absolute inset-0 rounded-[40px] overflow-hidden">
-                  <Image 
+                  <img 
                     src={previewProducts[0].image} 
                     alt={previewProducts[0].name}
-                    fill
                     className="object-cover transition-transform duration-1000 group-hover:scale-105"
                   />
                 </div>
@@ -167,13 +164,12 @@ export const ShopPreviewSection = () => {
                 className="group cursor-pointer block"
                 style={{ rotate: `${product.rotation}deg` }}
               >
-                <Link href={`/shop/${product.id}`}>
+                <Link to={`/shop/${product.id}`}>
                   <div className="relative w-full aspect-square rounded-[40px] overflow-visible bg-white mb-8 border-[10px] border-white shadow-xl transition-transform duration-500 group-hover:scale-[1.03]">
                     <div className="absolute inset-0 rounded-[30px] overflow-hidden">
-                      <Image 
+                      <img 
                         src={product.image} 
                         alt={product.name}
-                        fill
                         className="object-cover transition-transform duration-1000 group-hover:scale-105"
                       />
                     </div>

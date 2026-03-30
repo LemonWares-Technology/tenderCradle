@@ -1,10 +1,8 @@
-"use client";
 
 import { motion } from "framer-motion";
 import { SplitText } from "@/components/ui/split-text";
-import Link from "next/link";
-import { ArrowLeft, ArrowRight, Download, CheckCircle2, Sparkles } from "lucide-react";
-import Image from "next/image";
+import { Link } from "react-router-dom";
+import { ArrowRight, Download, CheckCircle2, Sparkles } from "lucide-react";
 
 const enrollmentSteps = [
   {
@@ -49,18 +47,6 @@ const checklistItems = [
 export const EnrollmentPageContent = () => {
   return (
     <div className="bg-background text-foreground overflow-hidden">
-      {/* Elegant navigation */}
-      <nav className="fixed top-0 left-0 w-full px-6 py-6 md:px-12 md:py-10 z-50 pointer-events-none">
-        <Link 
-          href="/"
-          className="inline-flex items-center gap-3 bg-white px-6 py-3 rounded-full shadow-lg border-2 border-[#1A1045]/5 pointer-events-auto hover:-translate-y-1 transition-all group"
-        >
-          <div className="w-8 h-8 rounded-full bg-[#FEF9C3] flex items-center justify-center group-hover:bg-[#FDE68A] transition-colors">
-            <ArrowLeft className="w-4 h-4 text-[#B45309]" />
-          </div>
-          <span className="font-bold text-[#1A1045] uppercase tracking-widest text-xs">Back Home</span>
-        </Link>
-      </nav>
 
       {/* Hero */}
       <section className="relative w-full min-h-[60vh] flex items-center pb-24 overflow-hidden pt-32 bg-[#FEF9C3]">
@@ -74,7 +60,7 @@ export const EnrollmentPageContent = () => {
           animate={{ y: [0, -15, 0], rotate: [-5, -10, -5] }}
           transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
         >
-          <Image src="/images/disney-butterfly.png" alt="Magical butterfly" fill className="object-contain" />
+          <img src="/images/disney-butterfly.png" alt="Magical butterfly" className="object-contain" />
         </motion.div>
 
         <div className="container mx-auto px-6 md:px-12 relative z-10 flex flex-col md:flex-row items-center gap-12">
@@ -119,10 +105,9 @@ export const EnrollmentPageContent = () => {
                 className="group bg-white p-6 rounded-[40px] shadow-xl border border-[#1A1045]/5 hover:-translate-y-2 transition-all duration-300 relative"
               >
                 <div className="relative aspect-[4/5] rounded-[30px] overflow-hidden mb-8 shadow-inner">
-                  <Image 
+                  <img 
                     src={step.image} 
                     alt={step.title} 
-                    fill 
                     className="object-cover transition-transform duration-1000 group-hover:scale-105" 
                   />
                   {/* Elegant Number Badge */}
@@ -194,7 +179,7 @@ export const EnrollmentPageContent = () => {
       {/* CTA */}
       <section className="py-40 bg-[#F8FAFC]">
         <div className="container mx-auto px-6 md:px-12 text-center">
-          <Link href="/contact" className="group inline-flex flex-col items-center">
+          <Link to="/contact" className="group inline-flex flex-col items-center">
             <span className="inline-flex items-center gap-3 px-4 py-2 rounded-full mb-8 bg-white shadow-sm border border-[#1A1045]/5">
               <span className="text-[10px] font-bold uppercase tracking-widest text-[#B45309]">Ready to Begin?</span>
             </span>

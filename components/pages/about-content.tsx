@@ -1,26 +1,12 @@
-"use client";
 
 import { motion } from "framer-motion";
 import { SplitText } from "@/components/ui/split-text";
-import Link from "next/link";
-import { ArrowLeft, Sparkles } from "lucide-react";
-import Image from "next/image";
+import { Link } from "react-router-dom";
+import { Sparkles } from "lucide-react";
 
 export const AboutPageContent = () => {
   return (
     <div className="bg-background text-foreground overflow-hidden">
-      {/* Elegant navigation */}
-      <nav className="fixed top-0 left-0 w-full px-6 py-6 md:px-12 md:py-10 z-50 pointer-events-none">
-        <Link 
-          href="/"
-          className="inline-flex items-center gap-3 bg-white px-6 py-3 rounded-full shadow-lg border-2 border-[#1A1045]/5 pointer-events-auto hover:-translate-y-1 transition-all group"
-        >
-          <div className="w-8 h-8 rounded-full bg-[#F0FDF4] flex items-center justify-center group-hover:bg-[#DCFCE7] transition-colors">
-            <ArrowLeft className="w-4 h-4 text-[#16A34A]" />
-          </div>
-          <span className="font-bold text-[#1A1045] uppercase tracking-widest text-xs">Back Home</span>
-        </Link>
-      </nav>
 
       {/* Hero */}
       <section className="relative w-full min-h-screen flex items-center pt-32 pb-20 overflow-hidden bg-[#F0FDF4]">
@@ -34,7 +20,7 @@ export const AboutPageContent = () => {
           animate={{ y: [0, -20, 0], rotate: [-2, 2, -2] }}
           transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
         >
-          <Image src="/images/disney-butterfly.png" alt="Magical butterfly" fill className="object-contain" />
+          <img src="/images/disney-butterfly.png" alt="Magical butterfly" className="object-contain" />
         </motion.div>
 
         <div className="container mx-auto px-6 md:px-12 relative z-10 flex flex-col lg:flex-row items-center gap-12">
@@ -77,7 +63,7 @@ export const AboutPageContent = () => {
                className="relative w-full h-full"
             >
                 <div className="absolute inset-0 bg-white rounded-full shadow-2xl shadow-[#16A34A]/20 opacity-80" />
-                <Image src="/images/disney-child.png" alt="Happy child playing" fill className="object-cover p-8 mix-blend-multiply rounded-full" />
+                <img src="/images/disney-child.png" alt="Happy child playing" className="object-cover p-8 mix-blend-multiply rounded-full" />
             </motion.div>
           </div>
         </div>
@@ -102,7 +88,7 @@ export const AboutPageContent = () => {
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
               className="lg:col-span-6 relative aspect-[4/5] rounded-[40px] md:rounded-[60px] overflow-hidden shadow-2xl border-4 border-[#1A1045]/5"
             >
-              <Image src="/images/about-1.png" alt="Caregiver with children" fill className="object-cover" />
+              <img src="/images/about-1.png" alt="Caregiver with children" className="object-cover" />
             </motion.div>
 
             <div className="lg:col-span-6">

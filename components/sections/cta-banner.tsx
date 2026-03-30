@@ -1,7 +1,6 @@
-"use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { ArrowUpRight, CheckCircle } from "lucide-react";
 
 const stars = [
@@ -102,15 +101,13 @@ export const CTABannerSection = () => {
           transition={{ delay: 0.4 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14"
         >
-          <Link
-            href="/contact"
+          <Link to="/contact"
             className="group inline-flex items-center gap-3 bg-white text-[#F97316] px-8 py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-[#1A1045] hover:text-white transition-all duration-500 shadow-xl shadow-black/15"
           >
             Enroll Your Child
             <ArrowUpRight className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
           </Link>
-          <Link
-            href="/about"
+          <Link to="/about"
             className="text-white/80 hover:text-white font-bold uppercase tracking-widest text-sm border-b-2 border-white/40 hover:border-white pb-1 transition-all duration-300"
           >
             Learn More

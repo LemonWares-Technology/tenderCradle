@@ -1,8 +1,7 @@
-"use client";
 
 import { motion } from "framer-motion";
 import { Baby, Gamepad2, HeartHandshake, Users } from "lucide-react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
 const programs = [
@@ -150,8 +149,7 @@ export const OfferingsSection = () => {
           transition={{ delay: 0.5 }}
           className="text-center mt-14"
         >
-          <Link
-            href="/programs"
+          <Link to="/programs"
             className="inline-flex items-center gap-3 bg-[#16A34A] text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#1A1045] transition-all duration-500 shadow-lg shadow-[#16A34A]/25"
           >
             View All Programs <ArrowRight className="w-4 h-4" />

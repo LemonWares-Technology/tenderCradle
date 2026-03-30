@@ -1,0 +1,134 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Bubblegum Sans", "Nunito", ui-sans-serif, sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-warm: var(--warm);
+  --color-warm-foreground: var(--warm-foreground);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+}
+
+:root {
+  /* Children's Palette — bright, warm, playful */
+  --background: #FFFFFF;
+  /* Pure White — clean base */
+  --foreground: #1A1045;
+  /* Deep Indigo */
+  --card: #FFFFFF;
+  /* Clean White */
+  --card-foreground: #1A1045;
+  --popover: #FFFFFF;
+  --popover-foreground: #1A1045;
+  --primary: #FF6B35;
+  /* Coral Orange CTA */
+  --primary-foreground: #FFFFFF;
+  --secondary: #FFE66D;
+  /* Sunny Yellow */
+  --secondary-foreground: #1A1045;
+  --muted: #EEF4FF;
+  /* Soft Lavender Tint */
+  --muted-foreground: #6B7DB3;
+  /* Periwinkle Grey */
+  --accent: #4ECDC4;
+  /* Aqua Teal */
+  --accent-foreground: #FFFFFF;
+  --warm: #4ECDC4;
+  /* Aqua Teal alias */
+  --warm-foreground: #FFFFFF;
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: #FFD6CC;
+  /* Soft Peach Border */
+  --input: #FFD6CC;
+  --ring: #FF6B6B;
+  /* Coral Red focus ring */
+
+  --sidebar: #FFFBF0;
+  --sidebar-foreground: #1A1045;
+  --sidebar-primary: #FF6B6B;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #EEF4FF;
+  --sidebar-accent-foreground: #1A1045;
+  --sidebar-border: #FFD6CC;
+  --sidebar-ring: #FF6B6B;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-foreground selection:text-background;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* ─── Custom Scrollbar ─────────────────────────────── */
+
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) transparent;
+  }
+
+  /* Webkit (Chrome, Safari, Edge) */
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 999px;
+    transition: background 0.2s;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--color-primary) 80%, white 20%);
+    box-shadow: 0 0 6px var(--color-primary);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}

@@ -1,9 +1,8 @@
-"use client";
 
 import { motion } from "framer-motion";
 import { SplitText } from "@/components/ui/split-text";
-import Link from "next/link";
-import { ArrowLeft, FileText, Download, Bookmark, Calendar, Phone, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
+import { FileText, Download, Bookmark, Calendar, Phone, Sparkles } from "lucide-react";
 
 const resources = [
   {
@@ -37,18 +36,6 @@ const resources = [
 export const ParentResourcesContent = () => {
   return (
     <div className="bg-[#F8FAFC] text-foreground pb-32 overflow-hidden">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full px-6 py-6 md:px-12 md:py-10 z-50 pointer-events-none">
-        <Link 
-          href="/"
-          className="inline-flex items-center gap-3 bg-white/90 backdrop-blur-md px-6 py-3 rounded-full shadow-lg border border-[#1A1045]/5 pointer-events-auto hover:-translate-y-1 transition-all group"
-        >
-          <div className="w-8 h-8 rounded-full bg-[#E0F2FE] flex items-center justify-center group-hover:bg-[#BAE6FD] transition-colors">
-            <ArrowLeft className="w-4 h-4 text-[#0284C7]" />
-          </div>
-          <span className="font-bold text-[#1A1045] uppercase tracking-widest text-xs hidden sm:inline-block">Back to Home</span>
-        </Link>
-      </nav>
 
       {/* Hero */}
       <section className="relative w-full min-h-[50vh] flex items-center pb-16 overflow-hidden pt-40 bg-white">
@@ -126,7 +113,7 @@ export const ParentResourcesContent = () => {
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6 md:px-12">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <Link href="/events" className="p-8 md:p-10 bg-[#FEF9C3] border border-[#FDE68A] text-[#B45309] rounded-[40px] shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-500 group">
+            <Link to="/events" className="p-8 md:p-10 bg-[#FEF9C3] border border-[#FDE68A] text-[#B45309] rounded-[40px] shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-500 group">
               <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-6 group-hover:scale-110 transition-transform">
                  <Calendar className="w-6 h-6 text-[#B45309]" />
               </div>
@@ -134,7 +121,7 @@ export const ParentResourcesContent = () => {
               <p className="text-sm text-[#B45309]/80 font-serif italic leading-relaxed">Term dates, holidays, and special events for 2026.</p>
             </Link>
             
-            <Link href="/contact" className="p-8 md:p-10 bg-[#DCFCE7] border border-[#BBF7D0] text-[#15803D] rounded-[40px] shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-500 group">
+            <Link to="/contact" className="p-8 md:p-10 bg-[#DCFCE7] border border-[#BBF7D0] text-[#15803D] rounded-[40px] shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-500 group">
               <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-6 group-hover:scale-110 transition-transform">
                  <Phone className="w-6 h-6 text-[#15803D]" />
               </div>

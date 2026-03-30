@@ -1,9 +1,8 @@
-"use client";
 
 import { motion } from "framer-motion";
 import { SplitText } from "@/components/ui/split-text";
-import Link from "next/link";
-import { ArrowLeft, Clock, Utensils, Coffee, Sun, Moon } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Clock, Utensils, Coffee, Sun, Moon } from "lucide-react";
 
 const schedule = [
   { time: "07:30 — 08:30", activity: "Soft Landing & Breakfast", detail: "Arrival, quiet play, and a nutritious morning meal to start the day." },
@@ -26,18 +25,6 @@ const weeklyMenu = [
 export const DailyLifePageContent = () => {
   return (
     <div className="bg-background selection:bg-foreground selection:text-background pb-32">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full px-6 py-6 md:px-12 md:py-8 z-50 bg-background/80 backdrop-blur-md border-b border-foreground/5">
-        <Link 
-          href="/"
-          className="inline-flex items-center gap-4 text-foreground hover:opacity-70 transition-opacity"
-        >
-          <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-foreground/20 flex items-center justify-center">
-            <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
-          </div>
-          <span className="font-serif text-lg md:text-xl tracking-widest uppercase">Back to Home</span>
-        </Link>
-      </nav>
 
       {/* Hero */}
       <section className="relative w-full min-h-[60vh] flex items-end pb-24 overflow-hidden pt-40">
@@ -145,7 +132,7 @@ export const DailyLifePageContent = () => {
       <section className="py-40">
         <div className="container mx-auto px-6 md:px-12 text-center">
           <p className="text-foreground/40 mb-8 uppercase tracking-[0.3em] font-bold text-xs">Want to see it in action?</p>
-          <Link href="/contact" className="font-serif text-5xl md:text-7xl lg:text-8xl tracking-tight hover:text-primary transition-colors border-b border-foreground/10 pb-4">
+          <Link to="/contact" className="font-serif text-5xl md:text-7xl lg:text-8xl tracking-tight hover:text-primary transition-colors border-b border-foreground/10 pb-4">
             Book a Morning Tour.
           </Link>
         </div>

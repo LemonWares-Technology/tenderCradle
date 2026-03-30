@@ -1,8 +1,7 @@
-"use client";
 import { useState } from "react";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { 
   ShoppingBag, 
   LayoutDashboard, 
@@ -11,9 +10,13 @@ import {
   Package,
   LogOut,
   X,
-  FileText
+  FileText,
+  MessageSquare,
+  Mail,
+  UserCheck
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
+import { useAuth } from "@/lib/context/AuthContext";
 
 const navItems = [
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
@@ -21,6 +24,9 @@ const navItems = [
   { name: "Orders", href: "/admin/orders", icon: ShoppingBag },
   { name: "Customers", href: "/admin/customers", icon: Users },
   { name: "Blog", href: "/admin/blog", icon: FileText },
+  { name: "Team", href: "/admin/team", icon: UserCheck },
+  { name: "Leads", href: "/admin/leads", icon: MessageSquare },
+  { name: "Newsletter", href: "/admin/newsletters", icon: Mail },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ];
 
@@ -30,8 +36,9 @@ interface AdminSidebarProps {
 }
 
 export const AdminSidebar = ({ className = "", onCloseMobile }: AdminSidebarProps) => {
-  const pathname = usePathname();
+  const { pathname } = useLocation();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const { logout } = useAuth();
 
   return (
     <>
@@ -57,7 +64,7 @@ export const AdminSidebar = ({ className = "", onCloseMobile }: AdminSidebarProp
           return (
             <Link
               key={item.name}
-              href={item.href}
+              to={item.href}
               className={`flex items-center gap-3 px-4 py-3 rounded-r-full text-sm font-medium transition-colors ${
                 isActive 
                   ? "bg-[#E8F0FE] text-[#1A73E8]" 
@@ -105,13 +112,12 @@ export const AdminSidebar = ({ className = "", onCloseMobile }: AdminSidebarProp
               >
                 Cancel
               </button>
-              <Link 
-                href="/"
-                onClick={() => setIsLogoutModalOpen(false)}
+              <button
+                onClick={() => { setIsLogoutModalOpen(false); logout(); }}
                 className="px-4 py-2 rounded text-sm font-medium bg-[#D93025] text-white hover:bg-[#B31412] transition-colors shadow-sm"
               >
                 Yes, Sign Out
-              </Link>
+              </button>
             </div>
           </div>
         </div>

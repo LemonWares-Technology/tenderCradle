@@ -1,8 +1,7 @@
-"use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { 
   ArrowRight, 
   BookOpen, 
@@ -11,11 +10,10 @@ import {
   Pencil, 
   Lightbulb, 
   Brain, 
-  Star 
+  Star,
+  Loader2
 } from "lucide-react";
-import { blogPosts } from "@/lib/blog-data";
-
-const articles = blogPosts.filter((p) => p.status === "Published").slice(0, 3);
+import { getBlogs, Blog } from "@/lib/api/blog";
 
 // Different colors for each card's accent
 const cardThemes = [
@@ -43,6 +41,32 @@ const cardThemes = [
 ];
 
 export const BlogPreviewSection = () => {
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const data = await getBlogs();
+        setBlogs(data.slice(0, 3));
+      } catch (err: any) {
+        setError(err.message || "Failed to load blog posts");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchBlogs();
+  }, []);
+
+  if (isLoading && blogs.length === 0) {
+    return (
+      <section className="py-24 bg-[#F5F3FF] flex justify-center items-center min-h-[400px]">
+        <Loader2 className="w-10 h-10 text-purple-600 animate-spin" />
+      </section>
+    );
+  }
+
   return (
     <section className="relative w-full py-24 md:py-40 bg-[#F5F3FF] text-[#1A1045] overflow-hidden">
       
@@ -102,8 +126,7 @@ export const BlogPreviewSection = () => {
               .
             </h2>
           </div>
-          <Link
-            href="/blog"
+          <Link to="/blog"
             className="group relative inline-flex items-center gap-4 bg-purple-600 text-white px-10 py-5 rounded-[24px] font-black uppercase tracking-widest text-sm hover:-translate-y-1 transition-all duration-300 shadow-[0_10px_0px_#5B21B6] hover:shadow-[0_14px_0px_#5B21B6]"
           >
             <span className="font-serif italic capitalize text-lg">See All Posts</span>
@@ -111,10 +134,23 @@ export const BlogPreviewSection = () => {
           </Link>
         </div>
 
+        {/* Error State */}
+        {error && (
+          <div className="bg-red-50 text-red-600 p-8 rounded-[40px] text-center mb-16 border border-red-100">
+            {error}
+          </div>
+        )}
+
         {/* Article Grid - Kiddidy Card Layout */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
-          {articles.map((article, idx) => {
+          {blogs.map((article, idx) => {
             const theme = cardThemes[idx % 3];
+            const date = new Date(article.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+            const wordsPerMinute = 200;
+            const words = article.content ? article.content.split(/\s+/).length : 0;
+            const readTime = `${Math.ceil(words / wordsPerMinute)} min read`;
+            const category = article.tags && article.tags.length > 0 ? article.tags[0] : "Education";
+
             return (
               <motion.div
                 key={article.id}
@@ -128,7 +164,7 @@ export const BlogPreviewSection = () => {
                 {/* Thick "Sticker" Shadow Effect */}
                 <div className="absolute inset-0 rounded-[50px] bg-white border-[12px] border-white shadow-2xl transition-transform duration-500 group-hover:scale-[1.03]" />
                 
-                <Link href={`/blog/${article.id}`} className="relative h-full flex flex-col p-2 z-10">
+                <Link to={`/blog/${article.id}`} className="relative h-full flex flex-col p-2 z-10">
                   <div 
                     className="relative rounded-[40px] h-full flex flex-col p-8 border-4 transition-colors duration-500"
                     style={{ backgroundColor: theme.bg, borderColor: theme.border }}
@@ -136,10 +172,9 @@ export const BlogPreviewSection = () => {
                     
                     {/* Thumbnail "Sticker" */}
                     <div className="w-full aspect-[4/3] rounded-[30px] overflow-hidden relative mb-8 border-4 border-white shadow-lg">
-                      <Image
+                      <img 
                         src={article.image}
                         alt={article.title}
-                        fill
                         className="object-cover transition-transform duration-1000 group-hover:scale-110"
                       />
                       
@@ -148,7 +183,7 @@ export const BlogPreviewSection = () => {
                         className="absolute top-4 left-4 text-white px-4 py-2 rounded-xl z-20 font-black uppercase tracking-tighter text-[10px] border-4 border-white shadow-md rotate-[-6deg]"
                         style={{ backgroundColor: theme.sticker }}
                       >
-                        {article.category}
+                        {category}
                         <Sparkles className="absolute -top-2 -right-2 w-4 h-4 text-white" />
                       </div>
 
@@ -161,9 +196,9 @@ export const BlogPreviewSection = () => {
                     {/* Content */}
                     <div className="flex-1 flex flex-col">
                       <div className="flex items-center gap-4 mb-4">
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#1A1045]/40">{article.date}</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#1A1045]/40">{date}</span>
                         <div className="w-1.5 h-1.5 rounded-full bg-white/50" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#1A1045]/40">{article.readTime}</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#1A1045]/40">{readTime}</span>
                       </div>
 
                       <h3 className="font-serif text-3xl font-black mb-4 text-[#1A1045] leading-none uppercase line-clamp-2">

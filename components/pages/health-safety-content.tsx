@@ -1,9 +1,8 @@
-"use client";
 
 import { motion } from "framer-motion";
 import { SplitText } from "@/components/ui/split-text";
-import Link from "next/link";
-import { ArrowLeft, ShieldCheck, Waves, Wind, Lock, Stethoscope, HeartPulse, ArrowUpRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ShieldCheck, Waves, Wind, Lock, Stethoscope, HeartPulse, ArrowUpRight } from "lucide-react";
 
 const safetyFeatures = [
   {
@@ -47,18 +46,6 @@ const safetyFeatures = [
 export const HealthSafetyPageContent = () => {
   return (
     <div className="bg-[#F8FAFC] text-foreground pb-32 overflow-hidden">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full px-6 py-6 md:px-12 md:py-10 z-50 pointer-events-none">
-        <Link 
-          href="/"
-          className="inline-flex items-center gap-3 bg-white/90 backdrop-blur-md px-6 py-3 rounded-full shadow-lg border border-[#1A1045]/5 pointer-events-auto hover:-translate-y-1 transition-all group"
-        >
-          <div className="w-8 h-8 rounded-full bg-[#DCFCE7] flex items-center justify-center group-hover:bg-[#BBF7D0] transition-colors">
-            <ArrowLeft className="w-4 h-4 text-[#15803D]" />
-          </div>
-          <span className="font-bold text-[#1A1045] uppercase tracking-widest text-xs hidden sm:inline-block">Back Home</span>
-        </Link>
-      </nav>
 
       {/* Hero */}
       <section className="relative w-full min-h-[50vh] flex items-center pb-16 overflow-hidden pt-40 bg-white">
@@ -171,8 +158,7 @@ export const HealthSafetyPageContent = () => {
           <h2 className="relative z-10 font-serif text-5xl md:text-6xl lg:text-7xl tracking-tighter mb-12 text-[#1A1045] mx-auto italic drop-shadow-md">
             Have questions about our <br />safety <span className="text-[#10B981] font-bold not-italic">protocols?</span>
           </h2>
-          <Link 
-            href="/contact" 
+          <Link to="/contact" 
             className="relative z-10 group inline-flex items-center gap-4 bg-[#1A1045] hover:bg-[#10B981] text-white px-10 py-5 rounded-2xl font-bold uppercase tracking-widest text-sm transition-all duration-300 shadow-xl"
           >
             <span>Speak with our Health Lead</span>

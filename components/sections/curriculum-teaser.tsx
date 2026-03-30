@@ -1,9 +1,8 @@
-"use client";
 
 import { motion } from "framer-motion";
 import { SplitText } from "@/components/ui/split-text";
 import { ArrowRight, Brain, HeartPulse, Palette, Microscope } from "lucide-react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 const pillars = [
   {
@@ -67,8 +66,7 @@ export const CurriculumTeaser = () => {
               Our Montessori-inspired approach is built on four essential pillars that nurture the whole child.
             </p>
 
-            <Link
-              href="/curriculum"
+            <Link to="/curriculum"
               className="group inline-flex items-center gap-4 py-4 px-8 bg-[#7C3AED] text-white rounded-full hover:bg-[#F59E0B] hover:text-[#1A1045] transition-all duration-500 font-bold uppercase tracking-widest text-xs shadow-lg shadow-[#7C3AED]/30"
             >
               Explore Curriculum

@@ -1,0 +1,47 @@
+name: Deploy React Frontend to cPanel
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.24.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Build Frontend
+        run: pnpm build
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+
+      - name: Deploy to cPanel
+        uses: Burnett01/rsync-deployments@5.2.1
+        with:
+          # 1. FIX: Removed --rsync-path and the extra SSH commands so jailshell doesn't panic
+          switches: -avzr --delete --exclude=".htaccess"
+          path: ./dist/
+          # 2. FIX: Main domains in cPanel use public_html, not a named folder.
+          # (Hardcoded to 'jerrypiping' to prevent that hidden space crash from earlie)
+          remote_path:  /home/tendercr/public_html
+          remote_host: ${{ secrets.CPANEL_HOST }}
+          remote_user: ${{ secrets.CPANEL_USERNAME }}
+          remote_key: ${{ secrets.CPANEL_SSH_KEY }}

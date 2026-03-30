@@ -1,8 +1,7 @@
-"use client";
 
 import { motion } from "framer-motion";
 import { Calendar as CalendarIcon, ArrowRight, Music, Leaf, Palette } from "lucide-react";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 const featuredEvents = [
   {
@@ -69,8 +68,7 @@ export const EventsTeaser = () => {
             </p>
           </div>
           
-          <Link 
-            href="/events"
+          <Link to="/events"
             className="group inline-flex items-center gap-4 py-4 px-8 bg-[#F59E0B] text-white rounded-full hover:bg-[#1A1045] transition-all duration-500 shadow-lg shadow-[#F59E0B]/20"
           >
             <span className="font-bold uppercase tracking-widest text-xs">View Full Calendar</span>

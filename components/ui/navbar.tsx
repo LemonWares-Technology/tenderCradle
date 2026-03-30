@@ -1,12 +1,13 @@
-"use client";
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Menu, X, ShoppingCart } from "lucide-react";
 import { Logo } from "./logo";
 import { useCart } from "@/components/providers/cart-provider";
+import { useCustomerAuth } from "@/lib/context/CustomerAuthContext";
+import { User, LogOut } from "lucide-react";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -21,8 +22,9 @@ const navLinks = [
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const pathname = usePathname();
+  const { pathname } = useLocation();
   const { isCartOpen, setIsCartOpen, cartCount } = useCart();
+  const { isAuthenticated, customer, logout } = useCustomerAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,7 +48,7 @@ export const Navbar = () => {
       <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
         
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group relative z-50">
+        <Link to="/" className="flex items-center gap-3 group relative z-50">
           <Logo className="w-8 h-8 text-primary group-hover:scale-110 transition-transform" />
           <span className="font-serif text-xl font-bold tracking-tighter text-foreground group-hover:text-primary transition-colors">
             Tender Cradle
@@ -60,7 +62,7 @@ export const Navbar = () => {
             return (
               <Link
                 key={link.name}
-                href={link.href}
+                to={link.href}
                 className="relative group py-2"
               >
                 <span className={`text-xs font-bold uppercase tracking-widest transition-colors ${
@@ -87,30 +89,55 @@ export const Navbar = () => {
 
         {/* Actions */}
         <div className="flex items-center gap-4 relative z-50">
-          {/* Cart Trigger */}
-          <button 
-            onClick={() => setIsCartOpen(!isCartOpen)}
-            className="p-2 relative hover:bg-[#FF6B35]/10 rounded-full transition-colors group"
-            aria-label="Toggle shopping cart"
-          >
-            <ShoppingCart className="w-5 h-5 text-[#1A1045] group-hover:text-[#FF6B35] transition-colors" />
-            {cartCount > 0 && (
-              <motion.span 
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                className="absolute top-0 right-0 w-4 h-4 bg-[#FF6B35] text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white"
-              >
-                {cartCount}
-              </motion.span>
-            )}
-          </button>
+          {/* Cart Trigger — hidden on landing page */}
+          {pathname !== "/" && (
+            <button 
+              onClick={() => setIsCartOpen(!isCartOpen)}
+              className="p-2 relative hover:bg-[#FF6B35]/10 rounded-full transition-colors group"
+              aria-label="Toggle shopping cart"
+            >
+              <ShoppingCart className="w-5 h-5 text-[#1A1045] group-hover:text-[#FF6B35] transition-colors" />
+              {cartCount > 0 && (
+                <motion.span 
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="absolute top-0 right-0 w-4 h-4 bg-[#FF6B35] text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white"
+                >
+                  {cartCount}
+                </motion.span>
+              )}
+            </button>
+          )}
 
-          <Link
-            href="/enrollment"
+          <Link to="/enrollment"
             className="hidden sm:flex items-center justify-center px-6 py-2.5 bg-[#FF6B35] text-white text-xs font-bold uppercase tracking-widest rounded-full hover:bg-[#7C3AED] hover:scale-105 transition-all duration-300 shadow-xl shadow-[#FF6B35]/20"
           >
             Enroll Now
           </Link>
+
+          {/* Customer Auth Actions */}
+          <div className="hidden md:flex items-center gap-2 border-l border-[#1A1045]/10 ml-2 pl-4">
+            {isAuthenticated ? (
+              <div className="flex items-center gap-4">
+                <Link to="/shop/orders" className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#1A1045]/60 hover:text-[#1A1045] transition-colors">
+                  <User className="w-4 h-4" />
+                  <span className="hidden xl:inline">My Orders</span>
+                </Link>
+                <button 
+                  onClick={logout}
+                  className="p-2 text-[#1A1045]/60 hover:text-red-500 transition-colors"
+                  title="Logout"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <Link to="/shop/login" className="text-xs font-bold uppercase tracking-widest text-[#1A1045]/60 hover:text-[#1A1045] transition-colors flex items-center gap-2">
+                <User className="w-4 h-4" />
+                <span>Login</span>
+              </Link>
+            )}
+          </div>
 
           {/* Mobile Menu Trigger */}
           <button 
@@ -146,8 +173,7 @@ export const Navbar = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: idx * 0.05 }}
                   >
-                    <Link
-                      href={link.href}
+                    <Link to={link.href}
                       className={`text-4xl font-serif tracking-tighter transition-all ${
                         isActive ? "text-primary pl-4" : "text-foreground hover:text-primary hover:pl-4"
                       }`}

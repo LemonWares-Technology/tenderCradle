@@ -1,12 +1,18 @@
-"use client";
 import { useState } from "react";
 import { Menu, Search, Bell, User, Settings, LogOut } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/lib/context/AuthContext";
 
 export const AdminTopbar = ({ onOpenMobileSidebar }: { onOpenMobileSidebar?: () => void }) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    setIsLogoutModalOpen(false);
+    logout();
+  };
+
   return (
     <header className="h-16 border-b border-[#DADCE0] bg-white flex items-center justify-between px-4 md:px-8 sticky top-0 z-20">
       
@@ -41,7 +47,7 @@ export const AdminTopbar = ({ onOpenMobileSidebar }: { onOpenMobileSidebar?: () 
             onClick={() => setIsProfileOpen(!isProfileOpen)}
             className="w-8 h-8 rounded-full overflow-hidden border border-[#DADCE0] focus:ring-2 focus:ring-[#1A73E8]/50 outline-none ml-2 flex items-center justify-center bg-[#1A73E8] text-white text-sm font-medium transition-shadow relative z-20"
           >
-            A
+            {user?.name?.charAt(0).toUpperCase() || 'A'}
           </button>
           
           {isProfileOpen && (
@@ -53,15 +59,15 @@ export const AdminTopbar = ({ onOpenMobileSidebar }: { onOpenMobileSidebar?: () 
               />
               <div className="absolute right-0 mt-2 w-56 bg-white border border-[#DADCE0] rounded-lg shadow-lg z-20 animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="p-4 border-b border-[#F1F3F4]">
-                  <p className="text-sm font-medium text-[#202124]">Admin User</p>
-                  <p className="text-xs text-[#5F6368] mt-0.5" style={{ wordBreak: 'break-all' }}>admin@tendercradle.com</p>
+                  <p className="text-sm font-medium text-[#202124]">{user?.name || 'Admin User'}</p>
+                  <p className="text-xs text-[#5F6368] mt-0.5" style={{ wordBreak: 'break-all' }}>{user?.email || 'admin@tendercradle.com'}</p>
                 </div>
                 <div className="p-2 space-y-1">
-                  <Link href="/admin/settings" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#5F6368] hover:bg-[#F1F3F4] hover:text-[#202124] rounded transition-colors">
+                  <Link to="/admin/settings" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#5F6368] hover:bg-[#F1F3F4] hover:text-[#202124] rounded transition-colors">
                     <User className="w-4 h-4" />
                     My Profile
                   </Link>
-                  <Link href="/admin/settings" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#5F6368] hover:bg-[#F1F3F4] hover:text-[#202124] rounded transition-colors">
+                  <Link to="/admin/settings" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-[#5F6368] hover:bg-[#F1F3F4] hover:text-[#202124] rounded transition-colors">
                     <Settings className="w-4 h-4" />
                     Account Settings
                   </Link>
@@ -105,13 +111,12 @@ export const AdminTopbar = ({ onOpenMobileSidebar }: { onOpenMobileSidebar?: () 
                   >
                     Cancel
                   </button>
-                  <Link 
-                    href="/"
-                    onClick={() => setIsLogoutModalOpen(false)}
+                  <button
+                    onClick={handleLogout}
                     className="px-4 py-2 rounded text-sm font-medium bg-[#D93025] text-white hover:bg-[#B31412] transition-colors shadow-sm"
                   >
                     Yes, Sign Out
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>

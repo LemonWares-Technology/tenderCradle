@@ -1,10 +1,8 @@
-"use client";
 
 import { motion } from "framer-motion";
 import { SplitText } from "@/components/ui/split-text";
-import Link from "next/link";
-import { ArrowLeft, BookOpen, Music, Palette, Brain, Microscope, Globe, HeartPulse, Sparkles } from "lucide-react";
-import Image from "next/image";
+import { Link } from "react-router-dom";
+import { BookOpen, Music, Palette, Brain, Microscope, Globe, HeartPulse, Sparkles } from "lucide-react";
 
 const ageGroups = [
   {
@@ -46,18 +44,6 @@ const pillars = [
 export const CurriculumPageContent = () => {
   return (
     <div className="bg-background text-foreground overflow-hidden">
-      {/* Elegant navigation */}
-      <nav className="fixed top-0 left-0 w-full px-6 py-6 md:px-12 md:py-10 z-50 pointer-events-none">
-        <Link 
-          href="/"
-          className="inline-flex items-center gap-3 bg-white px-6 py-3 rounded-full shadow-lg border-2 border-[#1A1045]/5 pointer-events-auto hover:-translate-y-1 transition-all group"
-        >
-          <div className="w-8 h-8 rounded-full bg-[#DCFCE7] flex items-center justify-center group-hover:bg-[#BBF7D0] transition-colors">
-            <ArrowLeft className="w-4 h-4 text-[#16A34A]" />
-          </div>
-          <span className="font-bold text-[#1A1045] uppercase tracking-widest text-xs">Back Home</span>
-        </Link>
-      </nav>
 
       {/* Hero */}
       <section className="relative w-full min-h-[60vh] flex items-center pb-24 overflow-hidden pt-32 bg-[#DCFCE7]">
@@ -73,7 +59,7 @@ export const CurriculumPageContent = () => {
            transition={{ delay: 0.4, duration: 1 }}
         >
           <div className="absolute inset-0 bg-white rounded-t-full shadow-2xl opacity-60 mix-blend-soft-light" />
-          <Image src="/images/disney-child.png" alt="Happy child" fill className="object-cover object-top mix-blend-multiply drop-shadow-lg" />
+          <img src="/images/disney-child.png" alt="Happy child" className="object-cover object-top mix-blend-multiply drop-shadow-lg" />
         </motion.div>
 
         <div className="container mx-auto px-6 md:px-12 relative z-10">
@@ -136,10 +122,9 @@ export const CurriculumPageContent = () => {
               <div className="lg:col-span-6 lg:ltr relative">
                  <div className="absolute -inset-4 rounded-[50px] opacity-20" style={{ backgroundColor: group.bg }} />
                  <div className="relative aspect-[4/3] rounded-[40px] overflow-hidden group shadow-2xl border-4 border-white z-10">
-                  <Image 
+                  <img 
                     src={group.image} 
                     alt={group.title} 
-                    fill 
                     className="object-cover transition-transform duration-1000 group-hover:scale-[1.03]" 
                   />
                 </div>
@@ -212,14 +197,14 @@ export const CurriculumPageContent = () => {
           <div className="grid grid-cols-2 gap-8 relative">
             <div className="grid gap-8">
               <div className="aspect-[4/5] bg-white border-4 border-white/10 rounded-[40px] shadow-2xl overflow-hidden relative">
-                 <Image src="/images/gallery-2.png" fill className="object-cover" alt="Global citizen" />
+                 <img src="/images/gallery-2.png" className="object-cover" alt="Global citizen" />
               </div>
               <div className="aspect-square bg-white/5 border border-white/10 rounded-[40px] p-8 flex items-center justify-center text-center text-5xl group hover:bg-white/10 transition-colors">🌎</div>
             </div>
             <div className="grid gap-8 mt-16">
               <div className="aspect-square bg-white/5 border border-white/10 rounded-[40px] p-8 flex items-center justify-center text-center text-5xl group hover:bg-white/10 transition-colors">✨</div>
               <div className="aspect-[4/5] bg-white border-4 border-white/10 rounded-[40px] shadow-2xl overflow-hidden relative">
-                 <Image src="/images/hero-1.png" fill className="object-cover" alt="Learning" />
+                 <img src="/images/hero-1.png" className="object-cover" alt="Learning" />
               </div>
             </div>
           </div>

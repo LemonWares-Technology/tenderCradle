@@ -1,15 +1,14 @@
-"use client";
 
 import { motion } from "framer-motion";
 import { Logo } from "@/components/ui/logo";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { ArrowUpRight, Instagram, Linkedin, Twitter, Mail, Phone, MapPin, Heart, Sparkles } from "lucide-react";
 import { useLenis } from "lenis/react";
-import { usePathname } from "next/navigation";
+import { useLocation } from "react-router-dom";
 
 export const Footer = () => {
   const lenis = useLenis();
-  const pathname = usePathname();
+  const { pathname } = useLocation();
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.startsWith("/#") && pathname === "/") {
@@ -59,7 +58,7 @@ export const Footer = () => {
               Ready to shape their future? <Heart className="w-6 h-6 text-pink-400 fill-pink-400" />
             </p>
             
-            <Link href="/contact" className="group relative inline-flex items-center gap-6 md:gap-12 hover:scale-105 transition-transform duration-500">
+            <Link to="/contact" className="group relative inline-flex items-center gap-6 md:gap-12 hover:scale-105 transition-transform duration-500">
               <h2 className="font-serif text-[12vw] md:text-[8vw] leading-[0.8] tracking-tighter text-white group-hover:text-[#FCD34D] transition-colors duration-500">
                 LET&apos;S{" "}
                 <span className="relative inline-block">
@@ -118,8 +117,7 @@ export const Footer = () => {
                 { name: 'Shop', href: '/shop' },
               ].map(link => (
                 <li key={link.name}>
-                  <Link 
-                    href={link.href} 
+                  <Link to={link.href} 
                     onClick={(e) => handleNavClick(e, link.href)}
                     className="text-lg font-serif text-white/70 hover:text-[#FCD34D] transition-colors flex items-center gap-2 group"
                   >
@@ -176,8 +174,8 @@ export const Footer = () => {
           <div className="flex items-center gap-6">
             <p>© {new Date().getFullYear()} Tender Cradle.</p>
             <div className="flex gap-4">
-              <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
-              <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
+              <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+              <Link to="/terms" className="hover:text-white transition-colors">Terms</Link>
             </div>
           </div>
           <p className="flex items-center gap-2">

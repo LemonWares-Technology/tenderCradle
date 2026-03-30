@@ -1,7 +1,5 @@
-"use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
 
 const marqueeImages = [
   "/images/hero-1.png",
@@ -60,12 +58,10 @@ export const GallerySection = () => {
               className={`relative w-[70vw] sm:w-[50vw] md:w-[35vw] lg:w-[25vw] aspect-4/3 rounded-[32px] overflow-hidden shrink-0 group border-8 border-white shadow-xl
                 ${index % 2 === 0 ? "rotate-2" : "-rotate-2"} hover:rotate-0 hover:scale-105 transition-all duration-500`}
             >
-              <Image
+              <img 
                 src={src}
                 alt={`Gallery image ${index + 1}`}
-                fill
                 className="object-cover"
-                sizes="(max-width: 640px) 70vw, (max-width: 768px) 50vw, (max-width: 1024px) 35vw, 25vw"
               />
               <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
             </div>
@@ -86,12 +82,10 @@ export const GallerySection = () => {
               className={`relative w-[50vw] sm:w-[40vw] md:w-[30vw] lg:w-[20vw] aspect-square rounded-[32px] overflow-hidden shrink-0 group border-8 border-white shadow-xl
                 ${index % 2 === 0 ? "-rotate-3" : "rotate-3"} hover:rotate-0 hover:scale-105 transition-all duration-500`}
             >
-              <Image
+              <img 
                 src={src}
                 alt={`Gallery image ${index + 1}`}
-                fill
                 className="object-cover"
-                sizes="(max-width: 640px) 50vw, (max-width: 768px) 40vw, (max-width: 1024px) 30vw, 20vw"
               />
               <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
             </div>

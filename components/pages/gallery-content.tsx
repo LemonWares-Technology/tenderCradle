@@ -1,10 +1,8 @@
-"use client";
 
 import { motion } from "framer-motion";
 import { SplitText } from "@/components/ui/split-text";
-import Link from "next/link";
-import { ArrowLeft, Play, Maximize2, Sparkles } from "lucide-react";
-import Image from "next/image";
+import { Link } from "react-router-dom";
+import { Play, Maximize2, Sparkles } from "lucide-react";
 
 const categories = ["All", "Classrooms", "Outdoor", "Activities", "Nutrition"];
 
@@ -20,18 +18,6 @@ const galleryImages = [
 export const GalleryPageContent = () => {
   return (
     <div className="bg-[#F8FAFC] text-foreground pb-32 overflow-hidden">
-      {/* Elegant navigation */}
-      <nav className="fixed top-0 left-0 w-full px-6 py-6 md:px-12 md:py-10 z-50 pointer-events-none">
-        <Link 
-          href="/"
-          className="inline-flex items-center gap-3 bg-white/90 backdrop-blur-md px-6 py-3 rounded-full shadow-lg border border-[#1A1045]/5 pointer-events-auto hover:-translate-y-1 transition-all group"
-        >
-          <div className="w-8 h-8 rounded-full bg-[#E0F2FE] flex items-center justify-center group-hover:bg-[#BAE6FD] transition-colors">
-            <ArrowLeft className="w-4 h-4 text-[#0284C7]" />
-          </div>
-          <span className="font-bold text-[#1A1045] uppercase tracking-widest text-xs hidden sm:inline-block">Back Home</span>
-        </Link>
-      </nav>
 
       {/* Hero */}
       <section className="relative w-full min-h-[50vh] flex items-center pb-16 overflow-hidden pt-40 bg-white">
@@ -84,10 +70,9 @@ export const GalleryPageContent = () => {
                 className="group relative flex flex-col bg-white rounded-[40px] border border-[#1A1045]/5 shadow-lg transition-all hover:shadow-2xl hover:-translate-y-2"
               >
                 <div className="relative aspect-[4/5] rounded-t-[40px] overflow-hidden">
-                  <Image 
+                  <img 
                     src={img.src} 
                     alt={img.title} 
-                    fill 
                     className="object-cover transition-transform duration-1000 group-hover:scale-[1.03]" 
                   />
                   <div className="absolute inset-0 bg-[#1A1045]/5 group-hover:bg-transparent transition-colors duration-500 pointer-events-none" />
@@ -114,10 +99,9 @@ export const GalleryPageContent = () => {
       <section className="py-32 bg-white">
         <div className="container mx-auto px-6 md:px-12">
           <div className="relative w-full aspect-[16/9] lg:aspect-[21/9] rounded-[40px] overflow-hidden group shadow-2xl border border-[#1A1045]/5">
-            <Image 
+            <img 
               src="/images/hero-1.png" 
               alt="Virtual Tour" 
-              fill 
               className="object-cover transition-transform duration-[2000ms] group-hover:scale-105" 
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#1A1045]/80 via-[#1A1045]/30 to-transparent transition-all duration-1000 group-hover:opacity-80" />

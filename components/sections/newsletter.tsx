@@ -1,17 +1,50 @@
-"use client";
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, CheckCircle2, Mail, Sparkles } from "lucide-react";
+import { subscribeToNewsletter } from "@/lib/api/newsletter";
+import { z } from "zod";
+
+const newsletterSchema = z.object({
+  email: z.string().email("Please enter a valid email address")
+});
 
 export const NewsletterSection = () => {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.trim()) {
+    if (isLoading) return;
+    
+    setIsLoading(true);
+    setError(null);
+
+    // Zod validation (Local)
+    const validation = newsletterSchema.safeParse({ email });
+    if (!validation.success) {
+      setError(validation.error.issues[0].message);
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      await subscribeToNewsletter(email);
       setSubmitted(true);
+    } catch (err: any) {
+      // Handle structured ApiError
+      if (err.errors && err.errors.length > 0) {
+        const aggregatedMessage = err.errors
+          .map((e: any) => e.message)
+          .join(" ");
+        setError(aggregatedMessage);
+      } else {
+        setError(err.message || "Something went wrong. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -99,32 +132,53 @@ export const NewsletterSection = () => {
 
           <AnimatePresence mode="wait">
             {!submitted ? (
-              <motion.form
-                key="form"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                onSubmit={handleSubmit}
-                className="relative max-w-md mx-auto"
-              >
-                <div className="relative group">
-                  <input
-                    type="email"
-                    required
-                    placeholder="Enter your email address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-white text-[#1A1045] px-8 py-6 rounded-full text-lg focus:outline-none focus:ring-4 focus:ring-white/30 transition-all placeholder:text-[#1A1045]/40 shadow-2xl"
-                  />
-                  <button
-                    type="submit"
-                    className="absolute right-2 top-2 bottom-2 bg-[#DB2777] text-white px-8 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#1A1045] transition-all flex items-center gap-2 group-hover:pr-10"
+              <div key="form-container">
+                <motion.form
+                  key="form"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  onSubmit={handleSubmit}
+                  className="relative max-w-md mx-auto mb-4"
+                >
+                  <div className="relative group">
+                    <input
+                      type="email"
+                      required
+                      placeholder="Enter your email address"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={isLoading}
+                      className={`w-full bg-white text-[#1A1045] px-8 py-6 rounded-full text-lg focus:outline-none focus:ring-4 ${error ? 'border-2 border-red-500 focus:ring-red-500/30' : 'focus:ring-white/30'} transition-all placeholder:text-[#1A1045]/40 shadow-2xl disabled:opacity-70`}
+                    />
+                    <button
+                      type="submit"
+                      disabled={isLoading}
+                      className="absolute right-2 top-2 bottom-2 bg-[#DB2777] text-white px-8 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#1A1045] transition-all flex items-center justify-center gap-2 group-hover:pr-10 disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px]"
+                    >
+                      {isLoading ? (
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          <span>Wait...</span>
+                        </div>
+                      ) : (
+                        <>
+                          Subscribe
+                          <Sparkles className="w-4 h-4" />
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </motion.form>
+                {error && (
+                  <motion.p 
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                    className="text-white/80 text-sm font-serif italic"
                   >
-                    Subscribe
-                    <Sparkles className="w-4 h-4" />
-                  </button>
-                </div>
-              </motion.form>
+                    {error}
+                  </motion.p>
+                )}
+              </div>
             ) : (
               <motion.div
                 key="success"
@@ -140,6 +194,7 @@ export const NewsletterSection = () => {
               </motion.div>
             )}
           </AnimatePresence>
+
 
         </div>
       </div>

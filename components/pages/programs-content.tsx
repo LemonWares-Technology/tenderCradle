@@ -1,10 +1,8 @@
-"use client";
 
 import { motion } from "framer-motion";
 import { SplitText } from "@/components/ui/split-text";
-import Link from "next/link";
-import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react";
-import Image from "next/image";
+import { Link } from "react-router-dom";
+import { ArrowRight, Sparkles } from "lucide-react";
 
 const programs = [
   {
@@ -33,18 +31,6 @@ const programs = [
 export const ProgramsPageContent = () => {
   return (
     <div className="bg-background text-foreground overflow-hidden">
-      {/* Elegant navigation */}
-      <nav className="fixed top-0 left-0 w-full px-6 py-6 md:px-12 md:py-10 z-50 pointer-events-none">
-        <Link 
-          href="/"
-          className="inline-flex items-center gap-3 bg-white px-6 py-3 rounded-full shadow-lg border-2 border-[#1A1045]/5 pointer-events-auto hover:-translate-y-1 transition-all group"
-        >
-          <div className="w-8 h-8 rounded-full bg-[#EDE9FE] flex items-center justify-center group-hover:bg-[#DDD6FE] transition-colors">
-            <ArrowLeft className="w-4 h-4 text-[#7C3AED]" />
-          </div>
-          <span className="font-bold text-[#1A1045] uppercase tracking-widest text-xs">Back Home</span>
-        </Link>
-      </nav>
 
       {/* Hero */}
       <section className="relative w-full min-h-[70vh] flex items-center pb-24 overflow-hidden pt-32 bg-[#EDE9FE]">
@@ -58,7 +44,7 @@ export const ProgramsPageContent = () => {
           animate={{ y: [0, -15, 0], rotate: [5, 10, 5] }}
           transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut" }}
         >
-          <Image src="/images/disney-butterfly.png" alt="Magical butterfly" fill className="object-contain" />
+          <img src="/images/disney-butterfly.png" alt="Magical butterfly" className="object-contain" />
         </motion.div>
 
         <div className="container mx-auto px-6 md:px-12 relative z-10">
@@ -110,10 +96,9 @@ export const ProgramsPageContent = () => {
                 {/* Description & Image */}
                 <div className={`lg:col-span-7 flex flex-col gap-12 ${index % 2 !== 0 ? 'lg:order-1' : ''}`}>
                   <div className={`relative w-full aspect-[4/3] rounded-[40px] overflow-hidden group shadow-2xl border-4 border-white`}>
-                    <Image 
+                    <img 
                       src={program.image} 
                       alt={program.title} 
-                      fill 
                       className="object-cover transition-transform duration-1000 group-hover:scale-[1.03]" 
                     />
                   </div>
@@ -123,8 +108,7 @@ export const ProgramsPageContent = () => {
           </div>
 
           <div className="mt-40 text-center">
-            <Link 
-              href="/contact"
+            <Link to="/contact"
               className="inline-flex items-center gap-4 bg-[#7C3AED] text-white px-10 py-5 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-[#1A1045] transition-all duration-500 shadow-xl shadow-[#7C3AED]/25 hover:scale-105"
             >
               Start the Process

@@ -1,13 +1,12 @@
-"use client";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Plus, Minus, Trash2 } from "lucide-react";
-import Image from "next/image";
 import { useCart } from "@/components/providers/cart-provider";
-import Link from "next/link";
+import { Link, useLocation } from "react-router-dom";
 
 export const CartSidebar = () => {
   const { isCartOpen, setIsCartOpen, items, updateQuantity, removeItem, cartTotal } = useCart();
+  const { pathname } = useLocation();
 
   // Helper to format currency
   const formatPrice = (amount: number) => {
@@ -16,7 +15,7 @@ export const CartSidebar = () => {
 
   return (
     <AnimatePresence>
-      {isCartOpen && (
+      {isCartOpen && pathname !== "/" && (
         <>
           {/* Backdrop */}
           <motion.div
@@ -60,7 +59,7 @@ export const CartSidebar = () => {
                 items.map((item) => (
                   <div key={item.id} className="flex gap-6 group">
                     <div className="relative w-24 h-32 rounded-[16px] overflow-hidden bg-foreground/5 shrink-0">
-                      <Image src={item.image} alt={item.name} fill className="object-cover"  />
+                      <img src={item.image} alt={item.name} className="object-cover"  />
                     </div>
                     <div className="flex flex-col flex-1 justify-between py-1">
                       <div>
@@ -105,11 +104,11 @@ export const CartSidebar = () => {
                   <span className="text-sm font-bold uppercase tracking-widest text-foreground/50">Subtotal</span>
                   <span className="font-serif text-3xl">{formatPrice(cartTotal)}</span>
                 </div>
-                <Link 
-                  href="/checkout" // Placeholder route
+                <Link to="/shop/checkout" 
                   onClick={() => setIsCartOpen(false)}
-                  className="w-full bg-foreground text-background flex items-center justify-center rounded-full py-5 text-sm font-bold uppercase tracking-widest hover:bg-primary transition-colors duration-500"
+                  className="w-full bg-[#1A1045] text-white flex items-center justify-center rounded-full py-5 text-sm font-bold uppercase tracking-widest hover:bg-[#3B82F6] transition-colors duration-500 shadow-xl"
                 >
+
                   Proceed to Checkout
                 </Link>
               </div>

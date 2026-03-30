@@ -1,8 +1,6 @@
-"use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
 
 const floatingItems = [
@@ -112,15 +110,13 @@ export const HeroSection = () => {
               transition={{ duration: 0.6, delay: 0.7 }}
               className="flex flex-col sm:flex-row items-start sm:items-center gap-4"
             >
-              <Link
-                href="/enrollment"
+              <Link to="/enrollment"
                 className="group inline-flex items-center gap-3 bg-[#FF6B35] text-white px-8 py-4 rounded-full font-bold text-sm uppercase tracking-widest hover:bg-[#7C3AED] transition-all duration-500 shadow-xl shadow-[#FF6B35]/30 hover:shadow-[#7C3AED]/30 hover:scale-105"
               >
                 Enroll Your Child
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link
-                href="/about"
+              <Link to="/about"
                 className="inline-flex items-center gap-2 text-[#1A1045] font-bold uppercase tracking-widest text-sm hover:text-[#FF6B35] transition-colors px-2 py-4"
               >
                 Take a Tour →
@@ -140,12 +136,10 @@ export const HeroSection = () => {
               transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
               className="absolute left-[2%] top-[4%] w-[62%] aspect-[3/4] rounded-[40px] overflow-hidden shadow-2xl border-4 border-white"
             >
-              <Image
+              <img 
                 src="/images/hero-1.png"
                 alt="Happy children learning at Tender Cradle"
-                fill
                 className="object-cover"
-                priority
               />
             </motion.div>
 
@@ -156,10 +150,9 @@ export const HeroSection = () => {
               transition={{ duration: 1, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
               className="absolute right-[0%] top-[28%] w-[48%] aspect-square rounded-[32px] overflow-hidden shadow-2xl border-4 border-white"
             >
-              <Image
+              <img 
                 src="/images/gallery-1.png"
                 alt="Children playing"
-                fill
                 className="object-cover"
               />
             </motion.div>

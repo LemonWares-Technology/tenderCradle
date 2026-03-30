@@ -1,7 +1,6 @@
-"use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { ArrowRight, ClipboardList, MessageSquare, UserCheck } from "lucide-react";
 
 const steps = [
@@ -26,7 +25,7 @@ const steps = [
   {
     icon: UserCheck,
     title: "You're In!",
-    text: "Confirm your spot and we&apos;ll handle everything from here.",
+    text: "Confirm your spot and we'll handle everything from here.",
     number: "03",
     bg: "#BBF7D0",
     iconColor: "#15803D",
@@ -111,9 +110,9 @@ export const EnrollmentTeaser = () => {
               </div>
 
               <h3 className="font-serif text-2xl mb-3 font-bold text-[#1A1045]">{step.title}</h3>
-              <p className="text-sm text-[#1A1045]/55 leading-relaxed max-w-xs"
-                dangerouslySetInnerHTML={{ __html: step.text }}
-              />
+              <p className="text-sm text-[#1A1045]/55 leading-relaxed max-w-xs">
+                {step.text}
+              </p>
             </motion.div>
           ))}
         </div>
@@ -126,8 +125,7 @@ export const EnrollmentTeaser = () => {
           transition={{ delay: 0.5 }}
           className="text-center"
         >
-          <Link
-            href="/enrollment"
+          <Link to="/enrollment"
             className="group inline-flex items-center gap-4 bg-[#F43F5E] text-white px-10 py-5 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-[#1A1045] transition-all duration-500 shadow-xl shadow-[#F43F5E]/25 hover:scale-105"
           >
             Start the Process

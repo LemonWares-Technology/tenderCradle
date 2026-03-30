@@ -1,10 +1,8 @@
-"use client";
 
 import { motion } from "framer-motion";
 import { SplitText } from "@/components/ui/split-text";
-import Link from "next/link";
-import { ArrowLeft, Calendar as CalendarIcon, MapPin, Clock, ArrowUpRight, Sparkles } from "lucide-react";
-import Image from "next/image";
+import { Link } from "react-router-dom";
+import { Calendar as CalendarIcon, MapPin, Clock, ArrowUpRight, Sparkles } from "lucide-react";
 
 const events = [
   {
@@ -48,18 +46,6 @@ const events = [
 export const EventsPageContent = () => {
   return (
     <div className="bg-[#F8FAFC] text-foreground pb-32 overflow-hidden">
-      {/* Elegant navigation */}
-      <nav className="fixed top-0 left-0 w-full px-6 py-6 md:px-12 md:py-10 z-50 pointer-events-none">
-        <Link 
-          href="/"
-          className="inline-flex items-center gap-3 bg-white/90 backdrop-blur-md px-6 py-3 rounded-full shadow-lg border border-[#1A1045]/5 pointer-events-auto hover:-translate-y-1 transition-all group"
-        >
-          <div className="w-8 h-8 rounded-full bg-[#FEF9C3] flex items-center justify-center group-hover:bg-[#FDE68A] transition-colors">
-            <ArrowLeft className="w-4 h-4 text-[#B45309]" />
-          </div>
-          <span className="font-bold text-[#1A1045] uppercase tracking-widest text-xs hidden sm:inline-block">Back Home</span>
-        </Link>
-      </nav>
 
       {/* Hero */}
       <section className="relative w-full min-h-[50vh] flex items-center pb-16 overflow-hidden pt-40 bg-white">
@@ -159,7 +145,7 @@ export const EventsPageContent = () => {
       {/* Philosophy Block */}
       <section className="py-32 bg-[#1A1045]">
         <div className="container mx-auto px-6 md:px-12 text-center">
-          <Link href="/contact" className="group inline-flex flex-col items-center gap-8 text-white hover:text-[#FDE68A] transition-colors mx-auto relative">
+          <Link to="/contact" className="group inline-flex flex-col items-center gap-8 text-white hover:text-[#FDE68A] transition-colors mx-auto relative">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-[#FDE68A] rounded-full opacity-0 blur-[40px] group-hover:opacity-20 transition-opacity duration-700 pointer-events-none" />
             <span className="font-serif text-5xl md:text-7xl font-bold tracking-tighter">Host an Event</span>
             <div className="w-20 h-20 rounded-full border border-white/20 bg-white/10 backdrop-blur-md flex items-center justify-center group-hover:bg-[#F59E0B] group-hover:text-white group-hover:border-transparent group-hover:shadow-lg group-hover:shadow-[#F59E0B]/50 transition-all duration-500 text-white/50">

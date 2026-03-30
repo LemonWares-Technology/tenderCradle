@@ -1,8 +1,6 @@
-"use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { Heart, Star, Shield, Smile } from "lucide-react";
 
 const features = [
@@ -56,10 +54,9 @@ export const AboutSection = () => {
             {/* Offset color block behind image */}
             <div className="absolute -top-4 -left-4 w-full h-full rounded-[40px] bg-[#FDE68A] z-0" />
             <div className="relative rounded-[40px] overflow-hidden border-4 border-white shadow-2xl z-10 aspect-4/5">
-              <Image
+              <img 
                 src="/images/about-1.png"
                 alt="Caregiver with children"
-                fill
                 className="object-cover"
               />
             </div>
@@ -149,8 +146,7 @@ export const AboutSection = () => {
               ))}
             </div>
 
-            <Link
-              href="/about"
+            <Link to="/about"
               className="group inline-flex items-center gap-4 bg-[#1A1045] text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-[#D97706] transition-all duration-500 shadow-lg"
             >
               Read the Full Story
