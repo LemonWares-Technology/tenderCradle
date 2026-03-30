@@ -26,6 +26,7 @@ import { CurriculumTeaser } from "@/components/sections/curriculum-teaser";
 import { SafetyTeaser } from "@/components/sections/safety-teaser";
 import { EnrollmentTeaser } from "@/components/sections/enrollment-teaser";
 import { EventsTeaser } from "@/components/sections/events-teaser";
+import { MagicalPlaygroundSection } from "@/components/sections/magical-playground";
 
 // ─── Page Content Imports ───────────────────────────────
 import { AboutPageContent } from "@/components/pages/about-content";
@@ -104,6 +105,7 @@ function HomePage() {
       />
       <HeroSection />
       <AboutSection />
+      <MagicalPlaygroundSection />
       <CurriculumTeaser />
       <OfferingsSection />
       <SafetyTeaser />

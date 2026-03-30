@@ -41,14 +41,14 @@ export const Navbar = () => {
 
   return (
     <nav 
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 w-full z-[110] transition-all duration-500 ${
         scrolled ? "py-4 bg-white/95 backdrop-blur-xl border-b border-[#1D4ED8]/10 shadow-sm" : "py-6 bg-transparent"
       }`}
     >
       <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
         
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-3 group relative z-50">
+        <Link to="/" className="flex items-center gap-3 group relative z-[120]">
           <Logo className="w-8 h-8 text-primary group-hover:scale-110 transition-transform" />
           <span className="font-serif text-xl font-bold tracking-tighter text-foreground group-hover:text-primary transition-colors">
             Tender Cradle
@@ -88,7 +88,7 @@ export const Navbar = () => {
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-4 relative z-50">
+        <div className="flex items-center gap-4 relative z-[120]">
           {/* Cart Trigger — hidden on landing page */}
           {pathname !== "/" && (
             <button 
@@ -152,7 +152,7 @@ export const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-white z-40 lg:hidden flex flex-col pt-32 pb-12 px-12"
+            className="fixed inset-0 bg-white z-[100] lg:hidden flex flex-col pt-32 pb-12 px-12"
           >
             {/* Background Decoration */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] aspect-square bg-primary/5 rounded-full blur-3xl pointer-events-none" />
@@ -181,6 +181,62 @@ export const Navbar = () => {
 
             <div className="mt-auto space-y-6 relative z-10">
               <div className="h-px w-full bg-foreground/10" />
+              
+              {/* Mobile Cart & Auth */}
+              <div className="flex flex-col gap-4">
+                <button 
+                  onClick={() => {
+                    setIsCartOpen(!isCartOpen);
+                    setIsOpen(false);
+                  }}
+                  className="flex items-center justify-between p-4 bg-[#FF6B35]/10 rounded-2xl hover:bg-[#FF6B35]/20 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <ShoppingCart className="w-5 h-5 text-[#FF6B35]" />
+                    <span className="font-bold text-[#1A1045]">Shopping Cart</span>
+                  </div>
+                  {cartCount > 0 && (
+                    <span className="w-6 h-6 bg-[#FF6B35] text-white text-xs font-bold rounded-full flex items-center justify-center">
+                      {cartCount}
+                    </span>
+                  )}
+                </button>
+
+                {isAuthenticated ? (
+                  <>
+                    <Link 
+                      to="/shop/orders"
+                      onClick={() => setIsOpen(false)}
+                      className="flex items-center gap-3 p-4 bg-blue-50 rounded-2xl hover:bg-blue-100 transition-colors"
+                    >
+                      <User className="w-5 h-5 text-blue-600" />
+                      <span className="font-bold text-[#1A1045]">My Orders</span>
+                    </Link>
+                    <button 
+                      onClick={() => {
+                        logout();
+                        setIsOpen(false);
+                      }}
+                      className="flex items-center gap-3 p-4 bg-red-50 rounded-2xl hover:bg-red-100 transition-colors"
+                    >
+                      <LogOut className="w-5 h-5 text-red-600" />
+                      <span className="font-bold text-[#1A1045]">Logout</span>
+                    </button>
+                  </>
+                ) : (
+                  <Link 
+                    to="/shop/login"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-3 p-4 bg-blue-50 rounded-2xl hover:bg-blue-100 transition-colors"
+                  >
+                    <User className="w-5 h-5 text-blue-600" />
+                    <span className="font-bold text-[#1A1045]">Login / Register</span>
+                  </Link>
+                )}
+              </div>
+
+              <div className="h-px w-full bg-foreground/10" />
+              
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-widest text-foreground/40 mb-2">Location</p>
