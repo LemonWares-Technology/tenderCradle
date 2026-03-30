@@ -1,0 +1,686 @@
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, ArrowLeft, CheckCircle2, Upload, X, Sparkles, Baby, Heart, Shield, Calendar } from "lucide-react";
+import { Link } from "react-router-dom";
+import { submitEnrollment } from "@/lib/api/enrollments";
+
+interface EnrollmentFormData {
+  // Parent Info
+  parentFirstName: string;
+  parentLastName: string;
+  parentEmail: string;
+  parentPhone: string;
+  parentAddress: string;
+  parentCity: string;
+  parentState: string;
+  
+  // Child Info
+  childFirstName: string;
+  childLastName: string;
+  childDOB: string;
+  childGender: string;
+  
+  // Medical Info
+  allergies: string;
+  medications: string;
+  medicalConditions: string;
+  doctorName: string;
+  doctorPhone: string;
+  
+  // Program Selection
+  programType: string;
+  enrollmentType: string;
+  startDate: string;
+  
+  // Emergency Contacts
+  emergencyName1: string;
+  emergencyPhone1: string;
+  emergencyRelation1: string;
+  emergencyName2: string;
+  emergencyPhone2: string;
+  emergencyRelation2: string;
+  
+  // Documents
+  birthCertificate: File | null;
+  immunizationRecords: File | null;
+}
+
+const initialFormData: EnrollmentFormData = {
+  parentFirstName: "", parentLastName: "", parentEmail: "", parentPhone: "",
+  parentAddress: "", parentCity: "", parentState: "",
+  childFirstName: "", childLastName: "", childDOB: "", childGender: "",
+  allergies: "", medications: "", medicalConditions: "", doctorName: "", doctorPhone: "",
+  programType: "", enrollmentType: "", startDate: "",
+  emergencyName1: "", emergencyPhone1: "", emergencyRelation1: "",
+  emergencyName2: "", emergencyPhone2: "", emergencyRelation2: "",
+  birthCertificate: null, immunizationRecords: null,
+};
+
+export const EnrollmentFormContent = () => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState<EnrollmentFormData>(initialFormData);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const totalSteps = 6;
+
+  const updateField = (field: keyof EnrollmentFormData, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleFileUpload = (field: "birthCertificate" | "immunizationRecords", file: File | null) => {
+    updateField(field, file);
+  };
+
+  const nextStep = () => {
+    if (currentStep < totalSteps) setCurrentStep(currentStep + 1);
+  };
+
+  const prevStep = () => {
+    if (currentStep > 1) setCurrentStep(currentStep - 1);
+  };
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    try {
+      const { birthCertificate, immunizationRecords, ...enrollmentData } = formData;
+      await submitEnrollment(enrollmentData, { birthCertificate, immunizationRecords });
+      setIsSuccess(true);
+    } catch (error) {
+      console.error("Enrollment submission failed:", error);
+      alert("Failed to submit enrollment. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const progress = (currentStep / totalSteps) * 100;
+
+  if (isSuccess) {
+    return (
+      <div className="min-h-screen bg-[#E0F2FE] flex items-center justify-center px-6 py-32">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-white p-12 md:p-16 rounded-[40px] shadow-2xl max-w-2xl text-center border-4 border-[#3B82F6]"
+        >
+          <div className="w-24 h-24 rounded-full bg-[#DBEAFE] flex items-center justify-center mx-auto mb-8">
+            <CheckCircle2 className="w-12 h-12 text-[#3B82F6]" />
+          </div>
+          <h2 className="font-serif text-4xl md:text-5xl text-[#1A1045] mb-6 tracking-tighter">Application Submitted!</h2>
+          <p className="text-xl text-[#1A1045]/70 font-serif italic mb-8">
+            Thank you for choosing Tender Cradle! We've received your enrollment application and will review it within 2-3 business days.
+          </p>
+          <p className="text-sm text-[#1A1045]/60 mb-8">
+            A confirmation email has been sent to <span className="font-bold">{formData.parentEmail}</span>
+          </p>
+          <Link to="/" className="inline-flex items-center gap-3 bg-[#3B82F6] text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-[#1D4ED8] transition-all">
+            Return Home
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+        </motion.div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-[#F8FAFC] py-32">
+      <div className="container mx-auto px-6 md:px-12 max-w-4xl">
+        
+        {/* Header */}
+        <div className="text-center mb-16">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full mb-6 bg-white shadow-sm border border-[#1A1045]/5">
+              <Sparkles className="w-4 h-4 text-[#3B82F6]" />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-[#3B82F6]">Enrollment Application</span>
+            </div>
+            <h1 className="font-serif text-4xl md:text-6xl text-[#1A1045] mb-4 tracking-tighter">
+              Join Our <span className="text-[#3B82F6]">Family</span>
+            </h1>
+            <p className="text-lg text-[#1A1045]/60 font-serif italic">Step {currentStep} of {totalSteps}</p>
+          </motion.div>
+        </div>
+
+        {/* Progress Bar */}
+        <div className="mb-12">
+          <div className="h-3 bg-white rounded-full overflow-hidden shadow-inner border border-[#1A1045]/5">
+            <motion.div
+              className="h-full bg-gradient-to-r from-[#3B82F6] to-[#60A5FA] rounded-full"
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.5 }}
+            />
+          </div>
+        </div>
+
+        {/* Form Steps */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentStep}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white p-8 md:p-12 rounded-[40px] shadow-xl border border-[#1A1045]/5"
+          >
+            
+            {/* Step 1: Parent Information */}
+            {currentStep === 1 && (
+              <div>
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-16 h-16 rounded-full bg-[#DBEAFE] flex items-center justify-center">
+                    <Heart className="w-8 h-8 text-[#3B82F6]" />
+                  </div>
+                  <div>
+                    <h2 className="font-serif text-3xl text-[#1A1045] tracking-tighter">Parent Information</h2>
+                    <p className="text-sm text-[#1A1045]/60 font-serif italic">Tell us about yourself</p>
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">First Name</label>
+                    <input
+                      type="text"
+                      value={formData.parentFirstName}
+                      onChange={(e) => updateField("parentFirstName", e.target.value)}
+                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#3B82F6] focus:outline-none transition-colors"
+                      placeholder="John"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Last Name</label>
+                    <input
+                      type="text"
+                      value={formData.parentLastName}
+                      onChange={(e) => updateField("parentLastName", e.target.value)}
+                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#3B82F6] focus:outline-none transition-colors"
+                      placeholder="Doe"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Email</label>
+                    <input
+                      type="email"
+                      value={formData.parentEmail}
+                      onChange={(e) => updateField("parentEmail", e.target.value)}
+                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#3B82F6] focus:outline-none transition-colors"
+                      placeholder="john@example.com"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Phone</label>
+                    <input
+                      type="tel"
+                      value={formData.parentPhone}
+                      onChange={(e) => updateField("parentPhone", e.target.value)}
+                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#3B82F6] focus:outline-none transition-colors"
+                      placeholder="+234 800 000 0000"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Address</label>
+                    <input
+                      type="text"
+                      value={formData.parentAddress}
+                      onChange={(e) => updateField("parentAddress", e.target.value)}
+                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#3B82F6] focus:outline-none transition-colors"
+                      placeholder="123 Main Street"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">City</label>
+                    <input
+                      type="text"
+                      value={formData.parentCity}
+                      onChange={(e) => updateField("parentCity", e.target.value)}
+                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#3B82F6] focus:outline-none transition-colors"
+                      placeholder="Lagos"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">State</label>
+                    <input
+                      type="text"
+                      value={formData.parentState}
+                      onChange={(e) => updateField("parentState", e.target.value)}
+                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#3B82F6] focus:outline-none transition-colors"
+                      placeholder="Lagos State"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Step 2: Child Information */}
+            {currentStep === 2 && (
+              <div>
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-16 h-16 rounded-full bg-[#FCE7F3] flex items-center justify-center">
+                    <Baby className="w-8 h-8 text-[#BE185D]" />
+                  </div>
+                  <div>
+                    <h2 className="font-serif text-3xl text-[#1A1045] tracking-tighter">Child Information</h2>
+                    <p className="text-sm text-[#1A1045]/60 font-serif italic">Tell us about your little one</p>
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">First Name</label>
+                    <input
+                      type="text"
+                      value={formData.childFirstName}
+                      onChange={(e) => updateField("childFirstName", e.target.value)}
+                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#BE185D] focus:outline-none transition-colors"
+                      placeholder="Emma"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Last Name</label>
+                    <input
+                      type="text"
+                      value={formData.childLastName}
+                      onChange={(e) => updateField("childLastName", e.target.value)}
+                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#BE185D] focus:outline-none transition-colors"
+                      placeholder="Doe"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Date of Birth</label>
+                    <input
+                      type="date"
+                      value={formData.childDOB}
+                      onChange={(e) => updateField("childDOB", e.target.value)}
+                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#BE185D] focus:outline-none transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Gender</label>
+                    <select
+                      value={formData.childGender}
+                      onChange={(e) => updateField("childGender", e.target.value)}
+                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#BE185D] focus:outline-none transition-colors"
+                    >
+                      <option value="">Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Step 3: Medical Information */}
+            {currentStep === 3 && (
+              <div>
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-16 h-16 rounded-full bg-[#DCFCE7] flex items-center justify-center">
+                    <Shield className="w-8 h-8 text-[#15803D]" />
+                  </div>
+                  <div>
+                    <h2 className="font-serif text-3xl text-[#1A1045] tracking-tighter">Medical Information</h2>
+                    <p className="text-sm text-[#1A1045]/60 font-serif italic">Help us keep your child safe</p>
+                  </div>
+                </div>
+
+                <div className="grid gap-6">
+                  <div>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Allergies</label>
+                    <textarea
+                      value={formData.allergies}
+                      onChange={(e) => updateField("allergies", e.target.value)}
+                      className="w-full px-6 py-4 rounded-[30px] border-2 border-[#1A1045]/10 focus:border-[#15803D] focus:outline-none transition-colors resize-none"
+                      rows={3}
+                      placeholder="List any known allergies (food, medication, environmental)"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Current Medications</label>
+                    <textarea
+                      value={formData.medications}
+                      onChange={(e) => updateField("medications", e.target.value)}
+                      className="w-full px-6 py-4 rounded-[30px] border-2 border-[#1A1045]/10 focus:border-[#15803D] focus:outline-none transition-colors resize-none"
+                      rows={3}
+                      placeholder="List any medications your child is currently taking"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Medical Conditions</label>
+                    <textarea
+                      value={formData.medicalConditions}
+                      onChange={(e) => updateField("medicalConditions", e.target.value)}
+                      className="w-full px-6 py-4 rounded-[30px] border-2 border-[#1A1045]/10 focus:border-[#15803D] focus:outline-none transition-colors resize-none"
+                      rows={3}
+                      placeholder="Any medical conditions we should be aware of?"
+                    />
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Doctor's Name</label>
+                      <input
+                        type="text"
+                        value={formData.doctorName}
+                        onChange={(e) => updateField("doctorName", e.target.value)}
+                        className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#15803D] focus:outline-none transition-colors"
+                        placeholder="Dr. Smith"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Doctor's Phone</label>
+                      <input
+                        type="tel"
+                        value={formData.doctorPhone}
+                        onChange={(e) => updateField("doctorPhone", e.target.value)}
+                        className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#15803D] focus:outline-none transition-colors"
+                        placeholder="+234 800 000 0000"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Step 4: Program Selection */}
+            {currentStep === 4 && (
+              <div>
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-16 h-16 rounded-full bg-[#FEF9C3] flex items-center justify-center">
+                    <Calendar className="w-8 h-8 text-[#B45309]" />
+                  </div>
+                  <div>
+                    <h2 className="font-serif text-3xl text-[#1A1045] tracking-tighter">Program Selection</h2>
+                    <p className="text-sm text-[#1A1045]/60 font-serif italic">Choose the right program</p>
+                  </div>
+                </div>
+
+                <div className="grid gap-6">
+                  <div>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-4">Program Type</label>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      {["Infants (3-18 Months)", "Toddlers (18M-3Y)", "Preschool (3-5Y)"].map((program) => (
+                        <button
+                          key={program}
+                          onClick={() => updateField("programType", program)}
+                          className={`p-6 rounded-[30px] border-2 transition-all ${
+                            formData.programType === program
+                              ? "border-[#B45309] bg-[#FEF9C3]"
+                              : "border-[#1A1045]/10 hover:border-[#B45309]/50"
+                          }`}
+                        >
+                          <p className="font-bold text-[#1A1045] text-center">{program}</p>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-4">Enrollment Type</label>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {["Full-Time", "Part-Time"].map((type) => (
+                        <button
+                          key={type}
+                          onClick={() => updateField("enrollmentType", type)}
+                          className={`p-6 rounded-[30px] border-2 transition-all ${
+                            formData.enrollmentType === type
+                              ? "border-[#B45309] bg-[#FEF9C3]"
+                              : "border-[#1A1045]/10 hover:border-[#B45309]/50"
+                          }`}
+                        >
+                          <p className="font-bold text-[#1A1045] text-center">{type}</p>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Preferred Start Date</label>
+                    <input
+                      type="date"
+                      value={formData.startDate}
+                      onChange={(e) => updateField("startDate", e.target.value)}
+                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#B45309] focus:outline-none transition-colors"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Step 5: Emergency Contacts */}
+            {currentStep === 5 && (
+              <div>
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-16 h-16 rounded-full bg-[#FEE2E2] flex items-center justify-center">
+                    <Shield className="w-8 h-8 text-[#DC2626]" />
+                  </div>
+                  <div>
+                    <h2 className="font-serif text-3xl text-[#1A1045] tracking-tighter">Emergency Contacts</h2>
+                    <p className="text-sm text-[#1A1045]/60 font-serif italic">Who should we call in an emergency?</p>
+                  </div>
+                </div>
+
+                <div className="space-y-8">
+                  {/* Contact 1 */}
+                  <div className="p-6 bg-[#F8FAFC] rounded-[30px]">
+                    <h3 className="font-bold text-[#1A1045] mb-4 uppercase tracking-widest text-sm">Emergency Contact 1</h3>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Full Name</label>
+                        <input
+                          type="text"
+                          value={formData.emergencyName1}
+                          onChange={(e) => updateField("emergencyName1", e.target.value)}
+                          className="w-full px-4 py-3 rounded-full border-2 border-[#1A1045]/10 focus:border-[#DC2626] focus:outline-none transition-colors"
+                          placeholder="Jane Doe"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Phone Number</label>
+                        <input
+                          type="tel"
+                          value={formData.emergencyPhone1}
+                          onChange={(e) => updateField("emergencyPhone1", e.target.value)}
+                          className="w-full px-4 py-3 rounded-full border-2 border-[#1A1045]/10 focus:border-[#DC2626] focus:outline-none transition-colors"
+                          placeholder="+234 800 000 0000"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Relationship</label>
+                        <input
+                          type="text"
+                          value={formData.emergencyRelation1}
+                          onChange={(e) => updateField("emergencyRelation1", e.target.value)}
+                          className="w-full px-4 py-3 rounded-full border-2 border-[#1A1045]/10 focus:border-[#DC2626] focus:outline-none transition-colors"
+                          placeholder="Aunt"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Contact 2 */}
+                  <div className="p-6 bg-[#F8FAFC] rounded-[30px]">
+                    <h3 className="font-bold text-[#1A1045] mb-4 uppercase tracking-widest text-sm">Emergency Contact 2</h3>
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Full Name</label>
+                        <input
+                          type="text"
+                          value={formData.emergencyName2}
+                          onChange={(e) => updateField("emergencyName2", e.target.value)}
+                          className="w-full px-4 py-3 rounded-full border-2 border-[#1A1045]/10 focus:border-[#DC2626] focus:outline-none transition-colors"
+                          placeholder="Bob Smith"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Phone Number</label>
+                        <input
+                          type="tel"
+                          value={formData.emergencyPhone2}
+                          onChange={(e) => updateField("emergencyPhone2", e.target.value)}
+                          className="w-full px-4 py-3 rounded-full border-2 border-[#1A1045]/10 focus:border-[#DC2626] focus:outline-none transition-colors"
+                          placeholder="+234 800 000 0000"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Relationship</label>
+                        <input
+                          type="text"
+                          value={formData.emergencyRelation2}
+                          onChange={(e) => updateField("emergencyRelation2", e.target.value)}
+                          className="w-full px-4 py-3 rounded-full border-2 border-[#1A1045]/10 focus:border-[#DC2626] focus:outline-none transition-colors"
+                          placeholder="Uncle"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Step 6: Document Upload */}
+            {currentStep === 6 && (
+              <div>
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-16 h-16 rounded-full bg-[#E0E7FF] flex items-center justify-center">
+                    <Upload className="w-8 h-8 text-[#4F46E5]" />
+                  </div>
+                  <div>
+                    <h2 className="font-serif text-3xl text-[#1A1045] tracking-tighter">Upload Documents</h2>
+                    <p className="text-sm text-[#1A1045]/60 font-serif italic">Required documents for enrollment</p>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  {/* Birth Certificate */}
+                  <div>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-3">Birth Certificate</label>
+                    <div className="relative">
+                      <input
+                        type="file"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        onChange={(e) => handleFileUpload("birthCertificate", e.target.files?.[0] || null)}
+                        className="hidden"
+                        id="birthCert"
+                      />
+                      <label
+                        htmlFor="birthCert"
+                        className="flex items-center justify-center gap-4 p-8 border-2 border-dashed border-[#1A1045]/20 rounded-[30px] cursor-pointer hover:border-[#4F46E5] hover:bg-[#E0E7FF]/20 transition-all"
+                      >
+                        {formData.birthCertificate ? (
+                          <div className="flex items-center gap-3">
+                            <CheckCircle2 className="w-6 h-6 text-[#15803D]" />
+                            <span className="font-serif text-[#1A1045]">{formData.birthCertificate.name}</span>
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleFileUpload("birthCertificate", null);
+                              }}
+                              className="p-1 hover:bg-red-100 rounded-full transition-colors"
+                            >
+                              <X className="w-4 h-4 text-red-500" />
+                            </button>
+                          </div>
+                        ) : (
+                          <>
+                            <Upload className="w-6 h-6 text-[#1A1045]/40" />
+                            <span className="font-serif text-[#1A1045]/60">Click to upload or drag and drop</span>
+                          </>
+                        )}
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Immunization Records */}
+                  <div>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-3">Immunization Records</label>
+                    <div className="relative">
+                      <input
+                        type="file"
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        onChange={(e) => handleFileUpload("immunizationRecords", e.target.files?.[0] || null)}
+                        className="hidden"
+                        id="immunization"
+                      />
+                      <label
+                        htmlFor="immunization"
+                        className="flex items-center justify-center gap-4 p-8 border-2 border-dashed border-[#1A1045]/20 rounded-[30px] cursor-pointer hover:border-[#4F46E5] hover:bg-[#E0E7FF]/20 transition-all"
+                      >
+                        {formData.immunizationRecords ? (
+                          <div className="flex items-center gap-3">
+                            <CheckCircle2 className="w-6 h-6 text-[#15803D]" />
+                            <span className="font-serif text-[#1A1045]">{formData.immunizationRecords.name}</span>
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleFileUpload("immunizationRecords", null);
+                              }}
+                              className="p-1 hover:bg-red-100 rounded-full transition-colors"
+                            >
+                              <X className="w-4 h-4 text-red-500" />
+                            </button>
+                          </div>
+                        ) : (
+                          <>
+                            <Upload className="w-6 h-6 text-[#1A1045]/40" />
+                            <span className="font-serif text-[#1A1045]/60">Click to upload or drag and drop</span>
+                          </>
+                        )}
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="bg-[#DBEAFE] p-6 rounded-[30px] border border-[#3B82F6]/20">
+                    <p className="text-sm text-[#1A1045]/70 font-serif italic">
+                      <span className="font-bold text-[#3B82F6]">Note:</span> Accepted formats: PDF, JPG, PNG. Max file size: 5MB
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Navigation Buttons */}
+            <div className="flex items-center justify-between mt-12 pt-8 border-t border-[#1A1045]/10">
+              {currentStep > 1 && (
+                <button
+                  onClick={prevStep}
+                  className="flex items-center gap-3 px-6 py-3 rounded-full border-2 border-[#1A1045]/10 hover:border-[#1A1045]/30 transition-all"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                  <span className="font-bold uppercase tracking-widest text-sm">Back</span>
+                </button>
+              )}
+              
+              {currentStep < totalSteps ? (
+                <button
+                  onClick={nextStep}
+                  className="ml-auto flex items-center gap-3 bg-[#3B82F6] text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-[#1D4ED8] transition-all"
+                >
+                  <span>Next Step</span>
+                  <ArrowRight className="w-5 h-5" />
+                </button>
+              ) : (
+                <button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  className="ml-auto flex items-center gap-3 bg-[#15803D] text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-[#166534] transition-all disabled:opacity-50"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span>Submitting...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Submit Application</span>
+                      <CheckCircle2 className="w-5 h-5" />
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+};

@@ -38,27 +38,6 @@ export const ShopPageContent = () => {
 
   return (
     <div className="bg-background text-foreground overflow-hidden">
-      {/* Elegant navigation */}
-      <nav className="fixed top-0 left-0 w-full px-6 py-6 md:px-12 md:py-10 z-50 pointer-events-none flex justify-between items-center">
-        <Link to="/"
-          className="inline-flex items-center gap-3 bg-white/90 backdrop-blur-md px-6 py-3 rounded-full shadow-lg border-2 border-[#1A1045]/5 pointer-events-auto hover:-translate-y-1 transition-all group"
-        >
-          <div className="w-8 h-8 rounded-full bg-[#E0F2FE] flex items-center justify-center group-hover:bg-[#BAE6FD] transition-colors">
-            <ArrowLeft className="w-4 h-4 text-[#0284C7]" />
-          </div>
-          <span className="font-bold text-[#1A1045] uppercase tracking-widest text-xs hidden md:inline-block">Return Home</span>
-        </Link>
-        <button 
-          onClick={() => setIsCartOpen(true)}
-          className="bg-white/90 backdrop-blur-md text-[#1A1045] px-6 py-3 rounded-full font-bold uppercase tracking-widest text-xs pointer-events-auto border-2 border-[#1A1045]/5 shadow-lg hover:-translate-y-1 transition-all flex items-center gap-3"
-        >
-          Cart
-          <span className="w-6 h-6 rounded-full bg-[#3B82F6] text-white flex items-center justify-center text-[10px] font-bold">
-            {cartCount}
-          </span>
-        </button>
-      </nav>
-
       {/* Hero */}
       <section className="relative w-full min-h-[50vh] flex items-center pb-16 overflow-hidden pt-32 bg-[#E0F2FE]">
         {/* Soft Background Blobs */}

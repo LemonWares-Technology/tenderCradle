@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import { SplitText } from "@/components/ui/split-text";
 import { Link } from "react-router-dom";
-import { ArrowRight, Download, CheckCircle2, Sparkles } from "lucide-react";
+import { ArrowRight, Download, CheckCircle2, Sparkles, CheckCircle } from "lucide-react";
 
 const enrollmentSteps = [
   {
@@ -82,8 +82,95 @@ export const EnrollmentPageContent = () => {
         </div>
       </section>
 
+      {/* Quick Apply Section - NEW */}
+      <section className="w-full py-16 bg-gradient-to-br from-[#3B82F6] to-[#1D4ED8] relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-10 w-32 h-32 bg-white rounded-full blur-2xl" />
+          <div className="absolute bottom-10 right-10 w-40 h-40 bg-white rounded-full blur-3xl" />
+        </div>
+        
+        <div className="container mx-auto px-6 md:px-12 relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/30"
+            >
+              <Sparkles className="w-4 h-4 text-[#FEF08A]" />
+              <span className="text-xs font-bold uppercase tracking-widest text-white">Ready to Begin?</span>
+            </motion.div>
+
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-6 tracking-tighter"
+            >
+              Start Your Application Today
+            </motion.h2>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="text-xl text-white/90 font-serif italic mb-10 max-w-2xl mx-auto"
+            >
+              Our simple 6-step application takes just 10 minutes. Secure your child's spot in our nurturing environment.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            >
+              <Link
+                to="/enrollment/apply"
+                className="group inline-flex items-center gap-3 bg-white text-[#1D4ED8] px-10 py-5 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-[#FEF08A] hover:text-[#1A1045] transition-all duration-300 shadow-2xl hover:shadow-[#FEF08A]/50 hover:scale-105"
+              >
+                <CheckCircle2 className="w-5 h-5" />
+                Begin Application
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              
+              <a
+                href="#process"
+                className="text-white/90 hover:text-white font-bold uppercase tracking-widest text-sm border-b-2 border-white/40 hover:border-white pb-1 transition-all duration-300"
+              >
+                Learn About Our Process
+              </a>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+              className="mt-10 flex flex-wrap items-center justify-center gap-6 text-white/80 text-sm"
+            >
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-[#FEF08A]" />
+                <span>Takes 10 minutes</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-[#FEF08A]" />
+                <span>Save & continue later</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-[#FEF08A]" />
+                <span>Instant confirmation</span>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Enrollment Process - Elegant Cards */}
-      <section className="w-full py-32 bg-[#F8FAFC]">
+      <section id="process" className="w-full py-32 bg-[#F8FAFC]">
         <div className="container mx-auto px-6 md:px-12">
           <div className="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8">
             <div className="max-w-2xl">
@@ -179,7 +266,7 @@ export const EnrollmentPageContent = () => {
       {/* CTA */}
       <section className="py-40 bg-[#F8FAFC]">
         <div className="container mx-auto px-6 md:px-12 text-center">
-          <Link to="/contact" className="group inline-flex flex-col items-center">
+          <Link to="/enrollment/apply" className="group inline-flex flex-col items-center">
             <span className="inline-flex items-center gap-3 px-4 py-2 rounded-full mb-8 bg-white shadow-sm border border-[#1A1045]/5">
               <span className="text-[10px] font-bold uppercase tracking-widest text-[#B45309]">Ready to Begin?</span>
             </span>

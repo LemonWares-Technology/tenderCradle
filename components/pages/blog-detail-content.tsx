@@ -23,12 +23,10 @@ export const BlogDetailContent = ({ post }: { post: BlogPost }) => {
 
       {/* Hero Image */}
       <div className="relative w-full h-[60vh] md:h-[70vh] overflow-hidden bg-[#F8FAFC] mt-0">
-        <Image
+        <img
           src={post.image}
           alt={post.title}
-          fill
-          className="object-cover"
-          priority
+          className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#1A1045]/60 to-transparent" />
         <div className="absolute inset-0 bg-[#0F0928]/10 mix-blend-overlay" />
@@ -85,9 +83,13 @@ export const BlogDetailContent = ({ post }: { post: BlogPost }) => {
           transition={{ delay: 0.4 }}
           className="space-y-8 text-lg font-serif italic md:text-xl text-[#1A1045]/80 leading-relaxed max-w-3xl mx-auto"
         >
-          {post.body.map((para, idx) => (
-            <p key={idx}>{para}</p>
-          ))}
+          {post.body && Array.isArray(post.body) ? (
+            post.body.map((para, idx) => (
+              <p key={idx}>{para}</p>
+            ))
+          ) : (
+            <div dangerouslySetInnerHTML={{ __html: post.content || '' }} />
+          )}
         </motion.div>
 
         {/* End divider & author bio summary */}

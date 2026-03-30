@@ -101,7 +101,7 @@ export const CTABannerSection = () => {
           transition={{ delay: 0.4 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14"
         >
-          <Link to="/contact"
+          <Link to="/enrollment/apply"
             className="group inline-flex items-center gap-3 bg-white text-[#F97316] px-8 py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-[#1A1045] hover:text-white transition-all duration-500 shadow-xl shadow-black/15"
           >
             Enroll Your Child

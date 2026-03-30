@@ -16,6 +16,11 @@ export const ScrollToTop = () => {
 
   const isLanding = pathname === "/";
 
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   useEffect(() => {
     const onScroll = () => {
       const scrolled = window.scrollY;

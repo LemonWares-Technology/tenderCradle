@@ -32,6 +32,7 @@ import { AboutPageContent } from "@/components/pages/about-content";
 import { StaffPageContent } from "@/components/pages/staff-content";
 import { CurriculumPageContent } from "@/components/pages/curriculum-content";
 import { EnrollmentPageContent } from "@/components/pages/enrollment-content";
+import { EnrollmentFormContent } from "@/components/pages/enrollment-form-content";
 import { HealthSafetyPageContent } from "@/components/pages/health-safety-content";
 import ParentResourcesContent from "@/components/pages/parent-resources-content";
 import { ContactPageContent } from "@/components/pages/contact-content";
@@ -190,6 +191,20 @@ function EnrollmentPage() {
         jsonLd={{ "@type": "Service", name: "Tender Cradle Enrollment", serviceType: "Childcare Enrollment", provider: { "@type": "Organization", name: "Tender Cradle" } }}
       />
       <EnrollmentPageContent />
+    </>
+  );
+}
+
+function EnrollmentFormPage() {
+  return (
+    <>
+      <SEO
+        title="Enrollment Application"
+        description="Complete your enrollment application to join the Tender Cradle family."
+        canonical="/enrollment/apply"
+        noIndex
+      />
+      <EnrollmentFormContent />
     </>
   );
 }
@@ -607,6 +622,7 @@ import AdminSettingsPage from "@/src/pages/admin/SettingsPage";
 import AdminLeadsPage from "@/src/pages/admin/LeadsPage";
 import AdminNewsletterPage from "@/src/pages/admin/NewsletterPage";
 import AdminTeamPage from "@/src/pages/admin/TeamPage";
+import AdminEnrollmentsPage from "@/src/pages/admin/EnrollmentsPage";
 import ProtectedRoute from "@/components/admin/ProtectedRoute";
 
 // ═══════════════════════════════════════════════════════════
@@ -623,6 +639,7 @@ export default function App() {
         <Route path="/staff" element={<StaffPage />} />
         <Route path="/curriculum" element={<CurriculumPage />} />
         <Route path="/enrollment" element={<EnrollmentPage />} />
+        <Route path="/enrollment/apply" element={<EnrollmentFormPage />} />
         <Route path="/health-safety" element={<HealthSafetyPage />} />
         <Route path="/parent-resources" element={<ParentResourcesPage />} />
         <Route path="/contact" element={<ContactPage />} />
@@ -659,6 +676,7 @@ export default function App() {
         <Route path="customers" element={<AdminCustomersPage />} />
         <Route path="team" element={<AdminTeamPage />} />
         <Route path="leads" element={<AdminLeadsPage />} />
+        <Route path="enrollments" element={<AdminEnrollmentsPage />} />
         <Route path="newsletters" element={<AdminNewsletterPage />} />
         <Route path="settings" element={<AdminSettingsPage />} />
       </Route>

@@ -110,7 +110,7 @@ export const HeroSection = () => {
               transition={{ duration: 0.6, delay: 0.7 }}
               className="flex flex-col sm:flex-row items-start sm:items-center gap-4"
             >
-              <Link to="/enrollment"
+              <Link to="/enrollment/apply"
                 className="group inline-flex items-center gap-3 bg-[#FF6B35] text-white px-8 py-4 rounded-full font-bold text-sm uppercase tracking-widest hover:bg-[#7C3AED] transition-all duration-500 shadow-xl shadow-[#FF6B35]/30 hover:shadow-[#7C3AED]/30 hover:scale-105"
               >
                 Enroll Your Child
