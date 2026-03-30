@@ -109,12 +109,6 @@ export const Navbar = () => {
             </button>
           )}
 
-          <Link to="/enrollment"
-            className="hidden sm:flex items-center justify-center px-6 py-2.5 bg-[#FF6B35] text-white text-xs font-bold uppercase tracking-widest rounded-full hover:bg-[#7C3AED] hover:scale-105 transition-all duration-300 shadow-xl shadow-[#FF6B35]/20"
-          >
-            Enroll Now
-          </Link>
-
           {/* Customer Auth Actions */}
           <div className="hidden md:flex items-center gap-2 border-l border-[#1A1045]/10 ml-2 pl-4">
             {isAuthenticated ? (
@@ -158,7 +152,7 @@ export const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-background z-40 lg:hidden flex flex-col pt-32 pb-12 px-12"
+            className="fixed inset-0 bg-white z-40 lg:hidden flex flex-col pt-32 pb-12 px-12"
           >
             {/* Background Decoration */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] aspect-square bg-primary/5 rounded-full blur-3xl pointer-events-none" />
