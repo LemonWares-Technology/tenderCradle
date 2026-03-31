@@ -47,6 +47,8 @@ import { BlogDetailContent } from "@/components/pages/blog-detail-content";
 import { PrivacyPageContent } from "@/components/pages/privacy-content";
 import { TermsPageContent } from "@/components/pages/terms-content";
 import { NotFoundContent } from "@/components/pages/not-found-content";
+import { ForgotPasswordContent } from "@/components/pages/forgot-password-content";
+import { ResetPasswordContent } from "@/components/pages/reset-password-content";
 import CustomerLoginPage from "@/src/pages/shop/CustomerLoginPage";
 import CustomerRegisterPage from "@/src/pages/shop/CustomerRegisterPage";
 import CheckoutPage from "@/src/pages/shop/CheckoutPage";
@@ -611,6 +613,8 @@ function BlogListContent({ posts }: { posts: Blog[] }) {
 
 // We'll lazily import admin pages — they stay as-is but need Link/Image migrations
 import AdminLoginPage from "@/src/pages/admin/LoginPage";
+import AdminForgotPasswordPage from "@/src/pages/admin/ForgotPasswordPage";
+import AdminResetPasswordPage from "@/src/pages/admin/ResetPasswordPage";
 import AdminDashboardPage from "@/src/pages/admin/DashboardPage";
 import AdminProductsPage from "@/src/pages/admin/ProductsPage";
 import AdminNewProductPage from "@/src/pages/admin/NewProductPage";
@@ -656,6 +660,10 @@ export default function App() {
         <Route path="/shop/orders" element={<MyOrdersPage />} />
         <Route path="/shop/:id" element={<ProductPage />} />
 
+        {/* Customer Password Reset */}
+        <Route path="/forgot-password" element={<><SEO title="Forgot Password" noIndex /><ForgotPasswordContent /></>} />
+        <Route path="/reset-password" element={<><SEO title="Reset Password" noIndex /><ResetPasswordContent /></>} />
+
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:id" element={<BlogPostPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
@@ -664,6 +672,8 @@ export default function App() {
 
       {/* ── Admin Login (public) ─────────────────────── */}
       <Route path="/admin/login" element={<AdminLoginPage />} />
+      <Route path="/admin/forgot-password" element={<AdminForgotPasswordPage />} />
+      <Route path="/admin/reset-password" element={<AdminResetPasswordPage />} />
 
       {/* ── Admin Routes (protected, noIndex) ────────── */}
       <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>

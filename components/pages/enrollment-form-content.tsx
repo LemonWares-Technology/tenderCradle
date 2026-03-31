@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowLeft, CheckCircle2, Upload, X, Sparkles, Baby, Heart, Shield, Calendar } from "lucide-react";
+import { ArrowRight, ArrowLeft, CheckCircle2, Upload, X, Sparkles, Baby, Heart, Shield, Calendar, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { submitEnrollment } from "@/lib/api/enrollments";
 
@@ -61,33 +61,154 @@ export const EnrollmentFormContent = () => {
   const [formData, setFormData] = useState<EnrollmentFormData>(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const totalSteps = 6;
 
   const updateField = (field: keyof EnrollmentFormData, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: "" }));
+    }
   };
 
   const handleFileUpload = (field: "birthCertificate" | "immunizationRecords", file: File | null) => {
+    if (file) {
+      // Validate file size (5MB max)
+      const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+      if (file.size > maxSize) {
+        setErrors(prev => ({ ...prev, [field]: "File size must be less than 5MB" }));
+        return;
+      }
+      
+      // Validate file type
+      const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+      if (!allowedTypes.includes(file.type)) {
+        setErrors(prev => ({ ...prev, [field]: "Only PDF, JPG, and PNG files are allowed" }));
+        return;
+      }
+    }
+    
     updateField(field, file);
   };
 
+  // Validation functions
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhone = (phone: string): boolean => {
+    // Allow various phone formats
+    const phoneRegex = /^[\d\s\-\+\(\)]+$/;
+    return phone.length >= 10 && phoneRegex.test(phone);
+  };
+
+  const validateStep = (step: number): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    switch (step) {
+      case 1: // Parent Information
+        if (!formData.parentFirstName.trim()) newErrors.parentFirstName = "First name is required";
+        if (!formData.parentLastName.trim()) newErrors.parentLastName = "Last name is required";
+        if (!formData.parentEmail.trim()) {
+          newErrors.parentEmail = "Email is required";
+        } else if (!validateEmail(formData.parentEmail)) {
+          newErrors.parentEmail = "Please enter a valid email address";
+        }
+        if (!formData.parentPhone.trim()) {
+          newErrors.parentPhone = "Phone number is required";
+        } else if (!validatePhone(formData.parentPhone)) {
+          newErrors.parentPhone = "Please enter a valid phone number";
+        }
+        if (!formData.parentAddress.trim()) newErrors.parentAddress = "Address is required";
+        if (!formData.parentCity.trim()) newErrors.parentCity = "City is required";
+        if (!formData.parentState.trim()) newErrors.parentState = "State is required";
+        break;
+
+      case 2: // Child Information
+        if (!formData.childFirstName.trim()) newErrors.childFirstName = "First name is required";
+        if (!formData.childLastName.trim()) newErrors.childLastName = "Last name is required";
+        if (!formData.childDOB) newErrors.childDOB = "Date of birth is required";
+        if (!formData.childGender) newErrors.childGender = "Gender is required";
+        break;
+
+      case 3: // Medical Information
+        if (!formData.doctorName.trim()) newErrors.doctorName = "Doctor's name is required";
+        if (!formData.doctorPhone.trim()) {
+          newErrors.doctorPhone = "Doctor's phone is required";
+        } else if (!validatePhone(formData.doctorPhone)) {
+          newErrors.doctorPhone = "Please enter a valid phone number";
+        }
+        break;
+
+      case 4: // Program Selection
+        if (!formData.programType) newErrors.programType = "Please select a program type";
+        if (!formData.enrollmentType) newErrors.enrollmentType = "Please select an enrollment type";
+        if (!formData.startDate) newErrors.startDate = "Start date is required";
+        break;
+
+      case 5: // Emergency Contacts
+        if (!formData.emergencyName1.trim()) newErrors.emergencyName1 = "Emergency contact 1 name is required";
+        if (!formData.emergencyPhone1.trim()) {
+          newErrors.emergencyPhone1 = "Emergency contact 1 phone is required";
+        } else if (!validatePhone(formData.emergencyPhone1)) {
+          newErrors.emergencyPhone1 = "Please enter a valid phone number";
+        }
+        if (!formData.emergencyRelation1.trim()) newErrors.emergencyRelation1 = "Relationship is required";
+        
+        if (!formData.emergencyName2.trim()) newErrors.emergencyName2 = "Emergency contact 2 name is required";
+        if (!formData.emergencyPhone2.trim()) {
+          newErrors.emergencyPhone2 = "Emergency contact 2 phone is required";
+        } else if (!validatePhone(formData.emergencyPhone2)) {
+          newErrors.emergencyPhone2 = "Please enter a valid phone number";
+        }
+        if (!formData.emergencyRelation2.trim()) newErrors.emergencyRelation2 = "Relationship is required";
+        break;
+
+      case 6: // Documents
+        if (!formData.birthCertificate) newErrors.birthCertificate = "Birth certificate is required";
+        if (!formData.immunizationRecords) newErrors.immunizationRecords = "Immunization records are required";
+        break;
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const nextStep = () => {
-    if (currentStep < totalSteps) setCurrentStep(currentStep + 1);
+    if (validateStep(currentStep)) {
+      if (currentStep < totalSteps) setCurrentStep(currentStep + 1);
+    } else {
+      // Scroll to first error
+      const firstError = document.querySelector('.border-red-500');
+      if (firstError) {
+        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
   };
 
   const prevStep = () => {
-    if (currentStep > 1) setCurrentStep(currentStep - 1);
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+      setErrors({}); // Clear errors when going back
+    }
   };
 
   const handleSubmit = async () => {
+    if (!validateStep(6)) {
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       const { birthCertificate, immunizationRecords, ...enrollmentData } = formData;
       await submitEnrollment(enrollmentData, { birthCertificate, immunizationRecords });
       setIsSuccess(true);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Enrollment submission failed:", error);
-      alert("Failed to submit enrollment. Please try again.");
+      const errorMessage = error?.message || "Failed to submit enrollment. Please try again.";
+      alert(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -178,74 +299,137 @@ export const EnrollmentFormContent = () => {
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">First Name</label>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">
+                      First Name <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="text"
+                      required
                       value={formData.parentFirstName}
                       onChange={(e) => updateField("parentFirstName", e.target.value)}
-                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#3B82F6] focus:outline-none transition-colors"
+                      className={`w-full px-6 py-4 rounded-full border-2 ${errors.parentFirstName ? 'border-red-500' : 'border-[#1A1045]/10'} focus:border-[#3B82F6] focus:outline-none transition-colors`}
                       placeholder="John"
                     />
+                    {errors.parentFirstName && (
+                      <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-4 h-4" />
+                        {errors.parentFirstName}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Last Name</label>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">
+                      Last Name <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="text"
+                      required
                       value={formData.parentLastName}
                       onChange={(e) => updateField("parentLastName", e.target.value)}
-                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#3B82F6] focus:outline-none transition-colors"
+                      className={`w-full px-6 py-4 rounded-full border-2 ${errors.parentLastName ? 'border-red-500' : 'border-[#1A1045]/10'} focus:border-[#3B82F6] focus:outline-none transition-colors`}
                       placeholder="Doe"
                     />
+                    {errors.parentLastName && (
+                      <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-4 h-4" />
+                        {errors.parentLastName}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Email</label>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">
+                      Email <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="email"
+                      required
                       value={formData.parentEmail}
                       onChange={(e) => updateField("parentEmail", e.target.value)}
-                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#3B82F6] focus:outline-none transition-colors"
+                      className={`w-full px-6 py-4 rounded-full border-2 ${errors.parentEmail ? 'border-red-500' : 'border-[#1A1045]/10'} focus:border-[#3B82F6] focus:outline-none transition-colors`}
                       placeholder="john@example.com"
                     />
+                    {errors.parentEmail && (
+                      <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-4 h-4" />
+                        {errors.parentEmail}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Phone</label>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">
+                      Phone <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="tel"
+                      required
                       value={formData.parentPhone}
                       onChange={(e) => updateField("parentPhone", e.target.value)}
-                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#3B82F6] focus:outline-none transition-colors"
+                      className={`w-full px-6 py-4 rounded-full border-2 ${errors.parentPhone ? 'border-red-500' : 'border-[#1A1045]/10'} focus:border-[#3B82F6] focus:outline-none transition-colors`}
                       placeholder="+234 800 000 0000"
                     />
+                    {errors.parentPhone && (
+                      <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-4 h-4" />
+                        {errors.parentPhone}
+                      </p>
+                    )}
                   </div>
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Address</label>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">
+                      Address <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="text"
+                      required
                       value={formData.parentAddress}
                       onChange={(e) => updateField("parentAddress", e.target.value)}
-                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#3B82F6] focus:outline-none transition-colors"
+                      className={`w-full px-6 py-4 rounded-full border-2 ${errors.parentAddress ? 'border-red-500' : 'border-[#1A1045]/10'} focus:border-[#3B82F6] focus:outline-none transition-colors`}
                       placeholder="123 Main Street"
                     />
+                    {errors.parentAddress && (
+                      <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-4 h-4" />
+                        {errors.parentAddress}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">City</label>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">
+                      City <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="text"
+                      required
                       value={formData.parentCity}
                       onChange={(e) => updateField("parentCity", e.target.value)}
-                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#3B82F6] focus:outline-none transition-colors"
+                      className={`w-full px-6 py-4 rounded-full border-2 ${errors.parentCity ? 'border-red-500' : 'border-[#1A1045]/10'} focus:border-[#3B82F6] focus:outline-none transition-colors`}
                       placeholder="Lagos"
                     />
+                    {errors.parentCity && (
+                      <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-4 h-4" />
+                        {errors.parentCity}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">State</label>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">
+                      State <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="text"
+                      required
                       value={formData.parentState}
                       onChange={(e) => updateField("parentState", e.target.value)}
-                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#3B82F6] focus:outline-none transition-colors"
+                      className={`w-full px-6 py-4 rounded-full border-2 ${errors.parentState ? 'border-red-500' : 'border-[#1A1045]/10'} focus:border-[#3B82F6] focus:outline-none transition-colors`}
                       placeholder="Lagos State"
                     />
+                    {errors.parentState && (
+                      <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-4 h-4" />
+                        {errors.parentState}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -266,46 +450,82 @@ export const EnrollmentFormContent = () => {
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">First Name</label>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">
+                      First Name <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="text"
+                      required
                       value={formData.childFirstName}
                       onChange={(e) => updateField("childFirstName", e.target.value)}
-                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#BE185D] focus:outline-none transition-colors"
+                      className={`w-full px-6 py-4 rounded-full border-2 ${errors.childFirstName ? 'border-red-500' : 'border-[#1A1045]/10'} focus:border-[#BE185D] focus:outline-none transition-colors`}
                       placeholder="Emma"
                     />
+                    {errors.childFirstName && (
+                      <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-4 h-4" />
+                        {errors.childFirstName}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Last Name</label>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">
+                      Last Name <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="text"
+                      required
                       value={formData.childLastName}
                       onChange={(e) => updateField("childLastName", e.target.value)}
-                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#BE185D] focus:outline-none transition-colors"
+                      className={`w-full px-6 py-4 rounded-full border-2 ${errors.childLastName ? 'border-red-500' : 'border-[#1A1045]/10'} focus:border-[#BE185D] focus:outline-none transition-colors`}
                       placeholder="Doe"
                     />
+                    {errors.childLastName && (
+                      <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-4 h-4" />
+                        {errors.childLastName}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Date of Birth</label>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">
+                      Date of Birth <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="date"
+                      required
                       value={formData.childDOB}
                       onChange={(e) => updateField("childDOB", e.target.value)}
-                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#BE185D] focus:outline-none transition-colors"
+                      className={`w-full px-6 py-4 rounded-full border-2 ${errors.childDOB ? 'border-red-500' : 'border-[#1A1045]/10'} focus:border-[#BE185D] focus:outline-none transition-colors`}
                     />
+                    {errors.childDOB && (
+                      <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-4 h-4" />
+                        {errors.childDOB}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Gender</label>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">
+                      Gender <span className="text-red-500">*</span>
+                    </label>
                     <select
+                      required
                       value={formData.childGender}
                       onChange={(e) => updateField("childGender", e.target.value)}
-                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#BE185D] focus:outline-none transition-colors"
+                      className={`w-full px-6 py-4 rounded-full border-2 ${errors.childGender ? 'border-red-500' : 'border-[#1A1045]/10'} focus:border-[#BE185D] focus:outline-none transition-colors`}
                     >
                       <option value="">Select Gender</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                       <option value="other">Other</option>
                     </select>
+                    {errors.childGender && (
+                      <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-4 h-4" />
+                        {errors.childGender}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -357,24 +577,42 @@ export const EnrollmentFormContent = () => {
                   </div>
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Doctor's Name</label>
+                      <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">
+                        Doctor's Name <span className="text-red-500">*</span>
+                      </label>
                       <input
                         type="text"
+                        required
                         value={formData.doctorName}
                         onChange={(e) => updateField("doctorName", e.target.value)}
-                        className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#15803D] focus:outline-none transition-colors"
+                        className={`w-full px-6 py-4 rounded-full border-2 ${errors.doctorName ? 'border-red-500' : 'border-[#1A1045]/10'} focus:border-[#15803D] focus:outline-none transition-colors`}
                         placeholder="Dr. Smith"
                       />
+                      {errors.doctorName && (
+                        <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.doctorName}
+                        </p>
+                      )}
                     </div>
                     <div>
-                      <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Doctor's Phone</label>
+                      <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">
+                        Doctor's Phone <span className="text-red-500">*</span>
+                      </label>
                       <input
                         type="tel"
+                        required
                         value={formData.doctorPhone}
                         onChange={(e) => updateField("doctorPhone", e.target.value)}
-                        className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#15803D] focus:outline-none transition-colors"
+                        className={`w-full px-6 py-4 rounded-full border-2 ${errors.doctorPhone ? 'border-red-500' : 'border-[#1A1045]/10'} focus:border-[#15803D] focus:outline-none transition-colors`}
                         placeholder="+234 800 000 0000"
                       />
+                      {errors.doctorPhone && (
+                        <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.doctorPhone}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -396,15 +634,20 @@ export const EnrollmentFormContent = () => {
 
                 <div className="grid gap-6">
                   <div>
-                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-4">Program Type</label>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-4">
+                      Program Type <span className="text-red-500">*</span>
+                    </label>
                     <div className="grid md:grid-cols-3 gap-4">
                       {["Infants (3-18 Months)", "Toddlers (18M-3Y)", "Preschool (3-5Y)"].map((program) => (
                         <button
                           key={program}
+                          type="button"
                           onClick={() => updateField("programType", program)}
                           className={`p-6 rounded-[30px] border-2 transition-all ${
                             formData.programType === program
                               ? "border-[#B45309] bg-[#FEF9C3]"
+                              : errors.programType
+                              ? "border-red-500"
                               : "border-[#1A1045]/10 hover:border-[#B45309]/50"
                           }`}
                         >
@@ -412,18 +655,29 @@ export const EnrollmentFormContent = () => {
                         </button>
                       ))}
                     </div>
+                    {errors.programType && (
+                      <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-4 h-4" />
+                        {errors.programType}
+                      </p>
+                    )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-4">Enrollment Type</label>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-4">
+                      Enrollment Type <span className="text-red-500">*</span>
+                    </label>
                     <div className="grid md:grid-cols-2 gap-4">
                       {["Full-Time", "Part-Time"].map((type) => (
                         <button
                           key={type}
+                          type="button"
                           onClick={() => updateField("enrollmentType", type)}
                           className={`p-6 rounded-[30px] border-2 transition-all ${
                             formData.enrollmentType === type
                               ? "border-[#B45309] bg-[#FEF9C3]"
+                              : errors.enrollmentType
+                              ? "border-red-500"
                               : "border-[#1A1045]/10 hover:border-[#B45309]/50"
                           }`}
                         >
@@ -431,16 +685,31 @@ export const EnrollmentFormContent = () => {
                         </button>
                       ))}
                     </div>
+                    {errors.enrollmentType && (
+                      <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-4 h-4" />
+                        {errors.enrollmentType}
+                      </p>
+                    )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">Preferred Start Date</label>
+                    <label className="block text-sm font-bold uppercase tracking-widest text-[#1A1045]/60 mb-2">
+                      Preferred Start Date <span className="text-red-500">*</span>
+                    </label>
                     <input
                       type="date"
+                      required
                       value={formData.startDate}
                       onChange={(e) => updateField("startDate", e.target.value)}
-                      className="w-full px-6 py-4 rounded-full border-2 border-[#1A1045]/10 focus:border-[#B45309] focus:outline-none transition-colors"
+                      className={`w-full px-6 py-4 rounded-full border-2 ${errors.startDate ? 'border-red-500' : 'border-[#1A1045]/10'} focus:border-[#B45309] focus:outline-none transition-colors`}
                     />
+                    {errors.startDate && (
+                      <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                        <AlertCircle className="w-4 h-4" />
+                        {errors.startDate}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>

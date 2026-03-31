@@ -1,5 +1,5 @@
 import { useState, FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/lib/context/AuthContext";
 import { Eye, EyeOff, Lock, Mail, Loader2 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
@@ -92,6 +92,15 @@ export default function AdminLoginPage() {
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
+          </div>
+
+          <div className="flex items-center justify-end">
+            <Link
+              to="/admin/forgot-password"
+              className="text-sm text-[#1A73E8] hover:text-[#185ABC] font-medium transition-colors"
+            >
+              Forgot password?
+            </Link>
           </div>
 
           <button
