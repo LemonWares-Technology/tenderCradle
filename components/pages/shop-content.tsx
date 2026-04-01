@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowLeft, ArrowUpRight, ShoppingBag, Loader2 } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, ShoppingBag, Loader2, Plus, Check } from "lucide-react";
 import { useCart } from "@/components/providers/cart-provider";
 import { getProducts, Product } from "@/lib/api/products";
 
 export const ShopPageContent = () => {
-  const { cartCount, setIsCartOpen } = useCart();
+  const { cartCount, setIsCartOpen, addItem } = useCart();
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [addedProducts, setAddedProducts] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -34,6 +35,41 @@ export const ShopPageContent = () => {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(num).replace('NGN', '₦');
+  };
+
+  const handleAddToCart = (e: React.MouseEvent, product: Product) => {
+    e.preventDefault(); // Prevent navigation to product detail
+    e.stopPropagation();
+    
+    // Get the first variant (default variant)
+    const variant = product.variants && product.variants[0];
+    
+    if (!variant) {
+      console.error("No variant available for product:", product);
+      return;
+    }
+
+    const price = typeof variant.price === 'string' ? parseFloat(variant.price) : variant.price;
+    const image = product.images && product.images.length > 0 ? product.images[0] : "/images/placeholder-product.png";
+
+    addItem({
+      productId: product.id,
+      variantId: variant.id,
+      name: `${product.name}${variant.name !== 'Default' ? ` - ${variant.name}` : ''}`,
+      price: price,
+      image: image,
+      quantity: 1
+    });
+
+    // Show added state
+    setAddedProducts(prev => new Set(prev).add(product.id));
+    setTimeout(() => {
+      setAddedProducts(prev => {
+        const next = new Set(prev);
+        next.delete(product.id);
+        return next;
+      });
+    }, 2000);
   };
 
   return (
@@ -88,54 +124,78 @@ export const ShopPageContent = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
-              {products.map((product, index) => (
-                <motion.div
-                  key={product.id}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: (index % 3) * 0.1 }}
-                  className="group cursor-pointer flex flex-col h-full"
-                >
-                  <Link to={`/shop/${product.id}`} className="block flex-1 flex flex-col h-full">
+              {products.map((product, index) => {
+                const isAdded = addedProducts.has(product.id);
+                const isOutOfStock = product.variants && product.variants[0] && product.variants[0].stock <= 0;
+                
+                return (
+                  <motion.div
+                    key={product.id}
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: (index % 3) * 0.1 }}
+                    className="group flex flex-col h-full"
+                  >
                     <div className="relative w-full aspect-[4/5] rounded-[30px] overflow-hidden bg-white shadow-lg border border-[#1A1045]/5 group-hover:shadow-2xl transition-all duration-500 mb-6">
-                      <img 
-                        src={product.images && product.images.length > 0 ? product.images[0] : "/images/placeholder-product.png"} 
-                        alt={product.name}
-                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.03]"
-                      />
-                      
-                      {/* Minimal Category Tag */}
-                      <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest text-[#1A1045] shadow-sm">
-                        {product.category?.name || (product.tags && product.tags[0]) || "General"}
-                      </div>
+                      <Link to={`/shop/${product.slug}`} className="block w-full h-full">
+                        <img 
+                          src={product.images && product.images.length > 0 ? product.images[0] : "/images/placeholder-product.png"} 
+                          alt={product.name}
+                          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.03]"
+                        />
+                        
+                        {/* Minimal Category Tag */}
+                        <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest text-[#1A1045] shadow-sm">
+                          {product.category?.name || (product.tags && product.tags[0]) || "General"}
+                        </div>
 
-                      {/* Elegant View Overlay */}
-                      <div className="absolute inset-0 bg-[#1A1045]/5 group-hover:bg-[#1A1045]/0 transition-colors duration-500" />
+                        {/* Elegant View Overlay */}
+                        <div className="absolute inset-0 bg-[#1A1045]/5 group-hover:bg-[#1A1045]/0 transition-colors duration-500" />
+                      </Link>
                       
-                      {/* View Button */}
-                      <div className="absolute bottom-4 right-4 bg-white text-[#1A1045] w-12 h-12 rounded-full shadow-lg flex items-center justify-center opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                        <ShoppingBag className="w-5 h-5" />
-                      </div>
+                      {/* Add to Cart Button - Bottom Right */}
+                      <button
+                        onClick={(e) => handleAddToCart(e, product)}
+                        disabled={isOutOfStock || isAdded}
+                        className={`absolute bottom-4 right-4 w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 ${
+                          isAdded 
+                            ? 'bg-green-500 text-white scale-110' 
+                            : isOutOfStock
+                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                            : 'bg-[#3B82F6] text-white hover:bg-[#1D4ED8] hover:scale-110'
+                        } opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0`}
+                        title={isOutOfStock ? "Out of Stock" : isAdded ? "Added to Cart" : "Add to Cart"}
+                      >
+                        {isAdded ? (
+                          <Check className="w-5 h-5" />
+                        ) : (
+                          <Plus className="w-5 h-5" />
+                        )}
+                      </button>
                     </div>
                     
                     <div className="flex flex-col flex-1 justify-between px-2">
-                      <h3 className="font-serif text-2xl md:text-3xl leading-[1.15] text-[#1A1045] group-hover:text-[#3B82F6] transition-colors mb-4 line-clamp-2">
-                        {product.name}
-                      </h3>
-                      <div className="inline-flex items-center gap-3">
+                      <Link to={`/shop/${product.slug}`}>
+                        <h3 className="font-serif text-2xl md:text-3xl leading-[1.15] text-[#1A1045] group-hover:text-[#3B82F6] transition-colors mb-4 line-clamp-2">
+                          {product.name}
+                        </h3>
+                      </Link>
+                      <div className="flex items-center justify-between">
                         <span className="text-xl font-bold text-[#1A1045] tracking-tight">
                           {formatPrice(product.lowestPrice || (product.variants && product.variants[0]?.price))}
                         </span>
-                        <div className="h-4 w-px bg-[#1A1045]/10" />
-                        <span className="text-sm font-serif italic text-[#1A1045]/50 group-hover:text-[#3B82F6]/70 transition-colors">
-                           View Details <ArrowUpRight className="inline-block w-3 h-3 ml-1" />
-                        </span>
+                        <Link 
+                          to={`/shop/${product.slug}`}
+                          className="text-sm font-serif italic text-[#1A1045]/50 hover:text-[#3B82F6] transition-colors flex items-center gap-1"
+                        >
+                          Details <ArrowUpRight className="w-3 h-3" />
+                        </Link>
                       </div>
                     </div>
-                  </Link>
-                </motion.div>
-              ))}
+                  </motion.div>
+                );
+              })}
             </div>
           )}
         </div>

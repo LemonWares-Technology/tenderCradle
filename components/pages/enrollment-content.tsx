@@ -169,44 +169,210 @@ export const EnrollmentPageContent = () => {
         </div>
       </section>
 
-      {/* Enrollment Process - Elegant Cards */}
-      <section id="process" className="w-full py-32 bg-[#F8FAFC]">
-        <div className="container mx-auto px-6 md:px-12">
-          <div className="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8">
-            <div className="max-w-2xl">
-              <h2 className="font-serif text-4xl md:text-6xl tracking-tighter text-[#1A1045] mb-6">Our Process.</h2>
-            </div>
-            <p className="text-xl md:text-2xl text-[#1A1045]/60 font-serif italic max-w-xl leading-relaxed">
-              A gentle, step-by-step path to joining the Tender Cradle family.
+      {/* Enrollment Process - Playful Winding Path Design */}
+      <section id="process" className="w-full py-32 bg-[#FEF9C3] relative overflow-hidden">
+        {/* Playful Background Decorations */}
+        <div className="absolute top-10 left-10 w-40 h-40 bg-[#FECDD3] rounded-full opacity-30 blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-48 h-48 bg-[#BFDBFE] rounded-full opacity-30 blur-3xl" />
+        <div className="absolute top-1/3 right-1/4 w-32 h-32 bg-[#BBF7D0] rounded-full opacity-25 blur-2xl" />
+        
+        {/* Floating Decorative Elements */}
+        <motion.div
+          className="absolute top-20 right-[10%] w-16 h-16 pointer-events-none opacity-50 mix-blend-multiply hidden lg:block"
+          animate={{ y: [0, -15, 0], rotate: [0, 10, 0] }}
+          transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+        >
+          <img src="/images/disney-butterfly.png" alt="Butterfly" className="object-contain" />
+        </motion.div>
+
+        <div className="container mx-auto px-6 md:px-12 relative z-10">
+          {/* Header */}
+          <div className="mb-20 text-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="inline-flex items-center gap-3 px-6 py-3 rounded-full mb-8 bg-white shadow-xl border-4 border-[#F59E0B] transform -rotate-2"
+            >
+              <Sparkles className="w-5 h-5 text-[#F59E0B]" />
+              <span className="text-sm font-black uppercase tracking-widest text-[#B45309]">Easy as 1-2-3-4!</span>
+            </motion.div>
+            
+            <h2 className="font-serif text-5xl md:text-7xl tracking-tighter text-[#1A1045] mb-6">
+              Your Journey to <br/>
+              <span className="text-[#F59E0B] relative inline-block">
+                Tender Cradle
+                <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 100 10" fill="none">
+                  <path d="M2 7 Q25 1 50 7 Q75 13 98 7" stroke="#FDE68A" strokeWidth="8" fill="none" strokeLinecap="round"/>
+                </svg>
+              </span>
+            </h2>
+            <p className="text-2xl text-[#1A1045]/60 font-serif italic max-w-2xl mx-auto">
+              Follow the fun path to join our family!
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {enrollmentSteps.map((step, index) => (
-              <motion.div
-                key={step.title}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                className="group bg-white p-6 rounded-[40px] shadow-xl border border-[#1A1045]/5 hover:-translate-y-2 transition-all duration-300 relative"
-              >
-                <div className="relative aspect-[4/5] rounded-[30px] overflow-hidden mb-8 shadow-inner">
-                  <img 
-                    src={step.image} 
-                    alt={step.title} 
-                    className="object-cover transition-transform duration-1000 group-hover:scale-105" 
-                  />
-                  {/* Elegant Number Badge */}
-                  <div className="absolute top-4 right-4 w-12 h-12 rounded-full flex items-center justify-center font-serif text-xl font-bold shadow-lg backdrop-blur-md" style={{ backgroundColor: step.bg, color: step.accent }}>
-                    {index + 1}
-                  </div>
-                </div>
-                <h3 className="font-serif text-2xl mb-4 tracking-tighter text-[#1A1045] leading-tight px-2">{step.title.substring(3)}</h3>
-                <p className="text-[#1A1045]/60 leading-relaxed font-serif italic px-2 pb-4">{step.description}</p>
-              </motion.div>
-            ))}
+          {/* Winding Path with Steps */}
+          <div className="relative max-w-7xl mx-auto">
+            {/* Decorative Winding Path Line */}
+            <svg className="absolute inset-0 w-full h-full pointer-events-none hidden lg:block" viewBox="0 0 1200 1000" preserveAspectRatio="none">
+              <path 
+                d="M 150 200 Q 400 100 600 250 T 1050 400 Q 900 600 600 650 T 150 800" 
+                stroke="#FDE68A" 
+                strokeWidth="20" 
+                fill="none" 
+                strokeDasharray="40,20"
+                strokeLinecap="round"
+                opacity="0.4"
+              />
+            </svg>
+
+            {/* Steps Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-20 relative">
+              {enrollmentSteps.map((step, index) => {
+                const isEven = index % 2 === 0;
+                
+                return (
+                  <motion.div
+                    key={step.title}
+                    initial={{ opacity: 0, x: isEven ? -50 : 50, rotate: isEven ? -5 : 5 }}
+                    whileInView={{ opacity: 1, x: 0, rotate: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.7, delay: index * 0.2, type: "spring" }}
+                    className="relative"
+                    style={{ marginTop: index === 0 ? '0' : index === 1 ? '80px' : index === 2 ? '160px' : '240px' }}
+                  >
+                    {/* Connecting Arrow (Mobile) */}
+                    {index < enrollmentSteps.length - 1 && (
+                      <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 lg:hidden">
+                        <motion.div
+                          animate={{ y: [0, 10, 0] }}
+                          transition={{ repeat: Infinity, duration: 2 }}
+                          className="text-[#F59E0B]"
+                        >
+                          <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 5V19M12 19L5 12M12 19L19 12" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </motion.div>
+                      </div>
+                    )}
+
+                    {/* Step Card */}
+                    <div className="relative group">
+                      {/* Giant Playful Number */}
+                      <motion.div 
+                        className="absolute -top-12 -left-8 z-20 transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-500"
+                        whileHover={{ scale: 1.2, rotate: 15 }}
+                      >
+                        <div 
+                          className="w-28 h-28 rounded-full flex items-center justify-center font-serif text-6xl font-black shadow-2xl border-8 border-white"
+                          style={{ backgroundColor: step.bg, color: step.accent }}
+                        >
+                          {index + 1}
+                        </div>
+                        {/* Sparkle decoration on number */}
+                        <div 
+                          className="absolute -top-2 -right-2 w-10 h-10 rounded-full flex items-center justify-center border-4 border-white shadow-lg"
+                          style={{ backgroundColor: step.accent }}
+                        >
+                          <Sparkles className="w-5 h-5 text-white" />
+                        </div>
+                      </motion.div>
+
+                      {/* Main Card */}
+                      <div 
+                        className="relative bg-white rounded-[40px] overflow-hidden shadow-2xl border-8 group-hover:scale-105 group-hover:-rotate-1 transition-all duration-500"
+                        style={{ borderColor: step.bg }}
+                      >
+                        {/* Image Section */}
+                        <div className="relative aspect-[16/10] overflow-hidden">
+                          <img 
+                            src={step.image} 
+                            alt={step.title} 
+                            className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110" 
+                          />
+                          {/* Colorful Overlay Corner */}
+                          <div 
+                            className="absolute top-0 right-0 w-32 h-32 opacity-60 blur-2xl"
+                            style={{ backgroundColor: step.bg }}
+                          />
+                        </div>
+
+                        {/* Content Section */}
+                        <div className="p-8 relative">
+                          {/* Decorative Top Border */}
+                          <div 
+                            className="absolute top-0 left-0 right-0 h-2"
+                            style={{ backgroundColor: step.bg }}
+                          />
+                          
+                          <h3 
+                            className="font-serif text-3xl font-black tracking-tight leading-tight mb-4 mt-2"
+                            style={{ color: step.accent }}
+                          >
+                            {step.title.substring(3)}
+                          </h3>
+                          
+                          <p className="text-[#1A1045]/70 text-lg leading-relaxed font-serif">
+                            {step.description}
+                          </p>
+
+                          {/* Fun Icon Badge */}
+                          <div 
+                            className="absolute bottom-6 right-6 w-14 h-14 rounded-full flex items-center justify-center shadow-xl transform group-hover:rotate-12 transition-transform"
+                            style={{ backgroundColor: step.bg }}
+                          >
+                            <CheckCircle2 className="w-7 h-7" style={{ color: step.accent }} />
+                          </div>
+                        </div>
+
+                        {/* Playful Bottom Accent with Pattern */}
+                        <div 
+                          className="h-4"
+                          style={{ 
+                            backgroundColor: step.bg,
+                            backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 10px, ${step.accent}20 10px, ${step.accent}20 20px)`
+                          }}
+                        />
+                      </div>
+
+                      {/* Floating Shadow */}
+                      <div 
+                        className="absolute inset-0 rounded-[40px] -z-10 blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"
+                        style={{ backgroundColor: step.accent }}
+                      />
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
+
+          {/* Fun Completion Badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
+            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 1, type: "spring" }}
+            className="mt-32 text-center"
+          >
+            <div className="inline-block relative">
+              <div className="bg-white rounded-full px-12 py-6 shadow-2xl border-8 border-[#16A34A] transform rotate-2">
+                <p className="font-serif text-3xl font-black text-[#16A34A] flex items-center gap-4">
+                  <CheckCircle2 className="w-10 h-10" />
+                  Welcome to the Family!
+                  <Sparkles className="w-8 h-8 text-[#FDE68A]" />
+                </p>
+              </div>
+              {/* Decorative stars */}
+              <div className="absolute -top-4 -left-4 text-[#FDE68A] animate-pulse">
+                <Sparkles className="w-8 h-8" />
+              </div>
+              <div className="absolute -bottom-4 -right-4 text-[#FDE68A] animate-pulse" style={{ animationDelay: '0.5s' }}>
+                <Sparkles className="w-8 h-8" />
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 

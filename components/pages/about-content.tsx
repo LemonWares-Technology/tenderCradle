@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { SplitText } from "@/components/ui/split-text";
 import { Link } from "react-router-dom";
 import { Sparkles } from "lucide-react";
+import { TeamSection } from "@/components/sections/team";
 
 export const AboutPageContent = () => {
   return (
@@ -115,6 +116,9 @@ export const AboutPageContent = () => {
           </div>
         </div>
       </section>
+
+      {/* Team Section */}
+      <TeamSection />
     </div>
   );
 };

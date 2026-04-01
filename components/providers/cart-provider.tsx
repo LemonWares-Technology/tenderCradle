@@ -89,30 +89,40 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [items, isAuthenticated]);
 
   const addItem = async (newItem: Omit<CartItem, 'id'>) => {
+    console.log("Cart addItem called with:", newItem);
+    
     if (isAuthenticated) {
       setIsLoading(true);
       try {
+        console.log("Adding to backend cart...");
         await cartApi.addToCart({
           productId: newItem.productId,
           variantId: newItem.variantId,
           quantity: newItem.quantity
         });
+        console.log("Successfully added to backend cart, syncing...");
         await syncWithBackend();
+        console.log("Cart synced successfully");
       } catch (err) {
         console.error("Failed to add to backend cart", err);
+        // Show error to user
+        alert("Failed to add item to cart. Please try again.");
       } finally {
         setIsLoading(false);
       }
     } else {
+      console.log("Adding to guest cart...");
       setItems((prev) => {
         const existing = prev.find((i) => i.productId === newItem.productId && i.variantId === newItem.variantId);
         if (existing) {
+          console.log("Item exists, updating quantity");
           return prev.map((i) =>
             (i.productId === newItem.productId && i.variantId === newItem.variantId) 
               ? { ...i, quantity: i.quantity + newItem.quantity } 
               : i
           );
         }
+        console.log("New item, adding to cart");
         return [...prev, { ...newItem, id: `${newItem.productId}-${newItem.variantId}` }];
       });
     }

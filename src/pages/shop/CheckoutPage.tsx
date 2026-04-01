@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useCart } from "@/components/providers/cart-provider";
 import { useCustomerAuth } from "@/lib/context/CustomerAuthContext";
 import { checkout, CheckoutData } from "@/lib/api/orders";
+import { initializePayment } from "@/lib/api/payments";
 import { 
   ArrowLeft, CreditCard, Truck, ShieldCheck, 
   MapPin, ShoppingBag, Loader2, CheckCircle2,
@@ -18,6 +19,8 @@ export default function CheckoutPage() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [orderNumber, setOrderNumber] = useState("");
+  const [orderId, setOrderId] = useState("");
+  const [isInitializingPayment, setIsInitializingPayment] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const [formData, setFormData] = useState({
@@ -103,10 +106,15 @@ export default function CheckoutPage() {
 
     try {
       const order = await checkout(checkoutData);
+      console.log("Order created successfully:", order);
       setOrderNumber(order.orderNumber);
+      setOrderId(order.id);
       setIsSuccess(true);
       clearCart();
       window.scrollTo(0, 0);
+      
+      // Automatically initialize payment after successful checkout
+      await handlePaymentInitialization(order.id);
     } catch (err: any) {
       if (err.errors) {
         const newFieldErrors: Record<string, string> = {};
@@ -128,6 +136,26 @@ export default function CheckoutPage() {
     }
   };
 
+  const handlePaymentInitialization = async (orderIdToUse: string) => {
+    setIsInitializingPayment(true);
+    try {
+      console.log("Initializing payment for order:", orderIdToUse);
+      
+      // Create callback URL for payment verification
+      const callbackUrl = `${window.location.origin}/shop/payment/callback`;
+      
+      const paymentData = await initializePayment(orderIdToUse, callbackUrl);
+      console.log("Payment initialized:", paymentData);
+      
+      // Redirect to Paystack payment page
+      window.location.href = paymentData.authorization_url;
+    } catch (err: any) {
+      console.error("Payment initialization failed:", err);
+      setError(err.message || "Failed to initialize payment. Please try again.");
+      setIsInitializingPayment(false);
+    }
+  };
+
   if (authLoading) {
     return (
       <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
@@ -138,32 +166,71 @@ export default function CheckoutPage() {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-[#F8FAFC] pt-32 pb-20 px-6">
+      <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center px-6 py-32">
         <div className="max-w-2xl mx-auto bg-white rounded-[40px] p-12 text-center shadow-2xl border border-[#1A1045]/5 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#3B82F6] via-[#BE185D] to-[#F59E0B]" />
           
-          <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce">
-            <CheckCircle2 className="w-12 h-12 text-green-600" />
-          </div>
-          
-          <h1 className="font-serif text-5xl text-[#1A1045] mb-4 tracking-tighter">Order Confirmed!</h1>
-          <p className="text-xl text-[#1A1045]/60 font-serif italic mb-8">
-            Thank you for shopping with Tender Cradle. Your little star's package will be ready soon!
-          </p>
-          
-          <div className="bg-[#F8FAFC] rounded-2xl p-6 mb-10 border border-[#1A1045]/5">
-            <p className="text-sm font-bold uppercase tracking-widest text-[#1A1045]/40 mb-2">Order Number</p>
-            <p className="text-3xl font-serif text-[#1A1045]">{orderNumber}</p>
-          </div>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/shop" className="bg-[#1A1045] text-white px-10 py-5 rounded-2xl font-bold uppercase tracking-widest text-sm hover:bg-[#3B82F6] transition-all shadow-xl">
-              Back to Boutique
-            </Link>
-            <Link to="/shop/orders" className="bg-white text-[#1A1045] border-2 border-[#1A1045]/10 px-10 py-5 rounded-2xl font-bold uppercase tracking-widest text-sm hover:border-[#1A1045] transition-all">
-              Track Order
-            </Link>
-          </div>
+          {isInitializingPayment ? (
+            <>
+              <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-8">
+                <Loader2 className="w-12 h-12 text-[#3B82F6] animate-spin" />
+              </div>
+              
+              <h1 className="font-serif text-5xl text-[#1A1045] mb-4 tracking-tighter">Redirecting to Payment...</h1>
+              <p className="text-xl text-[#1A1045]/60 font-serif italic mb-8">
+                Please wait while we redirect you to our secure payment gateway.
+              </p>
+              
+              <div className="bg-[#F8FAFC] rounded-2xl p-6 mb-10 border border-[#1A1045]/5">
+                <p className="text-sm font-bold uppercase tracking-widest text-[#1A1045]/40 mb-2">Order Number</p>
+                <p className="text-3xl font-serif text-[#1A1045]">{orderNumber}</p>
+              </div>
+            </>
+          ) : error ? (
+            <>
+              <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-8">
+                <AlertCircle className="w-12 h-12 text-red-600" />
+              </div>
+              
+              <h1 className="font-serif text-5xl text-[#1A1045] mb-4 tracking-tighter">Payment Error</h1>
+              <p className="text-xl text-red-600 font-serif italic mb-8">
+                {error}
+              </p>
+              
+              <div className="bg-[#F8FAFC] rounded-2xl p-6 mb-10 border border-[#1A1045]/5">
+                <p className="text-sm font-bold uppercase tracking-widest text-[#1A1045]/40 mb-2">Order Number</p>
+                <p className="text-3xl font-serif text-[#1A1045]">{orderNumber}</p>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button
+                  onClick={() => handlePaymentInitialization(orderId)}
+                  className="bg-[#3B82F6] text-white px-10 py-5 rounded-2xl font-bold uppercase tracking-widest text-sm hover:bg-[#1D4ED8] transition-all shadow-xl"
+                >
+                  Try Payment Again
+                </button>
+                <Link to="/shop/orders" className="bg-white text-[#1A1045] border-2 border-[#1A1045]/10 px-10 py-5 rounded-2xl font-bold uppercase tracking-widest text-sm hover:border-[#1A1045] transition-all">
+                  View Order
+                </Link>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce">
+                <CheckCircle2 className="w-12 h-12 text-green-600" />
+              </div>
+              
+              <h1 className="font-serif text-5xl text-[#1A1045] mb-4 tracking-tighter">Order Created!</h1>
+              <p className="text-xl text-[#1A1045]/60 font-serif italic mb-8">
+                Your order has been created. Redirecting to payment...
+              </p>
+              
+              <div className="bg-[#F8FAFC] rounded-2xl p-6 mb-10 border border-[#1A1045]/5">
+                <p className="text-sm font-bold uppercase tracking-widest text-[#1A1045]/40 mb-2">Order Number</p>
+                <p className="text-3xl font-serif text-[#1A1045]">{orderNumber}</p>
+              </div>
+            </>
+          )}
         </div>
       </div>
     );

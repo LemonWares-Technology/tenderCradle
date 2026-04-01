@@ -14,7 +14,7 @@ interface SEOProps {
 
 const SITE_NAME = "Tender Cradle";
 const BASE_URL = "https://tendercradle.com";
-const DEFAULT_OG_IMAGE = `${BASE_URL}/images/og-default.png`;
+const DEFAULT_OG_IMAGE = `${BASE_URL}/public/images/disney_kids_planting_1773833691754`;
 
 export const SEO: React.FC<SEOProps> = ({
   title,

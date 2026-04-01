@@ -53,6 +53,8 @@ import CustomerLoginPage from "@/src/pages/shop/CustomerLoginPage";
 import CustomerRegisterPage from "@/src/pages/shop/CustomerRegisterPage";
 import CheckoutPage from "@/src/pages/shop/CheckoutPage";
 import MyOrdersPage from "@/src/pages/shop/MyOrdersPage";
+import OrderDetailPage from "@/src/pages/shop/OrderDetailPage";
+import PaymentCallbackPage from "@/src/pages/shop/PaymentCallbackPage";
 
 // ─── Blog API ──────────────────────────────────────────
 import { getBlogs, getBlog, Blog } from "@/lib/api/blog";
@@ -658,11 +660,13 @@ export default function App() {
         <Route path="/shop/register" element={<CustomerRegisterPage />} />
         <Route path="/shop/checkout" element={<CheckoutPage />} />
         <Route path="/shop/orders" element={<MyOrdersPage />} />
+        <Route path="/shop/orders/:id" element={<OrderDetailPage />} />
+        <Route path="/shop/payment/callback" element={<PaymentCallbackPage />} />
         <Route path="/shop/:id" element={<ProductPage />} />
 
         {/* Customer Password Reset */}
-        <Route path="/forgot-password" element={<><SEO title="Forgot Password" noIndex /><ForgotPasswordContent /></>} />
-        <Route path="/reset-password" element={<><SEO title="Reset Password" noIndex /><ResetPasswordContent /></>} />
+        <Route path="/forgot-password" element={<><SEO title="Forgot Password" description="Reset your Tender Cradle account password" noIndex /><ForgotPasswordContent /></>} />
+        <Route path="/reset-password" element={<><SEO title="Reset Password" description="Create a new password for your account" noIndex /><ResetPasswordContent /></>} />
 
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:id" element={<BlogPostPage />} />

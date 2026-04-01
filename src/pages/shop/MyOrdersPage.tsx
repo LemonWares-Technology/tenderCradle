@@ -179,10 +179,13 @@ export default function MyOrdersPage() {
                         </div>
                       </div>
                       
-                      <button className="w-full bg-[#1A1045] text-white py-4 rounded-2xl font-bold uppercase tracking-widest text-[10px] hover:bg-[#3B82F6] transition-all shadow-lg flex items-center justify-center gap-2 group">
+                      <Link 
+                        to={`/shop/orders/${order.id}`}
+                        className="w-full bg-[#1A1045] text-white py-4 rounded-2xl font-bold uppercase tracking-widest text-[10px] hover:bg-[#3B82F6] transition-all shadow-lg flex items-center justify-center gap-2 group"
+                      >
                         <span>Order Details</span>
                         <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </div>
