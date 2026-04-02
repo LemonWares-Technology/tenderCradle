@@ -55,9 +55,9 @@ export const AboutSection = () => {
             <div className="absolute -top-4 -left-4 w-full h-full rounded-[40px] bg-[#FDE68A] z-0" />
             <div className="relative rounded-[40px] overflow-hidden border-4 border-white shadow-2xl z-10 aspect-4/5">
               <img 
-                src="/images/about-1.png"
+                src="/images/child_18.avif"
                 alt="Caregiver with children"
-                className="object-cover"
+                className="object-cover w-full h-full"
               />
             </div>
 
@@ -121,7 +121,7 @@ export const AboutSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="text-lg text-[#1A1045]/65 leading-relaxed mb-10 max-w-lg"
+              className="text-lg md:text-xl text-[#1A1045]/65 leading-relaxed mb-10 max-w-lg"
             >
               Tender Cradle goes beyond supervision to intentionally support each child&apos;s holistic growth. We believe children thrive in environments where safety is assured and care is delivered with pure warmth.
             </motion.p>

@@ -80,7 +80,7 @@ export const FAQSection = () => {
                 .
               </h2>
               
-              <p className="text-[#1A1045]/60 leading-relaxed text-xl font-serif italic mb-10">
+              <p className="text-[#1A1045]/60 leading-relaxed text-lg md:text-xl font-serif italic mb-10">
                 Everything you need to know about Tender Cradle. Still curious?
               </p>
               
@@ -125,7 +125,7 @@ export const FAQSection = () => {
                       className="overflow-hidden"
                     >
                       <div className="px-6 md:px-8 pb-8">
-                        <p className="text-[#1A1045]/60 leading-relaxed font-serif italic text-lg max-w-2xl border-t border-orange-100 pt-6">
+                        <p className="text-[#1A1045]/60 leading-relaxed font-serif italic text-base md:text-lg max-w-2xl border-t border-orange-100 pt-6">
                           {faq.answer}
                         </p>
                       </div>

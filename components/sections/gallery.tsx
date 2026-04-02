@@ -1,16 +1,50 @@
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-
-const marqueeImages = [
-  "/images/hero-1.png",
-  "/images/gallery-1.png",
-  "/images/about-2.png",
-  "/images/hero-2.png",
-  "/images/gallery-2.png",
-  "/images/about-1.png",
-];
+import { getGalleryImages, GalleryImage } from "@/lib/api/gallery";
+import { Loader2 } from "lucide-react";
 
 export const GallerySection = () => {
+  const [images, setImages] = useState<GalleryImage[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const data = await getGalleryImages();
+        setImages(data.slice(0, 12)); // Get first 12 images
+      } catch (error) {
+        console.error("Failed to load gallery images:", error);
+        setImages([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchImages();
+  }, []);
+
+  // Fallback images if API returns empty
+  const fallbackImages = [
+    { id: "fallback-1", image: "/images/child_10.jpg", title: "Happy Learning", isActive: true, order: 1, createdAt: "", updatedAt: "" },
+    { id: "fallback-2", image: "/images/child_14.jpg", title: "Creative Play", isActive: true, order: 2, createdAt: "", updatedAt: "" },
+    { id: "fallback-3", image: "/images/child_15.avif", title: "Growing Together", isActive: true, order: 3, createdAt: "", updatedAt: "" },
+    { id: "fallback-4", image: "/images/child_16.jpg", title: "Joyful Moments", isActive: true, order: 4, createdAt: "", updatedAt: "" },
+    { id: "fallback-5", image: "/images/child_5.jpg", title: "Discovery Time", isActive: true, order: 5, createdAt: "", updatedAt: "" },
+    { id: "fallback-6", image: "/images/child_6.jpg", title: "Learning Fun", isActive: true, order: 6, createdAt: "", updatedAt: "" },
+  ];
+
+  // Use real images if available, otherwise use fallback
+  const displayImages = images.length > 0 ? images : fallbackImages;
+  const marqueeImages = displayImages;
+
+  if (isLoading) {
+    return (
+      <section className="relative w-full py-24 md:py-40 bg-[#F5F3FF] overflow-hidden flex items-center justify-center min-h-[600px]">
+        <Loader2 className="w-10 h-10 text-[#7C3AED] animate-spin" />
+      </section>
+    );
+  }
+
   return (
     <section id="gallery" className="relative w-full py-24 md:py-40 bg-[#F5F3FF] overflow-hidden">
       
@@ -39,7 +73,7 @@ export const GallerySection = () => {
             </span>
             .
           </h2>
-          <p className="text-xl text-[#1A1045]/60 font-serif italic max-w-lg">
+          <p className="text-lg md:text-xl text-[#1A1045]/60 font-serif italic max-w-lg">
             A peek into the magical world where our little ones play, learn, and grow every day.
           </p>
         </motion.div>
@@ -52,16 +86,16 @@ export const GallerySection = () => {
           animate={{ x: ["0%", "-50%"] }}
           transition={{ repeat: Infinity, ease: "linear", duration: 40 }}
         >
-          {[...marqueeImages, ...marqueeImages].map((src, index) => (
+          {[...marqueeImages, ...marqueeImages].map((img, index) => (
             <div
-              key={`row1-${src}-${index}`}
+              key={`row1-${img.id}-${index}`}
               className={`relative w-[70vw] sm:w-[50vw] md:w-[35vw] lg:w-[25vw] aspect-4/3 rounded-[32px] overflow-hidden shrink-0 group border-8 border-white shadow-xl
                 ${index % 2 === 0 ? "rotate-2" : "-rotate-2"} hover:rotate-0 hover:scale-105 transition-all duration-500`}
             >
               <img 
-                src={src}
-                alt={`Gallery image ${index + 1}`}
-                className="object-cover"
+                src={img.image}
+                alt={img.title}
+                className="object-cover w-full h-full"
               />
               <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
             </div>
@@ -76,16 +110,16 @@ export const GallerySection = () => {
           animate={{ x: ["-50%", "0%"] }}
           transition={{ repeat: Infinity, ease: "linear", duration: 50 }}
         >
-          {[...[...marqueeImages].reverse(), ...[...marqueeImages].reverse()].map((src, index) => (
+          {[...[...marqueeImages].reverse(), ...[...marqueeImages].reverse()].map((img, index) => (
             <div
-              key={`row2-${src}-${index}`}
+              key={`row2-${img.id}-${index}`}
               className={`relative w-[50vw] sm:w-[40vw] md:w-[30vw] lg:w-[20vw] aspect-square rounded-[32px] overflow-hidden shrink-0 group border-8 border-white shadow-xl
                 ${index % 2 === 0 ? "-rotate-3" : "rotate-3"} hover:rotate-0 hover:scale-105 transition-all duration-500`}
             >
               <img 
-                src={src}
-                alt={`Gallery image ${index + 1}`}
-                className="object-cover"
+                src={img.image}
+                alt={img.title}
+                className="object-cover w-full h-full"
               />
               <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
             </div>

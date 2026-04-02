@@ -14,7 +14,9 @@ import {
   MessageSquare,
   Mail,
   UserCheck,
-  GraduationCap
+  GraduationCap,
+  Image,
+  FolderOpen
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { useAuth } from "@/lib/context/AuthContext";
@@ -26,6 +28,8 @@ const navItems = [
   { name: "Customers", href: "/admin/customers", icon: Users },
   { name: "Blog", href: "/admin/blog", icon: FileText },
   { name: "Team", href: "/admin/team", icon: UserCheck },
+  { name: "Gallery", href: "/admin/gallery", icon: Image },
+  { name: "Uploads", href: "/admin/uploads", icon: FolderOpen },
   { name: "Enrollments", href: "/admin/enrollments", icon: GraduationCap },
   { name: "Leads", href: "/admin/leads", icon: MessageSquare },
   { name: "Newsletter", href: "/admin/newsletters", icon: Mail },

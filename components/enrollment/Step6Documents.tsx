@@ -121,7 +121,7 @@ export const Step6Documents = ({ formData, errors, handleFileUpload }: Step6Prop
         </div>
 
         <div className="bg-[#DBEAFE] p-6 rounded-[30px] border border-[#3B82F6]/20">
-          <p className="text-sm text-[#1A1045]/70 font-serif italic">
+          <p className="text-base text-[#1A1045]/70 font-serif italic">
             <span className="font-bold text-[#3B82F6]">Note:</span> Accepted formats: PDF, JPG, PNG. Max file size: 5MB
           </p>
         </div>

@@ -118,7 +118,7 @@ export const ParentResourcesContent = () => {
                  <Calendar className="w-6 h-6 text-[#B45309]" />
               </div>
               <h4 className="font-serif text-3xl tracking-tighter mb-4 text-[#B45309]">School <br />Calendar</h4>
-              <p className="text-sm text-[#B45309]/80 font-serif italic leading-relaxed">Term dates, holidays, and special events for 2026.</p>
+              <p className="text-base text-[#B45309]/80 font-serif italic leading-relaxed">Term dates, holidays, and special events for 2026.</p>
             </Link>
             
             <Link to="/contact" className="p-8 md:p-10 bg-[#DCFCE7] border border-[#BBF7D0] text-[#15803D] rounded-[40px] shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-500 group">
@@ -126,7 +126,7 @@ export const ParentResourcesContent = () => {
                  <Phone className="w-6 h-6 text-[#15803D]" />
               </div>
               <h4 className="font-serif text-3xl tracking-tighter mb-4 text-[#15803D]">Quick <br />Contact</h4>
-              <p className="text-sm text-[#15803D]/80 font-serif italic leading-relaxed">Direct line to the Head Teacher and reception.</p>
+              <p className="text-base text-[#15803D]/80 font-serif italic leading-relaxed">Direct line to the Head Teacher and reception.</p>
             </Link>
 
             <div className="p-10 bg-gradient-to-br from-[#1A1045] to-[#31226E] rounded-[40px] shadow-xl lg:col-span-2 text-white relative flex flex-col justify-center overflow-hidden">

@@ -196,16 +196,16 @@ export const BlogPreviewSection = () => {
                     {/* Content */}
                     <div className="flex-1 flex flex-col">
                       <div className="flex items-center gap-4 mb-4">
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#1A1045]/40">{date}</span>
+                        <span className="text-xs md:text-sm font-black uppercase tracking-[0.2em] text-[#1A1045]/40">{date}</span>
                         <div className="w-1.5 h-1.5 rounded-full bg-white/50" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#1A1045]/40">{readTime}</span>
+                        <span className="text-xs md:text-sm font-black uppercase tracking-[0.2em] text-[#1A1045]/40">{readTime}</span>
                       </div>
 
                       <h3 className="font-serif text-3xl font-black mb-4 text-[#1A1045] leading-none uppercase line-clamp-2">
                         {article.title}
                       </h3>
                       
-                      <p className="text-base text-[#1A1045]/70 leading-snug font-serif italic line-clamp-3 mb-8">
+                      <p className="text-base md:text-lg text-[#1A1045]/70 leading-snug font-serif italic line-clamp-3 mb-8">
                         {article.excerpt}
                       </p>
 
@@ -216,7 +216,7 @@ export const BlogPreviewSection = () => {
                         >
                           <Star className="w-5 h-5" style={{ color: theme.color }} />
                         </div>
-                        <span className="text-xs font-black uppercase tracking-widest text-[#1A1045]/60 hover:text-purple-600 transition-colors">
+                        <span className="text-xs md:text-sm font-black uppercase tracking-widest text-[#1A1045]/60 hover:text-purple-600 transition-colors">
                           Open Treasure
                         </span>
                       </div>

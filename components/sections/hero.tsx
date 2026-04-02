@@ -137,9 +137,9 @@ export const HeroSection = () => {
               className="absolute left-[2%] top-[4%] w-[62%] aspect-[3/4] rounded-[40px] overflow-hidden shadow-2xl border-4 border-white"
             >
               <img 
-                src="/images/hero-1.png"
+                src="/images/child_9.jpg"
                 alt="Happy children learning at Tender Cradle"
-                className="object-cover"
+                className="object-cover w-full h-full"
               />
             </motion.div>
 
@@ -151,9 +151,9 @@ export const HeroSection = () => {
               className="absolute right-[0%] top-[28%] w-[48%] aspect-square rounded-[32px] overflow-hidden shadow-2xl border-4 border-white"
             >
               <img 
-                src="/images/gallery-1.png"
+                src="/images/child_17.avif"
                 alt="Children playing"
-                className="object-cover"
+                className="object-cover w-full h-full"
               />
             </motion.div>
 

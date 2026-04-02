@@ -10,7 +10,7 @@ const ageGroups = [
     title: "Nurturing Foundations.",
     description: "A sensory-rich environment focusing on emotional security and primary motor skills.",
     features: ["Sensory Stimulation", "Tummy Time & Exploration", "Language Immersion", "Personalized Sleep Routines"],
-    image: "/images/about-1.png",
+    image: "/images/child_1.jpg",
     bg: "#DBEAFE",
     accent: "#1D4ED8"
   },
@@ -19,7 +19,7 @@ const ageGroups = [
     title: "Curiosity & Discovery.",
     description: "Developing language, social interaction, and independence through structured play.",
     features: ["Language Development", "Social Interaction", "Fine Motor Skills", "Creative Expression"],
-    image: "/images/gallery-1.png",
+    image: "/images/child_2.jpg",
     bg: "#FEF9C3",
     accent: "#B45309"
   },
@@ -28,7 +28,7 @@ const ageGroups = [
     title: "Readiness & Beyond.",
     description: "Complex problem-solving, early literacy, and preparing for the formal school transition.",
     features: ["Early Literacy & Math", "Scientific Enquiry", "Collaborative Projects", "Global Citizenship"],
-    image: "/images/hero-2.png",
+    image: "/images/child_3.jpg",
     bg: "#FCE7F3",
     accent: "#BE185D"
   },
@@ -80,30 +80,119 @@ export const CurriculumPageContent = () => {
         </div>
       </section>
 
-      {/* Philosophy Pillars - Elegant Cards */}
-      <section className="w-full py-32 bg-[#F8FAFC]">
-        <div className="container mx-auto px-6 md:px-12">
-          <div className="text-center mb-20">
-            <h2 className="font-serif text-4xl md:text-6xl tracking-tighter text-[#1A1045]">Four Pillars.</h2>
+      {/* Philosophy Pillars - Playful Kid-Friendly Design */}
+      <section className="w-full py-32 bg-white overflow-hidden relative">
+        {/* Playful background shapes */}
+        <div className="absolute top-10 right-10 w-64 h-64 bg-[#FDE68A] rounded-full opacity-20 blur-3xl" />
+        <div className="absolute bottom-20 left-10 w-72 h-72 bg-[#BFDBFE] rounded-full opacity-20 blur-3xl" />
+        <div className="absolute top-1/2 right-1/4 w-48 h-48 bg-[#FBCFE8] rounded-full opacity-15 blur-2xl" />
+        
+        <div className="container mx-auto px-6 md:px-12 relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="font-serif text-4xl md:text-6xl tracking-tighter text-[#1A1045] mb-4">
+              How Your Child <span className="text-[#F59E0B]">Grows</span> With Us
+            </h2>
+            <p className="text-xl md:text-2xl text-[#1A1045]/70 font-serif italic max-w-2xl mx-auto">
+              Four magical ways we nurture every little learner
+            </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          
+          <div className="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto">
             {pillars.map((pillar, index) => (
               <motion.div
                 key={pillar.title}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.6 }}
-                className="group bg-white p-10 rounded-[40px] shadow-xl hover:-translate-y-2 transition-all duration-300 border border-[#1A1045]/5"
+                transition={{ delay: index * 0.1, duration: 0.5, type: "spring" }}
+                className="group relative"
               >
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-8 shadow-sm transition-transform group-hover:scale-110" style={{ backgroundColor: pillar.bg }}>
-                  <pillar.icon className="w-8 h-8" style={{ color: pillar.color }} />
+                {/* Colorful background card */}
+                <div 
+                  className="absolute inset-0 rounded-[50px] transform transition-transform duration-300 group-hover:scale-105"
+                  style={{ backgroundColor: pillar.bg }}
+                />
+                
+                {/* White content card */}
+                <div className="relative bg-white m-2 p-8 md:p-10 rounded-[45px] shadow-lg group-hover:shadow-2xl transition-all duration-300">
+                  
+                  {/* Icon with playful circle */}
+                  <div className="flex items-start gap-6 mb-6">
+                    <div 
+                      className="relative w-20 h-20 rounded-full flex items-center justify-center shrink-0 shadow-lg transform transition-transform group-hover:rotate-12 group-hover:scale-110 duration-300" 
+                      style={{ backgroundColor: pillar.bg }}
+                    >
+                      <pillar.icon className="w-10 h-10" style={{ color: pillar.color }} />
+                      
+                      {/* Decorative dots around icon */}
+                      <div 
+                        className="absolute -top-1 -right-1 w-4 h-4 rounded-full border-4 border-white"
+                        style={{ backgroundColor: pillar.color }}
+                      />
+                    </div>
+                    
+                    {/* Title */}
+                    <div className="flex-1 pt-2">
+                      <h3 
+                        className="font-serif text-3xl md:text-4xl font-black tracking-tight mb-2"
+                        style={{ color: pillar.color }}
+                      >
+                        {pillar.title}
+                      </h3>
+                    </div>
+                  </div>
+                  
+                  {/* Description */}
+                  <p className="text-lg md:text-xl text-[#1A1045]/80 leading-relaxed pl-2">
+                    {pillar.text}
+                  </p>
+                  
+                  {/* Playful corner decoration */}
+                  <div className="absolute bottom-6 right-6 flex gap-2">
+                    <div 
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: pillar.color, opacity: 0.3 }}
+                    />
+                    <div 
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: pillar.color, opacity: 0.5 }}
+                    />
+                    <div 
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: pillar.color, opacity: 0.7 }}
+                    />
+                  </div>
                 </div>
-                <h3 className="font-serif text-2xl md:text-3xl mb-4 tracking-tighter text-[#1A1045]">{pillar.title}</h3>
-                <p className="text-[#1A1045]/70 leading-relaxed font-serif italic">{pillar.text}</p>
               </motion.div>
             ))}
           </div>
+
+          {/* Fun bottom element */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5 }}
+            className="mt-16 text-center"
+          >
+            <div className="inline-flex items-center gap-4 bg-[#DCFCE7] px-10 py-5 rounded-full border-4 border-[#16A34A]/20 shadow-lg">
+              <div className="flex gap-2">
+                <div className="w-3 h-3 rounded-full bg-[#1D4ED8]" />
+                <div className="w-3 h-3 rounded-full bg-[#BE185D]" />
+                <div className="w-3 h-3 rounded-full bg-[#B45309]" />
+                <div className="w-3 h-3 rounded-full bg-[#15803D]" />
+              </div>
+              <p className="text-lg md:text-xl font-bold text-[#15803D]">
+                Every day is a new adventure in learning!
+              </p>
+              <div className="flex gap-2">
+                <div className="w-3 h-3 rounded-full bg-[#15803D]" />
+                <div className="w-3 h-3 rounded-full bg-[#B45309]" />
+                <div className="w-3 h-3 rounded-full bg-[#BE185D]" />
+                <div className="w-3 h-3 rounded-full bg-[#1D4ED8]" />
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -125,7 +214,7 @@ export const CurriculumPageContent = () => {
                   <img 
                     src={group.image} 
                     alt={group.title} 
-                    className="object-cover transition-transform duration-1000 group-hover:scale-[1.03]" 
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.03]" 
                   />
                 </div>
                 {/* Elegant Tag */}
@@ -160,54 +249,181 @@ export const CurriculumPageContent = () => {
         ))}
       </section>
 
-      {/* Global Mindset Section - Elegant Dark */}
-      <section className="py-40 bg-[#1A1045] text-white overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#1E1450] rounded-full blur-[100px] pointer-events-none translate-x-1/3 -translate-y-1/3" />
-        
-        {/* Soft Wavy Top */}
-        <div className="absolute top-0 left-0 w-full overflow-hidden leading-none rotate-180" aria-hidden="true">
-          <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" className="w-full h-12 fill-white">
-            <path d="M0,30 C360,60 1080,0 1440,30 L1440,0 L0,0 Z" />
-          </svg>
-        </div>
+      {/* Global Learning Section - Modern Playful Design */}
+      <section className="py-32 bg-white overflow-hidden relative">
+        {/* Organic blob shapes in background */}
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#FEF9C3] rounded-[40%_60%_70%_30%/40%_50%_60%_50%] opacity-60 blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#DBEAFE] rounded-[60%_40%_30%_70%/60%_30%_70%_40%] opacity-50 blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-[#FCE7F3] rounded-[50%_50%_50%_50%/60%_40%_60%_40%] opacity-40 blur-3xl transform -translate-x-1/2 -translate-y-1/2" />
 
-        <div className="container mx-auto px-6 md:px-12 relative z-10 grid lg:grid-cols-2 gap-24 items-center pt-16">
-          <div>
-            <div className="inline-flex items-center gap-4 mb-8">
-              <div className="h-px w-16 bg-[#FBCFE8]" />
-              <span className="text-sm font-bold uppercase tracking-widest text-[#FBCFE8]">Global Vision</span>
+        <div className="container mx-auto px-6 md:px-12 relative z-10">
+          
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <div className="inline-flex items-center gap-3 bg-[#FEF9C3] px-6 py-3 rounded-full mb-8 border-2 border-[#F59E0B]/20">
+              <div className="w-2 h-2 rounded-full bg-[#F59E0B]" />
+              <span className="text-sm font-bold uppercase tracking-widest text-[#B45309]">Global Learning</span>
             </div>
             
-            <h2 className="font-serif text-5xl md:text-7xl tracking-tighter mb-12 leading-[0.95]">Nurturing Citizens <br />of the World.</h2>
-            <p className="text-xl md:text-2xl text-white/70 font-serif italic mb-16 leading-relaxed">
-              Our curriculum blends vibrant local culture with premier early learning standards. Rooted at home, ready for anywhere.
+            <h2 className="font-serif text-5xl md:text-7xl tracking-tighter text-[#1A1045] mb-6 leading-tight">
+              Where Nigerian Roots <br/>
+              Meet <span className="text-[#F59E0B] relative inline-block">
+                World Wings
+                <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 100 10" fill="none">
+                  <path d="M2 7 Q25 1 50 7 Q75 13 98 7" stroke="#FDE68A" strokeWidth="6" fill="none" strokeLinecap="round"/>
+                </svg>
+              </span>
+            </h2>
+            <p className="text-xl md:text-2xl text-[#1A1045]/70 font-serif italic max-w-3xl mx-auto leading-relaxed">
+              We celebrate local culture while preparing your child for a connected world. Rooted at home, ready for anywhere.
             </p>
-            <div className="flex flex-wrap gap-8 md:gap-16 bg-white/5 p-10 rounded-[40px] border border-white/10 backdrop-blur-md">
-              <div>
-                <span className="text-5xl lg:text-6xl font-serif text-[#FDE68A] block mb-2 tracking-tighter">12:1</span>
-                <span className="text-[10px] uppercase tracking-widest font-bold text-white/60">Student-Teacher Ratio</span>
-              </div>
-              <div className="w-px h-16 bg-white/10 hidden md:block self-center" />
-              <div>
-                <span className="text-5xl lg:text-6xl font-serif text-[#BBF7D0] block mb-2 tracking-tighter">3+</span>
-                <span className="text-[10px] uppercase tracking-widest font-bold text-white/60">Languages Introduced</span>
-              </div>
+          </motion.div>
+
+          {/* Main Content Grid */}
+          <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
+            
+            {/* Left: Stats Cards */}
+            <div className="space-y-6">
+              {/* Card 1 */}
+              <motion.div
+                initial={{ opacity: 0, x: -40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="bg-[#DBEAFE] p-8 rounded-[40px] border-2 border-[#3B82F6]/10 hover:shadow-xl transition-all duration-300"
+              >
+                <div className="flex items-center gap-6">
+                  <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center shrink-0 shadow-lg">
+                    <span className="text-4xl font-serif font-black text-[#1D4ED8]">3+</span>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-serif font-bold text-[#1A1045] mb-2">Languages Spoken</h3>
+                    <p className="text-base md:text-lg text-[#1A1045]/70 leading-relaxed">
+                      English, Yoruba, Igbo and more. Multilingual minds develop stronger cognitive skills.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Card 2 */}
+              <motion.div
+                initial={{ opacity: 0, x: -40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="bg-[#FCE7F3] p-8 rounded-[40px] border-2 border-[#EC4899]/10 hover:shadow-xl transition-all duration-300"
+              >
+                <div className="flex items-center gap-6">
+                  <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center shrink-0 shadow-lg">
+                    <span className="text-3xl font-serif font-black text-[#BE185D]">12:1</span>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-serif font-bold text-[#1A1045] mb-2">Teacher-Child Ratio</h3>
+                    <p className="text-base md:text-lg text-[#1A1045]/70 leading-relaxed">
+                      Small groups ensure every child receives personalized attention and care.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Card 3 */}
+              <motion.div
+                initial={{ opacity: 0, x: -40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="bg-[#DCFCE7] p-8 rounded-[40px] border-2 border-[#16A34A]/10 hover:shadow-xl transition-all duration-300"
+              >
+                <div className="flex items-center gap-6">
+                  <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center shrink-0 shadow-lg">
+                    <svg className="w-10 h-10 text-[#15803D]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-serif font-bold text-[#1A1045] mb-2">Cultural Integration</h3>
+                    <p className="text-base md:text-lg text-[#1A1045]/70 leading-relaxed">
+                      Nigerian heritage meets international standards in every lesson and activity.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Right: Image Collage */}
+            <div className="relative">
+              {/* Main large image */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="relative"
+              >
+                <div className="aspect-[4/5] rounded-[60px] overflow-hidden shadow-2xl border-8 border-white">
+                  <img src="/images/child_4.jpg" className="object-cover w-full h-full" alt="Children learning together" />
+                </div>
+                
+                {/* Floating badge */}
+                <div className="absolute -top-6 -right-6 bg-[#F59E0B] text-white px-8 py-4 rounded-full shadow-xl border-4 border-white">
+                  <p className="text-sm font-bold uppercase tracking-widest">World Ready</p>
+                </div>
+              </motion.div>
+
+              {/* Small floating images */}
+              <motion.div
+                initial={{ opacity: 0, x: 40 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 }}
+                className="absolute -bottom-8 -left-8 w-48 h-48 rounded-[40px] overflow-hidden shadow-2xl border-6 border-white hidden md:block"
+              >
+                <img src="/images/child_5.jpg" className="object-cover w-full h-full" alt="Happy learning" />
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: -40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5 }}
+                className="absolute -top-8 -left-12 w-40 h-40 rounded-full overflow-hidden shadow-2xl border-6 border-white hidden lg:block"
+              >
+                <img src="/images/child_11.avif" className="object-cover w-full h-full" alt="Creative play" />
+              </motion.div>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-8 relative">
-            <div className="grid gap-8">
-              <div className="aspect-[4/5] bg-white border-4 border-white/10 rounded-[40px] shadow-2xl overflow-hidden relative">
-                 <img src="/images/gallery-2.png" className="object-cover" alt="Global citizen" />
+
+          {/* Bottom Feature Bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.6 }}
+            className="bg-[#1A1045] text-white p-10 md:p-12 rounded-[50px] shadow-2xl"
+          >
+            <div className="grid md:grid-cols-3 gap-8 text-center">
+              <div>
+                <div className="text-4xl md:text-5xl font-serif font-black text-[#FDE68A] mb-3">100%</div>
+                <p className="text-base md:text-lg text-white/80">Nigerian Heritage Celebrated</p>
               </div>
-              <div className="aspect-square bg-white/5 border border-white/10 rounded-[40px] p-8 flex items-center justify-center text-center text-5xl group hover:bg-white/10 transition-colors">🌎</div>
-            </div>
-            <div className="grid gap-8 mt-16">
-              <div className="aspect-square bg-white/5 border border-white/10 rounded-[40px] p-8 flex items-center justify-center text-center text-5xl group hover:bg-white/10 transition-colors">✨</div>
-              <div className="aspect-[4/5] bg-white border-4 border-white/10 rounded-[40px] shadow-2xl overflow-hidden relative">
-                 <img src="/images/hero-1.png" className="object-cover" alt="Learning" />
+              <div className="border-l border-r border-white/10 hidden md:block" />
+              <div>
+                <div className="text-4xl md:text-5xl font-serif font-black text-[#BBF7D0] mb-3">Daily</div>
+                <p className="text-base md:text-lg text-white/80">Cultural Activities & Stories</p>
+              </div>
+              <div className="border-l border-white/10 hidden md:block" />
+              <div>
+                <div className="text-4xl md:text-5xl font-serif font-black text-[#BFDBFE] mb-3">Global</div>
+                <p className="text-base md:text-lg text-white/80">Standards, Local Heart</p>
               </div>
             </div>
-          </div>
+          </motion.div>
+
         </div>
       </section>
     </div>

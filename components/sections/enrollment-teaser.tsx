@@ -110,7 +110,7 @@ export const EnrollmentTeaser = () => {
               </div>
 
               <h3 className="font-serif text-2xl mb-3 font-bold text-[#1A1045]">{step.title}</h3>
-              <p className="text-sm text-[#1A1045]/55 leading-relaxed max-w-xs">
+              <p className="text-base md:text-lg text-[#1A1045]/55 leading-relaxed max-w-xs">
                 {step.text}
               </p>
             </motion.div>

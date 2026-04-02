@@ -129,7 +129,7 @@ export const HealthSafetyPageContent = () => {
               <div className="order-1 lg:order-2">
                 <div className="relative aspect-[4/5] rounded-[40px] overflow-hidden shadow-2xl border border-white/10 group">
                    <img 
-                      src="/images/gallery-2.png" 
+                      src="/images/child_4.jpg" 
                       alt="Safe environment" 
                       className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.05]"
                     />

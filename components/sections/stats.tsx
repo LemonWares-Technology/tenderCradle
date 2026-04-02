@@ -57,7 +57,7 @@ function StatCard({ stat, delay }: { stat: (typeof stats)[0]; delay: number }) {
         </span>
       </div>
       {/* Label */}
-      <p className="text-white/60 text-xs md:text-sm uppercase tracking-widest font-sans font-bold mt-1">
+      <p className="text-white/60 text-sm md:text-base uppercase tracking-widest font-sans font-bold mt-1">
         {stat.label}
       </p>
       {/* Animated underline */}

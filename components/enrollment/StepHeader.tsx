@@ -16,7 +16,7 @@ export const StepHeader = ({ icon: Icon, title, subtitle, bgColor, iconColor }: 
       </div>
       <div>
         <h2 className="font-serif text-3xl text-[#1A1045] tracking-tighter">{title}</h2>
-        <p className="text-sm text-[#1A1045]/60 font-serif italic">{subtitle}</p>
+        <p className="text-base text-[#1A1045]/60 font-serif italic">{subtitle}</p>
       </div>
     </div>
   );

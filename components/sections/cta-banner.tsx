@@ -88,7 +88,7 @@ export const CTABannerSection = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="text-white/80 text-lg max-w-xl mx-auto mb-12"
+          className="text-white/80 text-base md:text-lg max-w-xl mx-auto mb-12"
         >
           Spots fill fast. Secure your child&apos;s place in our nurturing Montessori-inspired programme today.
         </motion.p>
@@ -123,7 +123,7 @@ export const CTABannerSection = () => {
           className="flex flex-wrap justify-center gap-6"
         >
           {trustBadges.map((b) => (
-            <div key={b} className="flex items-center gap-2 text-white/80 text-sm font-bold">
+            <div key={b} className="flex items-center gap-2 text-white/80 text-base font-bold">
               <CheckCircle className="w-4 h-4 text-[#FEF08A]" />
               {b}
             </div>

@@ -63,7 +63,7 @@ export const EventsTeaser = () => {
               </span>
               .
             </h2>
-            <p className="text-xl text-[#1A1045]/60 font-serif italic">
+            <p className="text-lg md:text-xl text-[#1A1045]/60 font-serif italic">
               Special days designed to spark joy, curiosity, and community.
             </p>
           </div>

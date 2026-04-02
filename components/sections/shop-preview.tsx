@@ -1,4 +1,5 @@
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { 
@@ -8,40 +9,104 @@ import {
   Sparkles, 
   Star, 
   ShoppingBag,
-  Heart
+  Heart,
+  Loader2
 } from "lucide-react";
-
-const previewProducts = [
-  {
-    id: "tc-unif-01",
-    name: "Tender Premium Uniform",
-    price: "₦15,000",
-    image: "/images/shop-uniform.png",
-    category: "Apparel",
-    rotation: -1.5,
-    accent: "#60A5FA"
-  },
-  {
-    id: "tc-toy-02",
-    name: "Montessori Object Box",
-    price: "₦8,500",
-    image: "/images/shop-montessori.png",
-    category: "Developmental",
-    rotation: 2.5,
-    accent: "#F472B6"
-  },
-  {
-    id: "tc-kit-03",
-    name: "Creative Learning Kit",
-    price: "₦12,000",
-    image: "/images/shop-kit.png",
-    category: "Learning",
-    rotation: -2,
-    accent: "#4ADE80"
-  }
-];
+import { getProducts, Product } from "@/lib/api/products";
 
 export const ShopPreviewSection = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const data = await getProducts();
+        setProducts(data.slice(0, 3)); // Get first 3 products
+      } catch (error) {
+        console.error("Failed to load products:", error);
+        setProducts([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  // Fallback products if API returns empty or insufficient products
+  const fallbackProducts = [
+    {
+      id: "fallback-1",
+      slug: "tender-premium-uniform",
+      name: "Tender Premium Uniform",
+      price: 15000,
+      images: ["/images/child_11.jpg"],
+      image: "/images/child_11.jpg",
+      category: "Apparel",
+      description: "Premium quality uniform for Tender Cradle students",
+      stock: 50,
+      isActive: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: "fallback-2",
+      slug: "montessori-object-box",
+      name: "Montessori Object Box",
+      price: 8500,
+      images: ["/images/child_12.jpg"],
+      image: "/images/child_12.jpg",
+      category: "Developmental",
+      description: "Educational Montessori learning materials",
+      stock: 30,
+      isActive: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    },
+    {
+      id: "fallback-3",
+      slug: "creative-learning-kit",
+      name: "Creative Learning Kit",
+      price: 12000,
+      images: ["/images/child_13.avif"],
+      image: "/images/child_13.avif",
+      category: "Learning",
+      description: "Complete creative learning kit for young minds",
+      stock: 25,
+      isActive: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    }
+  ];
+
+  if (isLoading) {
+    return (
+      <section className="relative w-full py-24 md:py-40 bg-[#FEF9C3] overflow-hidden flex items-center justify-center min-h-[600px]">
+        <Loader2 className="w-10 h-10 text-[#F59E0B] animate-spin" />
+      </section>
+    );
+  }
+
+  // Combine real products with fallback to ensure we have 3 products
+  let displayProducts: Product[] = [];
+  if (products.length >= 3) {
+    displayProducts = products.slice(0, 3);
+  } else if (products.length > 0) {
+    // Mix real products with fallback
+    displayProducts = [...products];
+    const needed = 3 - products.length;
+    displayProducts.push(...fallbackProducts.slice(0, needed));
+  } else {
+    // No real products, use all fallback
+    displayProducts = fallbackProducts;
+  }
+
+  const previewProducts = displayProducts.map((product, index) => ({
+    ...product,
+    rotation: index === 0 ? -1.5 : index === 1 ? 2.5 : -2,
+    accent: index === 0 ? "#60A5FA" : index === 1 ? "#F472B6" : "#4ADE80"
+  }));
+
   return (
     <section id="shop-preview" className="relative w-full py-24 md:py-40 bg-[#FEF9C3] text-[#1A1045] overflow-hidden">
       
@@ -119,13 +184,13 @@ export const ShopPreviewSection = () => {
             className="md:col-span-12 lg:col-span-7 group cursor-pointer block"
             style={{ rotate: `${previewProducts[0].rotation}deg` }}
           >
-            <Link to={`/shop/${previewProducts[0].id}`}>
+            <Link to={`/shop/${previewProducts[0].slug}`}>
               <div className="relative w-full aspect-4/5 rounded-[50px] overflow-visible bg-white mb-10 border-[10px] border-white shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]">
                 <div className="absolute inset-0 rounded-[40px] overflow-hidden">
                   <img 
-                    src={previewProducts[0].image} 
+                    src={previewProducts[0].images?.[0] || previewProducts[0].image} 
                     alt={previewProducts[0].name}
-                    className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                    className="object-cover w-full h-full transition-transform duration-1000 group-hover:scale-105"
                   />
                 </div>
                 
@@ -147,7 +212,7 @@ export const ShopPreviewSection = () => {
               
               <div className="flex flex-col items-start gap-2 pl-4">
                 <h3 className="font-serif text-4xl md:text-5xl font-black group-hover:text-blue-600 transition-colors uppercase leading-none">{previewProducts[0].name}</h3>
-                <span className="text-2xl md:text-3xl font-serif italic text-blue-600/60 font-black">{previewProducts[0].price}</span>
+                <span className="text-2xl md:text-3xl font-serif italic text-blue-600/60 font-black">₦{previewProducts[0].price.toLocaleString()}</span>
               </div>
             </Link>
           </motion.div>
@@ -164,13 +229,13 @@ export const ShopPreviewSection = () => {
                 className="group cursor-pointer block"
                 style={{ rotate: `${product.rotation}deg` }}
               >
-                <Link to={`/shop/${product.id}`}>
+                <Link to={`/shop/${product.slug}`}>
                   <div className="relative w-full aspect-square rounded-[40px] overflow-visible bg-white mb-8 border-[10px] border-white shadow-xl transition-transform duration-500 group-hover:scale-[1.03]">
                     <div className="absolute inset-0 rounded-[30px] overflow-hidden">
                       <img 
-                        src={product.image} 
+                        src={product.images?.[0] || product.image} 
                         alt={product.name}
-                        className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                        className="object-cover w-full h-full transition-transform duration-1000 group-hover:scale-105"
                       />
                     </div>
                     
@@ -182,7 +247,7 @@ export const ShopPreviewSection = () => {
                   
                   <div className="flex flex-col gap-2 pl-4">
                     <h3 className="font-serif text-3xl font-black group-hover:text-blue-600 transition-colors leading-none uppercase">{product.name}</h3>
-                    <span className="text-xl font-serif italic text-blue-600/60 font-black">{product.price}</span>
+                    <span className="text-xl font-serif italic text-blue-600/60 font-black">₦{product.price.toLocaleString()}</span>
                   </div>
                 </Link>
               </motion.div>

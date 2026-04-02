@@ -20,7 +20,7 @@ export const NotFoundContent = () => {
           >
             {/* Using a playful but elegant image for the 404 */}
             <img 
-              src="/images/gallery-2.png" 
+              src="/images/child_3.jpg" 
               alt="Lost page indicator" 
               className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
             />

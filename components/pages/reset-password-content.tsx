@@ -133,7 +133,7 @@ export const ResetPasswordContent = () => {
             </div>
             <div>
               <h2 className="font-serif text-3xl text-[#1A1045] tracking-tighter">New Password</h2>
-              <p className="text-sm text-[#1A1045]/60 font-serif italic">Choose a strong password</p>
+              <p className="text-base text-[#1A1045]/60 font-serif italic">Choose a strong password</p>
             </div>
           </div>
 
@@ -224,7 +224,7 @@ export const ResetPasswordContent = () => {
             {/* Error Message */}
             {error && (
               <div className="bg-red-50 border-2 border-red-200 rounded-[20px] p-4">
-                <p className="text-sm text-red-600 flex items-center gap-2">
+                <p className="text-base text-red-600 flex items-center gap-2">
                   <AlertCircle className="w-4 h-4" />
                   {error}
                 </p>

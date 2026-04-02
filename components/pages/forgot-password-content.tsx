@@ -55,7 +55,7 @@ export const ForgotPasswordContent = () => {
             If an account with that email exists, we've sent a password reset link to{" "}
             <span className="font-bold text-[#1A1045]">{email}</span>
           </p>
-          <p className="text-sm text-[#1A1045]/60 mb-8">
+          <p className="text-base text-[#1A1045]/60 mb-8">
             The link will expire in 1 hour. If you don't see the email, check your spam folder.
           </p>
           <Link
@@ -104,7 +104,7 @@ export const ForgotPasswordContent = () => {
             </div>
             <div>
               <h2 className="font-serif text-3xl text-[#1A1045] tracking-tighter">Reset Link</h2>
-              <p className="text-sm text-[#1A1045]/60 font-serif italic">We'll email you instructions</p>
+              <p className="text-base text-[#1A1045]/60 font-serif italic">We'll email you instructions</p>
             </div>
           </div>
 

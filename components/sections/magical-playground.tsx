@@ -214,7 +214,7 @@ export const MagicalPlaygroundSection = () => {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="text-xl text-[#1A1045]/70 font-serif italic leading-relaxed"
+            className="text-lg md:text-xl text-[#1A1045]/70 font-serif italic leading-relaxed"
           >
             Move your mouse around and watch the magic happen! Every bubble tells a story of joy, discovery, and wonder.
           </motion.p>

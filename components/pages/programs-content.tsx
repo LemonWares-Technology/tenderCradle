@@ -8,21 +8,21 @@ const programs = [
   {
     title: "Childcare & After-School Care",
     description: "Reliable childcare, after-school, and out-of-school care services supporting working families. We provide a safe, supervised environment where your child can learn and grow while you work with peace of mind.",
-    image: "/images/hero-1.png",
+    image: "/images/child_7.jpg",
     accent: "#1D4ED8",
     bg: "#DBEAFE",
   },
   {
     title: "Structured Play & Creativity",
     description: "Structured play, learning, and creative activities that promote age-appropriate development. From arts and crafts to music and movement, every activity is designed to spark joy and curiosity.",
-    image: "/images/gallery-1.png",
+    image: "/images/child_19.avif",
     accent: "#B45309",
     bg: "#FEF9C3",
   },
   {
     title: "Emotional & Social Development",
     description: "Emotional, social, and value-based development support that helps children build character, empathy, and strong interpersonal skills in a nurturing environment.",
-    image: "/images/about-2.png",
+    image: "/images/child_8.jpg",
     accent: "#15803D",
     bg: "#DCFCE7",
   },
@@ -99,7 +99,7 @@ export const ProgramsPageContent = () => {
                     <img 
                       src={program.image} 
                       alt={program.title} 
-                      className="object-cover transition-transform duration-1000 group-hover:scale-[1.03]" 
+                      className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-[1.03]" 
                     />
                   </div>
                 </div>

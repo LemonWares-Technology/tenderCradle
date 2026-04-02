@@ -129,7 +129,7 @@ export const OfferingsSection = () => {
               </span>
 
               <h3 className="font-serif text-xl text-[#1A1045] font-bold leading-tight">{p.title}</h3>
-              <p className="text-sm text-[#1A1045]/60 leading-relaxed flex-1">{p.description}</p>
+              <p className="text-base md:text-lg text-[#1A1045]/60 leading-relaxed flex-1">{p.description}</p>
 
               {/* Arrow */}
               <div

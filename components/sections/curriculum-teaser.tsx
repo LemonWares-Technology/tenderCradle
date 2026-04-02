@@ -62,7 +62,7 @@ export const CurriculumTeaser = () => {
               className="font-serif text-5xl md:text-6xl tracking-tighter mb-8"
             />
 
-            <p className="text-xl text-[#1A1045]/70 font-serif italic mb-12 leading-relaxed">
+            <p className="text-lg md:text-xl text-[#1A1045]/70 font-serif italic mb-12 leading-relaxed">
               Our Montessori-inspired approach is built on four essential pillars that nurture the whole child.
             </p>
 
@@ -97,7 +97,7 @@ export const CurriculumTeaser = () => {
                 <h3 className="font-serif text-2xl mb-3 font-bold" style={{ color: pillar.textColor }}>
                   {pillar.title}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: pillar.textColor, opacity: 0.75 }}>
+                <p className="text-base md:text-lg leading-relaxed" style={{ color: pillar.textColor, opacity: 0.75 }}>
                   {pillar.text}
                 </p>
               </motion.div>

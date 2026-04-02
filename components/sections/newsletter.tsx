@@ -173,7 +173,7 @@ export const NewsletterSection = () => {
                 {error && (
                   <motion.p 
                     initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                    className="text-white/80 text-sm font-serif italic"
+                    className="text-white/80 text-base font-serif italic"
                   >
                     {error}
                   </motion.p>

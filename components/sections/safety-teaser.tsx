@@ -155,7 +155,7 @@ export const SafetyTeaser = () => {
             .
           </motion.h2>
 
-          <p className="text-[#1A1045] text-xl md:text-2xl max-w-2xl mx-auto font-serif italic leading-relaxed">
+          <p className="text-[#1A1045] text-lg md:text-xl max-w-2xl mx-auto font-serif italic leading-relaxed">
             We look after our little stars like they&apos;re our own. Safety is the blanket that keeps our play warm and worry-free!
           </p>
         </div>
@@ -187,7 +187,7 @@ export const SafetyTeaser = () => {
                   <item.icon className="w-10 h-10" style={{ color: item.color }} />
                 </div>
                 <h3 className="font-serif text-3xl text-[#1A1045] mb-4 font-black">{item.title}</h3>
-                <p className="text-lg text-[#1A1045]/70 leading-snug font-serif italic">{item.text}</p>
+                <p className="text-base md:text-lg text-[#1A1045]/70 leading-snug font-serif italic">{item.text}</p>
                 
                 {/* Little decoration sparkles */}
                 <Sparkles className="absolute top-6 right-6 w-6 h-6 opacity-30" style={{ color: item.color }} />

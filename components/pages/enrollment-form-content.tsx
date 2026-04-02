@@ -183,7 +183,7 @@ export const EnrollmentFormContent = () => {
           <p className="text-xl text-[#1A1045]/70 font-serif italic mb-8">
             Thank you for choosing Tender Cradle! We've received your enrollment application and will review it within 2-3 business days.
           </p>
-          <p className="text-sm text-[#1A1045]/60 mb-8">
+          <p className="text-base text-[#1A1045]/60 mb-8">
             A confirmation email has been sent to <span className="font-bold">{formData.parentEmail}</span>
           </p>
           <Link to="/" className="inline-flex items-center gap-3 bg-[#3B82F6] text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-[#1D4ED8] transition-all">

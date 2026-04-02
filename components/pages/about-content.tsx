@@ -89,7 +89,7 @@ export const AboutPageContent = () => {
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
               className="lg:col-span-6 relative aspect-[4/5] rounded-[40px] md:rounded-[60px] overflow-hidden shadow-2xl border-4 border-[#1A1045]/5"
             >
-              <img src="/images/about-1.png" alt="Caregiver with children" className="object-cover" />
+              <img src="/images/disney_animal_friends_1773833494417.png" alt="Caregiver with children" className="object-cover w-full h-full" />
             </motion.div>
 
             <div className="lg:col-span-6">

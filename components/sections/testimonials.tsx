@@ -122,7 +122,7 @@ export const TestimonialsSection = () => {
                 </div>
                 <div>
                   <p className="font-bold text-[#1A1045] text-lg">{t.name}</p>
-                  <p className="text-sm text-[#1A1045]/55">{t.role}</p>
+                  <p className="text-base text-[#1A1045]/55">{t.role}</p>
                 </div>
               </div>
             </motion.div>

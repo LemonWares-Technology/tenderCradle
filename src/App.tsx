@@ -630,6 +630,8 @@ import AdminSettingsPage from "@/src/pages/admin/SettingsPage";
 import AdminLeadsPage from "@/src/pages/admin/LeadsPage";
 import AdminNewsletterPage from "@/src/pages/admin/NewsletterPage";
 import AdminTeamPage from "@/src/pages/admin/TeamPage";
+import AdminGalleryPage from "@/src/pages/admin/GalleryPage";
+import AdminUploadsPage from "@/src/pages/admin/UploadsPage";
 import AdminEnrollmentsPage from "@/src/pages/admin/EnrollmentsPage";
 import ProtectedRoute from "@/components/admin/ProtectedRoute";
 
@@ -691,6 +693,8 @@ export default function App() {
         <Route path="orders" element={<AdminOrdersPage />} />
         <Route path="customers" element={<AdminCustomersPage />} />
         <Route path="team" element={<AdminTeamPage />} />
+        <Route path="gallery" element={<AdminGalleryPage />} />
+        <Route path="uploads" element={<AdminUploadsPage />} />
         <Route path="leads" element={<AdminLeadsPage />} />
         <Route path="enrollments" element={<AdminEnrollmentsPage />} />
         <Route path="newsletters" element={<AdminNewsletterPage />} />

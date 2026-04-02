@@ -125,7 +125,7 @@ export const TeamSection = () => {
                 <div className="text-center md:text-left">
                   <h3 className="font-serif text-2xl leading-tight mb-2 text-[#1A1045]">{member.name}</h3>
                   <p className="text-[10px] font-bold uppercase tracking-widest mb-4 inline-block px-3 py-1 rounded-full" style={{ backgroundColor: style.bg, color: style.color }}>{member.role}</p>
-                  <p className="text-sm text-[#1A1045]/60 leading-relaxed font-serif italic">{member.bio}</p>
+                  <p className="text-base text-[#1A1045]/60 leading-relaxed font-serif italic">{member.bio}</p>
                 </div>
               </motion.div>
             );
