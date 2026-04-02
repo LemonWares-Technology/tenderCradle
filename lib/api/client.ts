@@ -4,7 +4,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 // Central Axios instance with JWT interceptors and error handling.
 // All API modules import this client instead of using raw axios.
 
-const API_BASE_URL = (import.meta as any).env.VITE_API_URL || 'https://api.tendercradel.com/api';
+const API_BASE_URL = (import.meta as any).env.VITE_API_URL || 'https://api.tendercradle.com/api';
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
