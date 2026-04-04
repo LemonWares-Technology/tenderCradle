@@ -147,19 +147,17 @@ export const Navbar = () => {
           {/* Right Actions */}
           <div className="flex items-center gap-3">
             {/* Cart */}
-            {pathname !== "/" && (
-              <button 
-                onClick={() => setIsCartOpen(!isCartOpen)}
-                className="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <ShoppingCart className="w-5 h-5 text-gray-700" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#FF6B35] text-white text-xs font-bold rounded-full flex items-center justify-center">
-                    {cartCount}
-                  </span>
-                )}
-              </button>
-            )}
+            <button 
+              onClick={() => setIsCartOpen(!isCartOpen)}
+              className="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <ShoppingCart className="w-5 h-5 text-gray-700" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#FF6B35] text-white text-xs font-bold rounded-full flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </button>
 
             {/* Auth */}
             <div className="hidden md:flex items-center gap-2">
@@ -317,8 +315,8 @@ export const Navbar = () => {
               >
                 <button 
                   onClick={() => {
-                    setIsCartOpen(!isCartOpen);
                     setIsOpen(false);
+                    setIsCartOpen(true);
                   }}
                   className="w-full flex items-center justify-between px-4 py-4 bg-orange-50 rounded-xl hover:bg-orange-100 transition-colors"
                 >

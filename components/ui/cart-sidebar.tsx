@@ -15,7 +15,7 @@ export const CartSidebar = () => {
 
   return (
     <AnimatePresence>
-      {isCartOpen && pathname !== "/" && (
+      {isCartOpen && (
         <>
           {/* Backdrop */}
           <motion.div

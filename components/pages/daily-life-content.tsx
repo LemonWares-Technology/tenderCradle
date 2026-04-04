@@ -135,9 +135,10 @@ export const DailyLifePageContent = () => {
             </p>
           </div>
 
-          {/* Table Layout */}
-          <div className="max-w-6xl mx-auto overflow-x-auto">
-            <div className="bg-white rounded-[40px] shadow-xl border-2 border-[#1A1045]/5 overflow-hidden">
+          {/* Table Layout - Desktop / Card Layout - Mobile */}
+          <div className="max-w-6xl mx-auto">
+            {/* Desktop Table */}
+            <div className="hidden md:block bg-white rounded-[40px] shadow-xl border-2 border-[#1A1045]/5 overflow-hidden">
               {/* Table Header */}
               <div className="grid grid-cols-4 bg-[#DCFCE7] p-6 border-b-2 border-[#16A34A]/10">
                 <div className="font-bold text-[#15803D] uppercase tracking-widest text-sm">Day</div>
@@ -168,6 +169,50 @@ export const DailyLifePageContent = () => {
                   <div className="text-[#1A1045]/80 text-base pr-4">{day.breakfast}</div>
                   <div className="text-[#1A1045]/80 text-base pr-4">{day.lunch}</div>
                   <div className="text-[#1A1045]/80 text-base">{day.snack}</div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Mobile Cards */}
+            <div className="md:hidden space-y-6">
+              {weeklyMenu.map((day, index) => (
+                <motion.div
+                  key={day.day}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="bg-white rounded-[30px] shadow-lg border-2 border-[#1A1045]/5 p-6"
+                >
+                  <h3 className="font-bold text-[#1A1045] text-2xl mb-6 pb-4 border-b-2 border-[#DCFCE7]">
+                    {day.day}
+                  </h3>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Sun className="w-4 h-4 text-[#F59E0B]" />
+                        <span className="font-bold text-[#15803D] uppercase tracking-widest text-xs">Breakfast</span>
+                      </div>
+                      <p className="text-[#1A1045]/80 text-base pl-6">{day.breakfast}</p>
+                    </div>
+                    
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Coffee className="w-4 h-4 text-[#F59E0B]" />
+                        <span className="font-bold text-[#15803D] uppercase tracking-widest text-xs">Lunch</span>
+                      </div>
+                      <p className="text-[#1A1045]/80 text-base pl-6">{day.lunch}</p>
+                    </div>
+                    
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <Moon className="w-4 h-4 text-[#F59E0B]" />
+                        <span className="font-bold text-[#15803D] uppercase tracking-widest text-xs">Snack</span>
+                      </div>
+                      <p className="text-[#1A1045]/80 text-base pl-6">{day.snack}</p>
+                    </div>
+                  </div>
                 </motion.div>
               ))}
             </div>
