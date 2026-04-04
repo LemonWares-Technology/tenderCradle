@@ -20,7 +20,6 @@ import { ShopPreviewSection } from "@/components/sections/shop-preview";
 import { BlogPreviewSection } from "@/components/sections/blog-preview";
 import { FAQSection } from "@/components/sections/faq";
 import { CTABannerSection } from "@/components/sections/cta-banner";
-import { NewsletterSection } from "@/components/sections/newsletter";
 import { GallerySection } from "@/components/sections/gallery";
 import { CurriculumTeaser } from "@/components/sections/curriculum-teaser";
 import { SafetyTeaser } from "@/components/sections/safety-teaser";
@@ -109,21 +108,16 @@ function HomePage() {
       />
       <HeroSection />
       <AboutSection />
-      <MagicalPlaygroundSection />
-      <CurriculumTeaser />
       <OfferingsSection />
+      <CurriculumTeaser />
       <SafetyTeaser />
-      <TeamSection />
-      <EnrollmentTeaser />
+      <MagicalPlaygroundSection />
       <TestimonialsSection />
-      <PartnersSection />
-      <EventsTeaser />
       <GallerySection />
       <ShopPreviewSection />
-      <BlogPreviewSection />
+      <EnrollmentTeaser />
       <FAQSection />
       <CTABannerSection />
-      <NewsletterSection />
     </>
   );
 }

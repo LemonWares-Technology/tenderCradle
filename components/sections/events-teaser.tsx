@@ -67,13 +67,6 @@ export const EventsTeaser = () => {
               Special days designed to spark joy, curiosity, and community.
             </p>
           </div>
-          
-          <Link to="/events"
-            className="group inline-flex items-center gap-4 py-4 px-8 bg-[#F59E0B] text-white rounded-full hover:bg-[#1A1045] transition-all duration-500 shadow-lg shadow-[#F59E0B]/20"
-          >
-            <span className="font-bold uppercase tracking-widest text-xs">View Full Calendar</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">

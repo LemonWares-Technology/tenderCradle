@@ -1,13 +1,11 @@
-
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { Menu, X, ShoppingCart, ChevronDown } from "lucide-react";
+import { Menu, X, ShoppingCart, ChevronDown, User, LogOut } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "./logo";
 import { useCart } from "@/components/providers/cart-provider";
 import { useCustomerAuth } from "@/lib/context/CustomerAuthContext";
-import { User, LogOut } from "lucide-react";
 
 type NavLink = {
   name: string;
@@ -59,290 +57,277 @@ const navLinks: NavLink[] = [
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const { pathname } = useLocation();
   const { isCartOpen, setIsCartOpen, cartCount } = useCart();
   const { isAuthenticated, logout } = useCustomerAuth();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Close mobile menu on path change
-  useEffect(() => {
     setIsOpen(false);
+    setOpenDropdown(null);
   }, [pathname]);
 
-  // Disable body scroll when mobile menu is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
-    
-    // Cleanup on unmount
     return () => {
       document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
 
   return (
-    <nav 
-      className={`fixed top-0 left-0 w-full z-[110] transition-all duration-500 ${
-        scrolled ? "py-4 bg-white/95 backdrop-blur-xl border-b border-[#1D4ED8]/10 shadow-sm" : "py-6 bg-transparent"
-      }`}
-    >
-      <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
-        
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-3 group relative z-[120]">
-          <Logo className="w-8 h-8 text-primary group-hover:scale-110 transition-transform" />
-          <span className="font-serif text-xl font-bold tracking-tighter text-foreground group-hover:text-primary transition-colors">
-            Tender Cradle
-          </span>
-        </Link>
+    <nav className="fixed top-0 left-0 w-full z-50 bg-white border-b border-gray-200">
+      <div className="container mx-auto px-4 md:px-6">
+        <div className="flex items-center justify-between h-16 md:h-20">
+          
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <Logo className="w-8 h-8 text-[#FF6B35]" />
+            <span className="font-serif font-bold text-lg md:text-xl text-gray-900">
+              Tender Cradle
+            </span>
+          </Link>
 
-        {/* Desktop Links */}
-        <div className="hidden lg:flex items-center gap-10">
-          {navLinks.map((link) => {
-            const isActive = pathname === link.href || link.children?.some(child => pathname === child.href);
-            const hasDropdown = link.children && link.children.length > 0;
-            
-            return (
-              <div 
-                key={link.name}
-                className="relative group"
-                onMouseEnter={() => hasDropdown && setOpenDropdown(link.name)}
-                onMouseLeave={() => hasDropdown && setOpenDropdown(null)}
-              >
-                <Link
-                  to={link.href}
-                  className="relative py-2 flex items-center gap-1"
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center gap-6">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href || link.children?.some(child => pathname === child.href);
+              const hasDropdown = link.children && link.children.length > 0;
+              
+              return (
+                <div 
+                  key={link.name}
+                  className="relative group"
                 >
-                  <span className={`text-xs font-bold uppercase tracking-widest transition-colors ${
-                    isActive ? "text-[#FF6B35]" : "text-[#1A1045]/60 group-hover:text-[#1A1045]"
-                  }`}>
+                  <Link
+                    to={link.href}
+                    className={`flex items-center gap-1 text-sm font-semibold uppercase tracking-wide transition-colors py-2 ${
+                      isActive ? "text-[#FF6B35]" : "text-gray-700 hover:text-[#FF6B35]"
+                    }`}
+                  >
                     {link.name}
-                  </span>
-                  {hasDropdown && (
-                    <ChevronDown className={`w-3 h-3 transition-all ${
-                      isActive ? "text-[#FF6B35]" : "text-[#1A1045]/60 group-hover:text-[#1A1045]"
-                    } ${openDropdown === link.name ? "rotate-180" : ""}`} />
-                  )}
-                  {/* Active Indicator */}
-                  {isActive && (
-                    <motion.div 
-                      layoutId="nav-active"
-                      className="absolute -bottom-1 left-0 w-full h-0.5 bg-[#FF6B35]"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                  {/* Hover Indicator */}
-                  {!isActive && (
-                    <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-foreground/20 group-hover:w-full transition-all duration-300" />
-                  )}
-                </Link>
+                    {hasDropdown && (
+                      <ChevronDown className={`w-4 h-4 transition-transform ${
+                        openDropdown === link.name ? "rotate-180" : ""
+                      }`} />
+                    )}
+                  </Link>
 
-                {/* Dropdown Menu */}
-                {hasDropdown && (
-                  <AnimatePresence>
-                    {openDropdown === link.name && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        transition={{ duration: 0.2 }}
-                        className="absolute top-full left-0 mt-2 min-w-[200px] bg-white rounded-2xl shadow-xl border border-[#1A1045]/10 py-2 z-[120]"
-                      >
+                  {/* Dropdown */}
+                  {hasDropdown && (
+                    <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                      <div className="w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2">
                         {link.children!.map((child) => {
                           const isChildActive = pathname === child.href;
                           return (
                             <Link
                               key={child.href}
                               to={child.href}
-                              className={`block px-6 py-3 text-sm font-medium transition-colors ${
+                              className={`block px-4 py-2 text-sm font-medium transition-colors ${
                                 isChildActive 
-                                  ? "text-[#FF6B35] bg-[#FF6B35]/5" 
-                                  : "text-[#1A1045]/70 hover:text-[#1A1045] hover:bg-[#1A1045]/5"
+                                  ? "text-[#FF6B35] bg-orange-50" 
+                                  : "text-gray-700 hover:bg-gray-50"
                               }`}
                             >
                               {child.name}
                             </Link>
                           );
                         })}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Actions */}
-        <div className="flex items-center gap-4 relative z-[120]">
-          {/* Cart Trigger — hidden on landing page */}
-          {pathname !== "/" && (
-            <button 
-              onClick={() => setIsCartOpen(!isCartOpen)}
-              className="p-2 relative hover:bg-[#FF6B35]/10 rounded-full transition-colors group"
-              aria-label="Toggle shopping cart"
-            >
-              <ShoppingCart className="w-5 h-5 text-[#1A1045] group-hover:text-[#FF6B35] transition-colors" />
-              {cartCount > 0 && (
-                <motion.span 
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="absolute top-0 right-0 w-4 h-4 bg-[#FF6B35] text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white"
-                >
-                  {cartCount}
-                </motion.span>
-              )}
-            </button>
-          )}
-
-          {/* Customer Auth Actions */}
-          <div className="hidden md:flex items-center gap-2 border-l border-[#1A1045]/10 ml-2 pl-4">
-            {isAuthenticated ? (
-              <div className="flex items-center gap-4">
-                <Link to="/shop/orders" className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#1A1045]/60 hover:text-[#1A1045] transition-colors">
-                  <User className="w-4 h-4" />
-                  <span className="hidden xl:inline">My Orders</span>
-                </Link>
-                <button 
-                  onClick={logout}
-                  className="p-2 text-[#1A1045]/60 hover:text-red-500 transition-colors"
-                  title="Logout"
-                >
-                  <LogOut className="w-4 h-4" />
-                </button>
-              </div>
-            ) : (
-              <Link to="/shop/login" className="text-xs font-bold uppercase tracking-widest text-[#1A1045]/60 hover:text-[#1A1045] transition-colors flex items-center gap-2">
-                <User className="w-4 h-4" />
-                <span>Login</span>
-              </Link>
-            )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
-          {/* Mobile Menu Trigger */}
-          <button 
-            className="lg:hidden p-2 hover:bg-foreground/5 rounded-full transition-colors"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label="Toggle mobile menu"
-          >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          {/* Right Actions */}
+          <div className="flex items-center gap-3">
+            {/* Cart */}
+            {pathname !== "/" && (
+              <button 
+                onClick={() => setIsCartOpen(!isCartOpen)}
+                className="relative p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <ShoppingCart className="w-5 h-5 text-gray-700" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#FF6B35] text-white text-xs font-bold rounded-full flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </button>
+            )}
+
+            {/* Auth */}
+            <div className="hidden md:flex items-center gap-2">
+              {isAuthenticated ? (
+                <>
+                  <Link 
+                    to="/shop/orders" 
+                    className="flex items-center gap-2 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <User className="w-4 h-4" />
+                    <span>Orders</span>
+                  </Link>
+                  <button 
+                    onClick={logout}
+                    className="p-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                    title="Logout"
+                  >
+                    <LogOut className="w-4 h-4" />
+                  </button>
+                </>
+              ) : (
+                <Link 
+                  to="/shop/login" 
+                  className="flex items-center gap-2 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <User className="w-4 h-4" />
+                  <span>Login</span>
+                </Link>
+              )}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button 
+              onClick={() => setIsOpen(!isOpen)}
+              className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-white z-[100] lg:hidden overflow-y-auto"
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="lg:hidden fixed inset-0 top-16 md:top-20 bg-white z-40 overflow-y-auto"
           >
-            {/* Background Decoration */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] aspect-square bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-
-            <div className="flex flex-col gap-6 relative z-10 pt-32 pb-12 px-6 min-h-full">
-              {navLinks.map((link, idx) => {
-                const isActive = pathname === link.href || link.children?.some(child => pathname === child.href);
-                const hasDropdown = link.children && link.children.length > 0;
-                const isExpanded = openDropdown === link.name;
-                
-                return (
-                  <motion.div
-                    key={link.name}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: idx * 0.05 }}
-                  >
-                    {hasDropdown ? (
-                      <div>
-                        <button
-                          onClick={() => setOpenDropdown(isExpanded ? null : link.name)}
-                          className={`w-full flex items-center justify-between text-3xl font-serif tracking-tighter transition-all ${
-                            isActive ? "text-primary pl-4" : "text-foreground hover:text-primary hover:pl-4"
-                          }`}
-                        >
-                          <span>{link.name}</span>
-                          <ChevronDown className={`w-6 h-6 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
-                        </button>
-                        
-                        <AnimatePresence>
-                          {isExpanded && (
+            <div className="container mx-auto px-4 py-8">
+              <div className="space-y-2">
+                {navLinks.map((link, idx) => {
+                  const isActive = pathname === link.href || link.children?.some(child => pathname === child.href);
+                  const hasDropdown = link.children && link.children.length > 0;
+                  const isExpanded = openDropdown === link.name;
+                  
+                  return (
+                    <motion.div 
+                      key={link.name}
+                      initial={{ opacity: 0, y: -20, scale: 0.8 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ 
+                        delay: idx * 0.08,
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 15
+                      }}
+                    >
+                      {hasDropdown ? (
+                        <>
+                          <button
+                            onClick={() => setOpenDropdown(isExpanded ? null : link.name)}
+                            className={`w-full flex items-center justify-between px-4 py-4 text-2xl md:text-3xl font-serif font-bold rounded-lg transition-colors ${
+                              isActive ? "text-[#FF6B35]" : "text-gray-900 hover:text-[#FF6B35]"
+                            }`}
+                          >
+                            {link.name}
                             <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: "auto", opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.3 }}
-                              className="overflow-hidden"
+                              animate={{ rotate: isExpanded ? 180 : 0 }}
+                              transition={{ type: "spring", stiffness: 200, damping: 15 }}
                             >
-                              <div className="mt-4 ml-8 space-y-3">
-                                {link.children!.map((child) => {
+                              <ChevronDown className="w-6 h-6" />
+                            </motion.div>
+                          </button>
+                          
+                          <AnimatePresence>
+                            {isExpanded && (
+                              <motion.div 
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                                className="overflow-hidden ml-6 space-y-1"
+                              >
+                                {link.children!.map((child, childIdx) => {
                                   const isChildActive = pathname === child.href;
                                   return (
-                                    <Link
+                                    <motion.div
                                       key={child.href}
-                                      to={child.href}
-                                      className={`block text-xl font-medium transition-colors ${
-                                        isChildActive 
-                                          ? "text-[#FF6B35]" 
-                                          : "text-[#1A1045]/60 hover:text-[#1A1045]"
-                                      }`}
+                                      initial={{ opacity: 0, x: -10, scale: 0.9 }}
+                                      animate={{ opacity: 1, x: 0, scale: 1 }}
+                                      transition={{ 
+                                        delay: childIdx * 0.05,
+                                        type: "spring",
+                                        stiffness: 250,
+                                        damping: 18
+                                      }}
                                     >
-                                      {child.name}
-                                    </Link>
+                                      <Link
+                                        to={child.href}
+                                        className={`block px-4 py-3 text-lg font-medium rounded-lg transition-colors ${
+                                          isChildActive 
+                                            ? "text-[#FF6B35] bg-orange-50" 
+                                            : "text-gray-600 hover:bg-gray-50"
+                                        }`}
+                                      >
+                                        {child.name}
+                                      </Link>
+                                    </motion.div>
                                   );
                                 })}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    ) : (
-                      <Link to={link.href}
-                        className={`text-3xl font-serif tracking-tighter transition-all ${
-                          isActive ? "text-primary pl-4" : "text-foreground hover:text-primary hover:pl-4"
-                        }`}
-                      >
-                        {link.name}
-                      </Link>
-                    )}
-                  </motion.div>
-                );
-              })}
-            </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </>
+                      ) : (
+                        <Link
+                          to={link.href}
+                          className={`block px-4 py-4 text-2xl md:text-3xl font-serif font-bold rounded-lg transition-colors ${
+                            isActive ? "text-[#FF6B35]" : "text-gray-900 hover:text-[#FF6B35]"
+                          }`}
+                        >
+                          {link.name}
+                        </Link>
+                      )}
+                    </motion.div>
+                  );
+                })}
+              </div>
 
-            <div className="mt-auto space-y-6 relative z-10 px-6 pb-12">
-              <div className="h-px w-full bg-foreground/10" />
-              
-              {/* Mobile Cart & Auth */}
-              <div className="flex flex-col gap-4">
+              {/* Mobile Auth & Cart */}
+              <motion.div 
+                initial={{ opacity: 0, y: -20, scale: 0.8 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ 
+                  delay: navLinks.length * 0.08,
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 15
+                }}
+                className="mt-8 pt-6 border-t border-gray-200 space-y-3"
+              >
                 <button 
                   onClick={() => {
                     setIsCartOpen(!isCartOpen);
                     setIsOpen(false);
                   }}
-                  className="flex items-center justify-between p-4 bg-[#FF6B35]/10 rounded-2xl hover:bg-[#FF6B35]/20 transition-colors"
+                  className="w-full flex items-center justify-between px-4 py-4 bg-orange-50 rounded-xl hover:bg-orange-100 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <ShoppingCart className="w-5 h-5 text-[#FF6B35]" />
-                    <span className="font-bold text-[#1A1045]">Shopping Cart</span>
+                    <ShoppingCart className="w-6 h-6 text-[#FF6B35]" />
+                    <span className="text-lg font-semibold text-gray-900">Shopping Cart</span>
                   </div>
                   {cartCount > 0 && (
-                    <span className="w-6 h-6 bg-[#FF6B35] text-white text-xs font-bold rounded-full flex items-center justify-center">
+                    <span className="w-8 h-8 bg-[#FF6B35] text-white text-sm font-bold rounded-full flex items-center justify-center">
                       {cartCount}
                     </span>
                   )}
@@ -353,49 +338,33 @@ export const Navbar = () => {
                     <Link 
                       to="/shop/orders"
                       onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-3 p-4 bg-blue-50 rounded-2xl hover:bg-blue-100 transition-colors"
+                      className="w-full flex items-center gap-3 px-4 py-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors"
                     >
-                      <User className="w-5 h-5 text-blue-600" />
-                      <span className="font-bold text-[#1A1045]">My Orders</span>
+                      <User className="w-6 h-6 text-blue-600" />
+                      <span className="text-lg font-semibold text-gray-900">My Orders</span>
                     </Link>
                     <button 
                       onClick={() => {
                         logout();
                         setIsOpen(false);
                       }}
-                      className="flex items-center gap-3 p-4 bg-red-50 rounded-2xl hover:bg-red-100 transition-colors"
+                      className="w-full flex items-center gap-3 px-4 py-4 bg-red-50 rounded-xl hover:bg-red-100 transition-colors"
                     >
-                      <LogOut className="w-5 h-5 text-red-600" />
-                      <span className="font-bold text-[#1A1045]">Logout</span>
+                      <LogOut className="w-6 h-6 text-red-600" />
+                      <span className="text-lg font-semibold text-gray-900">Logout</span>
                     </button>
                   </>
                 ) : (
                   <Link 
                     to="/shop/login"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-3 p-4 bg-blue-50 rounded-2xl hover:bg-blue-100 transition-colors"
+                    className="w-full flex items-center gap-3 px-4 py-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors"
                   >
-                    <User className="w-5 h-5 text-blue-600" />
-                    <span className="font-bold text-[#1A1045]">Login / Register</span>
+                    <User className="w-6 h-6 text-blue-600" />
+                    <span className="text-lg font-semibold text-gray-900">Login</span>
                   </Link>
                 )}
-              </div>
-
-              <div className="h-px w-full bg-foreground/10" />
-              
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-widest text-foreground/40 mb-2">Location</p>
-                  <p className="text-sm font-medium">Lagos, Nigeria</p>
-                </div>
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-widest text-foreground/40 mb-2">Follow Us</p>
-                  <div className="flex gap-4">
-                    <span className="text-sm hover:text-primary transition-colors cursor-pointer underline">In</span>
-                    <span className="text-sm hover:text-primary transition-colors cursor-pointer underline">Tw</span>
-                  </div>
-                </div>
-              </div>
+              </motion.div>
             </div>
           </motion.div>
         )}

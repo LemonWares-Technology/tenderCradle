@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { SplitText } from "@/components/ui/split-text";
 import { Link } from "react-router-dom";
 import { Calendar as CalendarIcon, MapPin, Clock, ArrowUpRight, Sparkles } from "lucide-react";
+import { EventsTeaser } from "@/components/sections/events-teaser";
 
 const events = [
   {
@@ -69,6 +70,9 @@ export const EventsPageContent = () => {
           </h1>
         </div>
       </section>
+
+      {/* Events Teaser */}
+      <EventsTeaser />
 
       {/* Events List */}
       <section className="w-full py-24 bg-[#F8FAFC]">

@@ -4,6 +4,7 @@ import { SplitText } from "@/components/ui/split-text";
 import { Link } from "react-router-dom";
 import { Sparkles } from "lucide-react";
 import { TeamSection } from "@/components/sections/team";
+import { PartnersSection } from "@/components/sections/partners";
 
 export const AboutPageContent = () => {
   return (
@@ -119,6 +120,9 @@ export const AboutPageContent = () => {
 
       {/* Team Section */}
       <TeamSection />
+
+      {/* Partners Section */}
+      <PartnersSection />
     </div>
   );
 };

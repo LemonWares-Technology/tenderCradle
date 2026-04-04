@@ -1,20 +1,62 @@
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Logo } from "@/components/ui/logo";
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Instagram, Linkedin, Twitter, Mail, Phone, MapPin, Heart, Sparkles } from "lucide-react";
+import { ArrowUpRight, Instagram, Linkedin, Twitter, Mail, Phone, MapPin, Heart, Sparkles, CheckCircle2 } from "lucide-react";
 import { useLenis } from "lenis/react";
 import { useLocation } from "react-router-dom";
+import { subscribeToNewsletter } from "@/lib/api/newsletter";
+import { z } from "zod";
+
+const newsletterSchema = z.object({
+  email: z.string().email("Please enter a valid email address")
+});
 
 export const Footer = () => {
   const lenis = useLenis();
   const { pathname } = useLocation();
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.startsWith("/#") && pathname === "/") {
       e.preventDefault();
       const target = href.replace("/", "");
       lenis?.scrollTo(target, { offset: 0 });
+    }
+  };
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isLoading) return;
+    
+    setIsLoading(true);
+    setError(null);
+
+    const validation = newsletterSchema.safeParse({ email });
+    if (!validation.success) {
+      setError(validation.error.issues[0].message);
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      await subscribeToNewsletter(email);
+      setSubmitted(true);
+    } catch (err: any) {
+      if (err.errors && err.errors.length > 0) {
+        const aggregatedMessage = err.errors
+          .map((e: any) => e.message)
+          .join(" ");
+        setError(aggregatedMessage);
+      } else {
+        setError(err.message || "Something went wrong. Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -167,6 +209,60 @@ export const Footer = () => {
             </ul>
           </div>
 
+        </div>
+
+        {/* Newsletter Section */}
+        <div className="border-t border-white/10 pt-16 pb-12">
+          <div className="max-w-2xl mx-auto text-center">
+            <h4 className="text-2xl md:text-3xl font-serif font-bold text-white mb-4">
+              Keep in the loop!
+            </h4>
+            <p className="text-white/60 text-base md:text-lg mb-8">
+              Join our mailing list for parenting tips, curriculum updates, and news from our little stars.
+            </p>
+
+            {!submitted ? (
+              <form onSubmit={handleNewsletterSubmit} className="relative max-w-md mx-auto">
+                <div className="relative group">
+                  <input
+                    type="email"
+                    required
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={isLoading}
+                    className={`w-full bg-white/10 backdrop-blur-sm text-white px-6 py-4 rounded-full text-base focus:outline-none focus:ring-2 ${
+                      error ? 'border-2 border-red-400 focus:ring-red-400/50' : 'focus:ring-white/30'
+                    } transition-all placeholder:text-white/40 border border-white/20 disabled:opacity-70`}
+                  />
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="absolute right-2 top-2 bottom-2 bg-[#FCD34D] text-[#2D0057] px-6 rounded-full font-bold uppercase tracking-wider text-xs hover:bg-white transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed min-w-[100px]"
+                  >
+                    {isLoading ? (
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 border-2 border-[#2D0057]/30 border-t-[#2D0057] rounded-full animate-spin" />
+                      </div>
+                    ) : (
+                      <>Subscribe</>
+                    )}
+                  </button>
+                </div>
+                {error && (
+                  <p className="text-red-300 text-sm mt-2">{error}</p>
+                )}
+              </form>
+            ) : (
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 inline-block">
+                <div className="w-12 h-12 rounded-full bg-[#FCD34D] flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle2 className="w-6 h-6 text-[#2D0057]" />
+                </div>
+                <h5 className="text-xl font-serif font-bold mb-2">Welcome to the family!</h5>
+                <p className="text-white/70 text-sm">You've successfully joined our newsletter.</p>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Legal Bar */}
